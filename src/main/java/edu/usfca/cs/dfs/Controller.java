@@ -5,6 +5,11 @@ public class Controller {
     public static void main(String[] args) {
 
         System.out.println("Starting controller...");
+        new Controller().start();
+
+    }
+
+    public void start() {
 
     }
 
