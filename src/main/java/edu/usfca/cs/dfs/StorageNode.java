@@ -6,40 +6,47 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class StorageNode {
-
+class WriteFile implements Runnable {
     private ServerSocket srvSocket;
+
+    @Override
+    public void run() {
+        try {
+            srvSocket = new ServerSocket(9997);
+            float total = 0, total1;
+            System.out.println("Listening...");
+            while (true) {
+                Socket socket = srvSocket.accept();
+                StorageMessages.StorageMessageWrapper msgWrapper
+                        = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
+                        socket.getInputStream());
+
+                if (msgWrapper.hasStoreChunkMsg()) {
+                    StorageMessages.StoreChunk storeChunkMsg
+                            = msgWrapper.getStoreChunkMsg();
+                    System.out.println("Storing file name: "
+                            + storeChunkMsg.getFileName());
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
+}
+
+public class StorageNode {
 
     public static void main(String[] args)
             throws Exception {
         String hostname = getHostname();
         long diskSize = new File("/").getTotalSpace();
-        System.out.println("Total disk size:" + diskSize + " bytes");
+        System.out.println("Total disk size:" + (diskSize / (1024 * 1024)) + " bytes");
         System.out.println("Starting storage node on " + hostname + "...");
-        new StorageNode().start();
-    }
-
-    public float start()
-            throws Exception {
-        srvSocket = new ServerSocket(9999);
-        float total = 0, total1;
-        System.out.println("Listening...");
-        while (true) {
-            Socket socket = srvSocket.accept();
-            StorageMessages.StorageMessageWrapper msgWrapper
-                    = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
-                    socket.getInputStream());
-
-            if (msgWrapper.hasStoreChunkMsg()) {
-                StorageMessages.StoreChunk storeChunkMsg
-                        = msgWrapper.getStoreChunkMsg();
-                System.out.println("Storing file name: "
-                        + storeChunkMsg.getFileName());
-                total = total + storeChunkMsg.getSerializedSize();
-            }
-            total1 = total / (1024 * 1024);
-        }
-
+        WriteFile writeFile = new WriteFile();
+        Thread t1 = new Thread(writeFile);
+        t1.start();
     }
 
     /**
@@ -51,5 +58,6 @@ public class StorageNode {
             throws UnknownHostException {
         return InetAddress.getLocalHost().getHostName();
     }
+
 
 }
