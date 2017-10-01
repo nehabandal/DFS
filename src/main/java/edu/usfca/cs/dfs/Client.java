@@ -11,7 +11,11 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
         Client client = new Client();
         ProtoBuf pb = new ProtoBuf();
         fileInChunks = pb.splitFile(new File("/Users/npbandal/BigData/p1-nehabandal/TXT.rtf"));
-        client.writeRequestToController(fileInChunks);
+        for (File fileNameChunk : fileInChunks) {
+            client.writeRequestToController(fileNameChunk);
+        }
+        pb.protoBufToReceiveResponseFromController(9999);
+
     }
 
     @Override
@@ -25,11 +29,8 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
     }
 
     @Override
-    public void writeRequestToController(List<File> fileInChunks) {
-        for (File chunk : fileInChunks) {
-            String chunkName = chunk.getName();
-            protoBufToSendReq(9998, chunkName);
-        }
+    public void writeRequestToController(File chunk) {
+        protoBufToSendReqToController(9998, chunk.getName());
 
     }
 
