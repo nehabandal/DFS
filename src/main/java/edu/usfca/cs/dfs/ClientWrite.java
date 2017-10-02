@@ -7,8 +7,8 @@ import java.io.File;
  */
 public interface ClientWrite {
 
-    void writeRequestToController(File fileInChunks);
+    void writeRequestToController(String chunkName);
 
-    void writeIntoStorageNode();
+    void writeIntoStorageNode(String hostname, File chunk);
 
 }

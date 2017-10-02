@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends ProtoBuf implements ClientRead, ClientWrite {
@@ -11,11 +12,16 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
         Client client = new Client();
         ProtoBuf pb = new ProtoBuf();
         fileInChunks = pb.splitFile(new File("/Users/npbandal/BigData/p1-nehabandal/TXT.rtf"));
+        List<String> hostnames = new ArrayList<>();
         for (File fileNameChunk : fileInChunks) {
-            client.writeRequestToController(fileNameChunk);
+            client.writeRequestToController(fileNameChunk.getName());
+//            hostnames = pb.protoBufToReceiveResponseFromController(9999);
+//            client.writeIntoStorageNode();
         }
-        pb.protoBufToReceiveResponseFromController(9999);
-
+        hostnames = pb.protoBufToReceiveResponseFromController(9999);
+        for (String hostname : hostnames)
+            System.out.println(hostname);
+        client.writeIntoStorageNode("ML-ITS-601927",fileInChunks.get(0));
     }
 
     @Override
@@ -29,14 +35,16 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
     }
 
     @Override
-    public void writeRequestToController(File chunk) {
-        protoBufToSendReqToController(9998, chunk.getName());
+    public void writeRequestToController(String chunkname) {
+        protoBufToSendReqToController(9998, chunkname);
 
     }
 
     @Override
-    public void writeIntoStorageNode() {
+    public void writeIntoStorageNode(String hostname, File chunk) {
+        protoBufToSendWriteReqToStorageNode(hostname,9990,chunk);
 
     }
+
 }
 

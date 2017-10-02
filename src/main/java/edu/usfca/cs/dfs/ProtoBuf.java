@@ -1,9 +1,14 @@
 package edu.usfca.cs.dfs;
 
+import com.google.protobuf.ByteString;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +17,11 @@ import java.util.List;
  */
 public class ProtoBuf implements ChunkHelper {
 
-
     public void protoBufToSendReqToController(int portnumber, String chunkname) {
         protoBufToSendReq(portnumber, chunkname);
     }
 
-    public void protoBufToReceiveRequestFromCLient(int portnumber, String msg) throws IOException {
+    public void protoBufToReceiveRequestFromClient(int portnumber, String msg) throws IOException {
         ServerSocket srvSocket = new ServerSocket(portnumber);
         try {
             Socket client = srvSocket.accept();
@@ -40,8 +44,9 @@ public class ProtoBuf implements ChunkHelper {
         }
     }
 
-    public void protoBufToReceiveResponseFromController(int portnumber) throws IOException {
+    public List<String> protoBufToReceiveResponseFromController(int portnumber) throws IOException {
         ServerSocket srvSocket = new ServerSocket(portnumber);
+        List<String> hostnames = new ArrayList<>();
         int i = 0;
         try {
             while (i < 3) {
@@ -52,14 +57,66 @@ public class ProtoBuf implements ChunkHelper {
                 if (msgWrapper.hasStoreChunkMsg()) {
                     StorageMessages.StoreChunk storeChunkMsg
                             = msgWrapper.getStoreChunkMsg();
-                    System.out.println(storeChunkMsg.getFileName());
+                    hostnames.add(storeChunkMsg.getFileName());
                 }
                 i++;
+                client.close();
+            }
+            srvSocket.close();
+
+        } finally {
+            srvSocket.close();
+        }
+        return hostnames;
+    }
+
+    public void protoBufToSendWriteReqToStorageNode(String hostname, int portnumber, File chunk) {
+        Path path = Paths.get(chunk.getPath());
+        try {
+            byte[] chunkdata = Files.readAllBytes(path);
+
+            ByteString data = ByteString.copyFrom(chunkdata);
+
+            Socket sockController = new Socket(hostname, portnumber);
+            StorageMessages.StoreChunk storeChunkMsg
+                    = StorageMessages.StoreChunk.newBuilder()
+                    .setFileName(chunk.getName())
+                    .setChunkId(3)
+                    .setData(data)
+                    .build();
+            StorageMessages.StorageMessageWrapper msgWrapper =
+                    StorageMessages.StorageMessageWrapper.newBuilder()
+                            .setStoreChunkMsg(storeChunkMsg)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+
+            sockController.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void protoBufToReceiveRequestFromClientAtStorageNode(int portnumber, String msg) throws IOException {
+        ServerSocket srvSocket = new ServerSocket(portnumber);
+        try {
+            Socket client = srvSocket.accept();
+            StorageMessages.StorageMessageWrapper msgWrapper
+                    = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
+                    client.getInputStream());
+            if (msgWrapper.hasStoreChunkMsg()) {
+                StorageMessages.StoreChunk storeChunkMsg
+                        = msgWrapper.getStoreChunkMsg();
+//                System.out.println(msg + storeChunkMsg.getData());
+                byte[] bytes = storeChunkMsg.toByteArray();
+                String s = new String(bytes);
+                System.out.println(msg + "\n" + s);
             }
         } finally {
             srvSocket.close();
         }
     }
+
 
     private void protoBufToSendReq(int portnumber, String chunkname) {
         try {
@@ -73,6 +130,7 @@ public class ProtoBuf implements ChunkHelper {
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+            sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,7 +147,7 @@ public class ProtoBuf implements ChunkHelper {
             String line = br.readLine();
             while (line != null) {
                 File newFile = new File(file.getParent(), name + "."
-                        + String.format("%02d", counter++));
+                        + String.format("%03d", counter++));
                 try (OutputStream out = new BufferedOutputStream(new FileOutputStream(newFile))) {
                     int fileSize = 0;
                     while (line != null) {
@@ -103,7 +161,7 @@ public class ProtoBuf implements ChunkHelper {
                 }
                 files.add(newFile);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return files;
