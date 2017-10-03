@@ -2,13 +2,11 @@ package edu.usfca.cs.dfs;
 
 import com.google.protobuf.ByteString;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,17 +68,14 @@ public class ProtoBuf implements ChunkHelper {
         return hostnames;
     }
 
-    public void protoBufToSendWriteReqToStorageNode(String hostname, int portnumber, File chunk) {
-        Path path = Paths.get(chunk.getPath());
+    public void protoBufToSendWriteReqToStorageNode(String hostname, int portnumber, byte[] chunk) {
         try {
-            byte[] chunkdata = Files.readAllBytes(path);
 
-            ByteString data = ByteString.copyFrom(chunkdata);
+            ByteString data = ByteString.copyFrom(chunk);
 
             Socket sockController = new Socket(hostname, portnumber);
             StorageMessages.StoreChunk storeChunkMsg
                     = StorageMessages.StoreChunk.newBuilder()
-                    .setFileName(chunk.getName())
                     .setChunkId(3)
                     .setData(data)
                     .build();
@@ -137,35 +132,23 @@ public class ProtoBuf implements ChunkHelper {
     }
 
     @Override
-    public List<File> splitFile(File file) {
-        int counter = 1;
-        List<File> files = new ArrayList<File>();
-        int sizeOfChunk = 1024 * 1024;
-        String eof = System.lineSeparator();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String name = file.getName();
-            String line = br.readLine();
-            while (line != null) {
-                File newFile = new File(file.getParent(), name + "."
-                        + String.format("%03d", counter++));
-                try (OutputStream out = new BufferedOutputStream(new FileOutputStream(newFile))) {
-                    int fileSize = 0;
-                    while (line != null) {
-                        byte[] bytes = (line + eof).getBytes(Charset.defaultCharset());
-                        if (fileSize + bytes.length > sizeOfChunk)
-                            break;
-                        out.write(bytes);
-                        fileSize += bytes.length;
-                        line = br.readLine();
-                    }
-                }
-                files.add(newFile);
+    public List<byte[]> splitFile(File file) {
+        final int CHUNK_SIZE = 1024 * 1024;
+        final int nChunks = (int) Math.ceil((double) file.length() / CHUNK_SIZE);
+        List<byte[]> fileInChunks = new ArrayList<>();
+        try {
+            final FileInputStream fis = new FileInputStream(file);
+            for (int i = 0; i < nChunks; ++i) {
+                final byte[] bytes = new byte[CHUNK_SIZE];
+                fis.read(bytes);
+                String emptyRemoved = new String(bytes).replaceAll("\u0000.*", "");
+                byte[] finalarray = emptyRemoved.getBytes();
+                fileInChunks.add(finalarray);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return files;
+        return fileInChunks;
     }
-
 }
 

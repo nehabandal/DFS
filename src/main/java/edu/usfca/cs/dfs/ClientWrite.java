@@ -9,6 +9,6 @@ public interface ClientWrite {
 
     void writeRequestToController(String chunkName);
 
-    void writeIntoStorageNode(String hostname, File chunk);
+    void writeIntoStorageNode(String hostname, byte[] chunk);
 
 }

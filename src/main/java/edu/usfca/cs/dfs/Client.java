@@ -8,20 +8,22 @@ import java.util.List;
 public class Client extends ProtoBuf implements ClientRead, ClientWrite {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        List<File> fileInChunks;
+        File file = new File("/Users/npbandal/BigData/p1-nehabandal/expectedOutput8000");
+        List<byte[]> fileInChunks = new ArrayList<>();
         Client client = new Client();
         ProtoBuf pb = new ProtoBuf();
-        fileInChunks = pb.splitFile(new File("/Users/npbandal/BigData/p1-nehabandal/TXT.rtf"));
         List<String> hostnames = new ArrayList<>();
-        for (File fileNameChunk : fileInChunks) {
-            client.writeRequestToController(fileNameChunk.getName());
-//            hostnames = pb.protoBufToReceiveResponseFromController(9999);
-//            client.writeIntoStorageNode();
+        fileInChunks = pb.splitFile(file);
+
+        for (int j = 0; j < fileInChunks.size(); j++) {
+            String chunkname = "Chunk " + j;
+            client.writeRequestToController(chunkname);
         }
+
         hostnames = pb.protoBufToReceiveResponseFromController(9999);
         for (String hostname : hostnames)
             System.out.println(hostname);
-        client.writeIntoStorageNode("ML-ITS-601927",fileInChunks.get(0));
+        client.writeIntoStorageNode("ML-ITS-601927", fileInChunks.get(2));
     }
 
     @Override
@@ -41,8 +43,8 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
     }
 
     @Override
-    public void writeIntoStorageNode(String hostname, File chunk) {
-        protoBufToSendWriteReqToStorageNode(hostname,9990,chunk);
+    public void writeIntoStorageNode(String hostname, byte[] chunk) {
+        protoBufToSendWriteReqToStorageNode(hostname, 9990, chunk);
 
     }
 

@@ -8,6 +8,6 @@ import java.util.List;
  */
 public interface ChunkHelper {
 
-    List<File> splitFile(File file);
+    List<byte[]> splitFile(File file);
 
 }
