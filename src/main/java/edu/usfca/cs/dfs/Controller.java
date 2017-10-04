@@ -17,17 +17,10 @@ public class Controller extends ProtoBuf {
         pb.protoBufToReceiveRequestFromClientAtController(9998, "Request received from client ");
         pb.protoBufToSendResponseToClientFromController(9999, hostNames);
 
-        StorageNode server = new StorageNode(9000);
-        new Thread(server).start();
+        pb.protoBufToReceiveRequestFromClientAtController(9000,"");
 
-        try {
-            Thread.sleep(10 * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        System.out.println("Stopping Server");
-        server.stop();
+
 
     }
 
