@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class ProtoBuf implements ChunkHelper {
 
-    public void protoBufToSendReqToController(int portnumber, String chunkname) {
+    public void protoBufToSendReqToControllerFromClient(int portnumber, String chunkname) {
         protoBufToSendReq(portnumber, chunkname);
     }
 
-    public void protoBufToReceiveRequestFromClient(int portnumber, String msg) throws IOException {
+    public void protoBufToReceiveRequestFromClientAtController(int portnumber, String msg) throws IOException {
         ServerSocket srvSocket = new ServerSocket(portnumber);
         try {
             Socket client = srvSocket.accept();
@@ -36,13 +36,13 @@ public class ProtoBuf implements ChunkHelper {
         }
     }
 
-    public void protoBufToSendResponseToClient(int portnumber, List<String> hostnames) {
+    public void protoBufToSendResponseToClientFromController(int portnumber, List<String> hostnames) {
         for (String hostname : hostnames) {
             protoBufToSendReq(portnumber, hostname);
         }
     }
 
-    public List<String> protoBufToReceiveResponseFromController(int portnumber) throws IOException {
+    public List<String> protoBufToReceiveResponseFromControllerAtClientSide(int portnumber) throws IOException {
         ServerSocket srvSocket = new ServerSocket(portnumber);
         List<String> hostnames = new ArrayList<>();
         int i = 0;
@@ -68,7 +68,7 @@ public class ProtoBuf implements ChunkHelper {
         return hostnames;
     }
 
-    public void protoBufToSendWriteReqToStorageNode(String hostname, int portnumber, byte[] chunk) {
+    public void protoBufToSendWriteReqToStorageNodeFromClient(String hostname, int portnumber, byte[] chunk) {
         try {
 
             ByteString data = ByteString.copyFrom(chunk);
@@ -102,7 +102,6 @@ public class ProtoBuf implements ChunkHelper {
             if (msgWrapper.hasStoreChunkMsg()) {
                 StorageMessages.StoreChunk storeChunkMsg
                         = msgWrapper.getStoreChunkMsg();
-//                System.out.println(msg + storeChunkMsg.getData());
                 byte[] bytes = storeChunkMsg.toByteArray();
                 String s = new String(bytes);
                 System.out.println(msg + "\n" + s);
@@ -111,6 +110,11 @@ public class ProtoBuf implements ChunkHelper {
             srvSocket.close();
         }
     }
+
+//    public void protoBufToSendHeartbeatToStorageNodeFromController(int portnumber,)
+//    {
+//
+//    }
 
 
     private void protoBufToSendReq(int portnumber, String chunkname) {
