@@ -1,20 +1,12 @@
 package edu.usfca.cs.dfs;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class StorageNode extends ProtoBuf  {
-
-    protected int serverPort = 8080;
-    protected ServerSocket serverSocket = null;
-    protected boolean isStopped = false;
-    protected Thread runningThread = null;
-
+public class StorageNode extends ProtoBuf {
 
     public static void main(String[] args)
             throws Exception {
@@ -22,12 +14,18 @@ public class StorageNode extends ProtoBuf  {
         ProtoBuf pb = new ProtoBuf();
         System.out.println("Starting storage node on " + hostname + "...");
         pb.protoBufToReceiveRequestFromClientAtStorageNode(9990, "File received ");
-        pb.protoBufToSendReqToControllerFromClient(9000,"Hi storage node ML-ITS-601927 here");
-
+        while (true) {
+            try {
+//                pb.protoBufToSendReqToControllerFromClient(9000,"Hi I am here");
+                Socket soc = new Socket("localhost", 9000);
+                OutputStream os = soc.getOutputStream();
+                PrintWriter pw = new PrintWriter(os, true);
+                pw.println("Hi I am here");
+            } catch (Exception e) {
+                System.out.println("Error : " + e.getMessage());
+            }
+        }
     }
-
-
-
 
     /**
      * Retrieves the short host name of the current host.
