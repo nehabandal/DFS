@@ -13,18 +13,20 @@ public class Controller extends ProtoBuf implements Runnable {
     protected boolean isStopped = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        Controller server = new Controller(9010);
+        new Thread(server).start();
         List<String> hostNames = Arrays.asList("Bass1", "Bass2", "Bass3");
         ProtoBuf pb = new ProtoBuf();
         System.out.println("Controller listening on port 9998...");
         pb.protoBufToReceiveRequestFromClientAtController(9998, "Request received from client ");
-        pb.protoBufToSendResponseToClientFromController(9999, hostNames);
+//        pb.protoBufToSendResponseToClientFromController(9999, hostNames);
 
-        Controller server = new Controller(9010);
-        new Thread(server).start();
+//        pb.protoBufToSendReq(9999,"hi its me");
 
 
 //        try {
 //            Thread.sleep(10 * 1000);
+//            pb.protoBufToSendResponseToClientFromController(9999, hostNames);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
@@ -59,8 +61,7 @@ public class Controller extends ProtoBuf implements Runnable {
                 long start = System.currentTimeMillis();
                 processClientRequest(clientSocket);
                 Thread.sleep(3000);
-                if(isStopped())
-                {
+                if (isStopped()) {
                     stop();
                 }
                 int timeToSleep = (int) (System.currentTimeMillis() - start);

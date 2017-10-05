@@ -17,12 +17,14 @@ public class Client extends ProtoBuf implements ClientRead, ClientWrite {
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = file.getName() + "_chunk_" + j;
             client.writeRequestToController(chunkname);
+            client.writeIntoStorageNode("ML-ITS-601927", fileInChunks.get(j));
+
         }
 
-        hostnames = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
-        for (String hostname : hostnames)
-            System.out.println(hostname);
-        client.writeIntoStorageNode("ML-ITS-601927", fileInChunks.get(2));
+//        hostnames = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
+//        for (String hostname : hostnames)
+//            System.out.println(hostname);
+
     }
 
     @Override

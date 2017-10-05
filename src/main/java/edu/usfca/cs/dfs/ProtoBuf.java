@@ -31,8 +31,8 @@ public class ProtoBuf implements ChunkHelper {
                         = msgWrapper.getStoreChunkMsg();
                 System.out.println(msg + storeChunkMsg.getFileName());
             }
-        } finally {
-            srvSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -84,8 +84,6 @@ public class ProtoBuf implements ChunkHelper {
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-
-            sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,7 +147,7 @@ public class ProtoBuf implements ChunkHelper {
         }
     }
 
-    private void protoBufToSendReq(int portnumber, String chunkname) {
+    public void protoBufToSendReq(int portnumber, String chunkname) {
         try {
             Socket sockController = new Socket("localhost", portnumber);
             StorageMessages.StoreChunk storeChunkMsg
@@ -161,7 +159,7 @@ public class ProtoBuf implements ChunkHelper {
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-            sockController.close();
+//            sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
