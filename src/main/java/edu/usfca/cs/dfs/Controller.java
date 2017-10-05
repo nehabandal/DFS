@@ -1,13 +1,16 @@
 package edu.usfca.cs.dfs;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
-public class Controller extends ProtoBuf {
-
+public class Controller extends ProtoBuf implements Runnable {
+    protected Thread runningThread = null;
+    protected ServerSocket serverSocket = null;
+    protected int serverPort = 9010;
+    protected boolean isStopped = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         List<String> hostNames = Arrays.asList("Bass1", "Bass2", "Bass3");
@@ -15,17 +18,87 @@ public class Controller extends ProtoBuf {
         System.out.println("Controller listening on port 9998...");
         pb.protoBufToReceiveRequestFromClientAtController(9998, "Request received from client ");
         pb.protoBufToSendResponseToClientFromController(9999, hostNames);
-        ServerSocket s = new ServerSocket(9000);
-        while (true) {
-//            pb.protoBufToReceiveRequestFromClientAtController(9000,"");
-            Socket c = s.accept();
-            InputStream in = c.getInputStream();
-            InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader br = new BufferedReader(inr);
-            String str = br.readLine();
-            System.out.println("Ping command received from : " + c.getInetAddress().getHostName() + " with string " + str);
-            PrintStream ps = new PrintStream(c.getOutputStream());
-            ps.println(str);
+        Controller server = new Controller(9010);
+        new Thread(server).start();
+
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("Stopping Server");
+//        server.stop();
+    }
+
+    public Controller(int port) {
+        this.serverPort = port;
+    }
+
+    @Override
+    public void run() {
+        synchronized (this) {
+            this.runningThread = Thread.currentThread();
+        }
+        openServerSocket();
+
+        while (!serverSocket.isClosed()) {
+            Socket clientSocket = null;
+            try {
+                clientSocket = this.serverSocket.accept();
+            } catch (IOException e) {
+                if (isStopped()) {
+                    System.out.println("Server Stopped.");
+                    return;
+                }
+                throw new RuntimeException(
+                        "Error accepting client connection", e);
+            }
+            try {
+                processClientRequest(clientSocket);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Server Stopped.");
+    }
+
+    private void openServerSocket() {
+        try {
+            this.serverSocket = new ServerSocket(this.serverPort);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot open port 9010", e);
         }
     }
+
+    private void processClientRequest(Socket clientSocket)
+            throws IOException {
+        StorageMessages.StorageMessageWrapper msgWrapper
+                = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
+                clientSocket.getInputStream());
+        if (msgWrapper.hasStoreChunkMsg()) {
+            StorageMessages.StoreChunk storeChunkMsg
+                    = msgWrapper.getStoreChunkMsg();
+            System.out.println("Host Alive " + storeChunkMsg.getFileName());
+        }
+    }
+
+    private synchronized boolean isStopped() {
+        return this.isStopped;
+    }
+
+    public synchronized void stop() {
+        this.isStopped = true;
+        try {
+            this.serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error closing server", e);
+        }
+    }
+
+
 }

@@ -111,11 +111,43 @@ public class ProtoBuf implements ChunkHelper {
         }
     }
 
-//    public void protoBufToSendHeartbeatToStorageNodeFromController(int portnumber,)
-//    {
-//
-//    }
+    public void protoBufToSendHeartbeatFromStorageNodeToController(int portnumber, String msg) {
+        try {
 
+//            ByteString data = ByteString.copyFrom(chunk);
+            Socket sockController = new Socket("localhost", portnumber);
+            StorageMessages.StoreChunk storeChunkMsg
+                    = StorageMessages.StoreChunk.newBuilder()
+                    .setChunkId(3)
+                    .setFileName(msg)
+                    .build();
+            StorageMessages.StorageMessageWrapper msgWrapper =
+                    StorageMessages.StorageMessageWrapper.newBuilder()
+                            .setStoreChunkMsg(storeChunkMsg)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        } catch (IOException e) {
+
+        }
+
+    }
+
+    public void protoBufToReceiveHeartbeatFromStorageNodeAtController(int portnumber) throws IOException {
+        ServerSocket srvSocket = new ServerSocket(portnumber);
+        try {
+            Socket client = srvSocket.accept();
+            StorageMessages.StorageMessageWrapper msgWrapper
+                    = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
+                    client.getInputStream());
+            if (msgWrapper.hasStoreChunkMsg()) {
+                StorageMessages.StoreChunk storeChunkMsg
+                        = msgWrapper.getStoreChunkMsg();
+                System.out.println("Host Alive " + storeChunkMsg.getFileName());
+            }
+        } finally {
+            srvSocket.close();
+        }
+    }
 
     private void protoBufToSendReq(int portnumber, String chunkname) {
         try {
