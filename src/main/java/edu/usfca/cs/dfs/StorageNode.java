@@ -19,8 +19,7 @@ public class StorageNode extends ProtoBuf {
             pb.protoBufToSendHeartbeatFromStorageNodeToController(9010, "Bass02");
             pb.protoBufToSendHeartbeatFromStorageNodeToController(9010, "Bass03");
         }
-//            pb.protoBufToSendHeartbeatFromStorageNodeToController(sockController, "Bass02");
-//            pb.protoBufToSendHeartbeatFromStorageNodeToController(sockController, "Bass03");
+
     }
 
     /**

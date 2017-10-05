@@ -118,7 +118,6 @@ public class ProtoBuf implements ChunkHelper {
             Socket sockController = new Socket("localhost", portnumber);
             StorageMessages.StoreChunk storeChunkMsg
                     = StorageMessages.StoreChunk.newBuilder()
-                    .setChunkId(3)
                     .setFileName(msg)
                     .build();
             StorageMessages.StorageMessageWrapper msgWrapper =
@@ -126,6 +125,7 @@ public class ProtoBuf implements ChunkHelper {
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+            sockController.close();
         } catch (IOException e) {
 
         }
