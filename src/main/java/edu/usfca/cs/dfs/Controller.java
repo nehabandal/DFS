@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
+import static javafx.application.Platform.exit;
+
 public class Controller extends ProtoBuf implements Runnable {
     protected Thread runningThread = null;
     protected ServerSocket serverSocket = null;
@@ -20,14 +22,14 @@ public class Controller extends ProtoBuf implements Runnable {
         pb.protoBufToSendResponseToClientFromController(9999, hostNames);
         Controller server = new Controller(9010);
         new Thread(server).start();
-
 //        try {
-//            Thread.sleep(3000);
+//            Thread.sleep(10 * 1000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
 //        System.out.println("Stopping Server");
 //        server.stop();
+
     }
 
     public Controller(int port) {
@@ -41,13 +43,13 @@ public class Controller extends ProtoBuf implements Runnable {
         }
         openServerSocket();
 
-        while (!serverSocket.isClosed()) {
+        while(!isStopped()){
             Socket clientSocket = null;
             try {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
-                if (isStopped()) {
-                    System.out.println("Server Stopped.");
+                if(isStopped()) {
+                    stop();
                     return;
                 }
                 throw new RuntimeException(
@@ -55,16 +57,12 @@ public class Controller extends ProtoBuf implements Runnable {
             }
             try {
                 processClientRequest(clientSocket);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 Thread.sleep(3000);
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
-        System.out.println("Server Stopped.");
     }
 
     private void openServerSocket() {
