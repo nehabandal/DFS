@@ -1,10 +1,13 @@
 package edu.usfca.cs.dfs;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Controller extends ProtoBuf implements Runnable {
     protected Thread runningThread = null;
@@ -17,12 +20,12 @@ public class Controller extends ProtoBuf implements Runnable {
         new Thread(server).start();
         List<String> hostNames = Arrays.asList("Bass1", "Bass2", "Bass3");
         ProtoBuf pb = new ProtoBuf();
+        HashMap<String,String> hostdetails= new HashMap<String,String>();
+        hostdetails.put("ML-ITS-601927","10.1.25.209");
+        hostdetails.put("Ganesha","1254235");
         System.out.println("Controller listening on port 9998...");
         pb.protoBufToReceiveRequestFromClientAtController(9998, "Request received from client ");
-//        pb.protoBufToSendResponseToClientFromController(9999, hostNames);
-
-//        pb.protoBufToSendReq(9999,"hi its me");
-
+        pb.protoBufToSendResponseToClientFromController(9999,hostdetails);
 
 //        try {
 //            Thread.sleep(10 * 1000);

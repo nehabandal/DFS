@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by npbandal on 10/1/17.
@@ -36,18 +38,37 @@ public class ProtoBuf implements ChunkHelper {
         }
     }
 
-    public void protoBufToSendResponseToClientFromController(int portnumber, List<String> hostnames) {
-        for (String hostname : hostnames) {
-            protoBufToSendReq(portnumber, hostname);
+//    public void protoBufToSendResponseToClientFromController(int portnumber, List<String> hostnames) {
+//        for (String hostname : hostnames) {
+//            protoBufToSendReq(portnumber, hostname);
+//        }
+//    }
+
+    public void protoBufToSendResponseToClientFromController(int portnumber, Map<String,String> hostdetails) {
+        try {
+            ByteString hostinfo = ByteString.copyFromUtf8(hostdetails.toString());
+            Socket sockController = new Socket("localhost", portnumber);
+            StorageMessages.StoreChunk storeChunkMsg
+                    = StorageMessages.StoreChunk.newBuilder()
+                    .setData(hostinfo)
+                    .build();
+            StorageMessages.StorageMessageWrapper msgWrapper =
+                    StorageMessages.StorageMessageWrapper.newBuilder()
+                            .setStoreChunkMsg(storeChunkMsg)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
-    public List<String> protoBufToReceiveResponseFromControllerAtClientSide(int portnumber) throws IOException {
+    public HashMap<String,String> protoBufToReceiveResponseFromControllerAtClientSide(int portnumber) throws IOException {
         ServerSocket srvSocket = new ServerSocket(portnumber);
-        List<String> hostnames = new ArrayList<>();
-        int i = 0;
+        String hostinfo;
+        HashMap<String, String> mapHostInfo = new HashMap<>();
         try {
-            while (i < 3) {
                 Socket client = srvSocket.accept();
                 StorageMessages.StorageMessageWrapper msgWrapper
                         = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
@@ -55,17 +76,21 @@ public class ProtoBuf implements ChunkHelper {
                 if (msgWrapper.hasStoreChunkMsg()) {
                     StorageMessages.StoreChunk storeChunkMsg
                             = msgWrapper.getStoreChunkMsg();
-                    hostnames.add(storeChunkMsg.getFileName());
-                }
-                i++;
-                client.close();
+                    hostinfo = storeChunkMsg.getData().toStringUtf8();
+                    String s = hostinfo.replaceAll("[{}]", "");
+                    for(String keyValue : s.split(" *, *")) {
+                        String[] pairs = keyValue.split(" *= *");
+                        mapHostInfo.put(pairs[0],pairs[1]);
+                    }
+
             }
             srvSocket.close();
 
         } finally {
             srvSocket.close();
         }
-        return hostnames;
+
+        return mapHostInfo;
     }
 
     public void protoBufToSendWriteReqToStorageNodeFromClient(String hostname, int portnumber, byte[] chunk) {
@@ -90,24 +115,6 @@ public class ProtoBuf implements ChunkHelper {
 
     }
 
-    public void protoBufToReceiveRequestFromClientAtStorageNode(int portnumber, String msg) throws IOException {
-        ServerSocket srvSocket = new ServerSocket(portnumber);
-        try {
-            Socket client = srvSocket.accept();
-            StorageMessages.StorageMessageWrapper msgWrapper
-                    = StorageMessages.StorageMessageWrapper.parseDelimitedFrom(
-                    client.getInputStream());
-            if (msgWrapper.hasStoreChunkMsg()) {
-                StorageMessages.StoreChunk storeChunkMsg
-                        = msgWrapper.getStoreChunkMsg();
-                byte[] bytes = storeChunkMsg.toByteArray();
-                String s = new String(bytes);
-                System.out.println(msg + "\n" + s);
-            }
-        } finally {
-            srvSocket.close();
-        }
-    }
 
     public void protoBufToSendHeartbeatFromStorageNodeToController(int portnumber, String msg) {
         try {

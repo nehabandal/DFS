@@ -7,7 +7,7 @@ import java.util.List;
  * Created by npbandal on 10/1/17.
  */
 public interface ClientRead {
-     void readRequestToController();
+     void readRequestToController(String filename);
      void readFromStorageNode();
 
 }
