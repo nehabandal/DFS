@@ -1,4 +1,4 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.client;
 
 import java.io.File;
 import java.util.List;

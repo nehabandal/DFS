@@ -1,37 +1,45 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.controller;
+
+import edu.usfca.cs.dfs.client.ClientProtoBuf;
+import edu.usfca.cs.dfs.storage.StorageMessages;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-public class StorageNode extends ProtoBuf implements Runnable {
+public class Controller extends ClientProtoBuf implements Runnable {
     protected Thread runningThread = null;
     protected ServerSocket serverSocket = null;
-    protected int serverPort;
+    protected int serverPort = 9010;
     protected boolean isStopped = false;
 
-    public static void main(String[] args)
-            throws Exception {
-        String hostname = getHostname();
-
-        ProtoBuf pb = new ProtoBuf();
-        System.out.println("Starting storage node on " + hostname + "...");
-//        pb.protoBufToReceiveRequestFromClientAtStorageNode(9990, "File received ");
-
-        StorageNode server = new StorageNode(9990);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Controller server = new Controller(9010);
         new Thread(server).start();
+        List<String> hostNames = Arrays.asList("Bass1", "Bass2", "Bass3");
+        ClientProtoBuf pb = new ClientProtoBuf();
+        HashMap<String,String> hostdetails= new HashMap<String,String>();
+        hostdetails.put("ML-ITS-601927","10.1.25.209");
+        hostdetails.put("Ganesha","1254235");
+        System.out.println("Controller listening on port 9998...");
+//        pb.protoBufToReceiveRequestFromClientAtController(9998, "Request received from client ");
+//        pb.protoBufToSendResponseToClientFromController(9999,hostdetails);
 
-        while (true) {
-            pb.protoBufToSendHeartbeatFromStorageNodeToController(9010, "Bass01");
-            pb.protoBufToSendHeartbeatFromStorageNodeToController(9010, "Bass02");
-            pb.protoBufToSendHeartbeatFromStorageNodeToController(9010, "Bass03");
-        }
+//        try {
+//            Thread.sleep(10 * 1000);
+//            pb.protoBufToSendResponseToClientFromController(9999, hostNames);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("Stopping Server");
+//        server.stop();
 
     }
 
-    public StorageNode(int port) {
+    public Controller(int port) {
         this.serverPort = port;
     }
 
@@ -51,12 +59,20 @@ public class StorageNode extends ProtoBuf implements Runnable {
                     return;
                 }
                 throw new RuntimeException(
-                        "Error accepting file from client ", e);
+                        "Error accepting client connection", e);
             }
             try {
                 long start = System.currentTimeMillis();
                 processClientRequest(clientSocket);
-                Thread.sleep(1000);
+                Thread.sleep(3000);
+                if (isStopped()) {
+                    stop();
+                }
+                int timeToSleep = (int) (System.currentTimeMillis() - start);
+                if (timeToSleep > 5000) {
+                    return;
+                }
+
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,7 +84,7 @@ public class StorageNode extends ProtoBuf implements Runnable {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
         } catch (IOException e) {
-            throw new RuntimeException("Cannot open port 9990", e);
+            throw new RuntimeException("Cannot open port 9010", e);
         }
     }
 
@@ -80,10 +96,7 @@ public class StorageNode extends ProtoBuf implements Runnable {
         if (msgWrapper.hasStoreChunkMsg()) {
             StorageMessages.StoreChunk storeChunkMsg
                     = msgWrapper.getStoreChunkMsg();
-            byte[] bytes = storeChunkMsg.toByteArray();
-            String s = new String(bytes);
-            System.out.println("File is" + s);
-
+            System.out.println("Host Alive " + storeChunkMsg.getFileName());
         }
     }
 
@@ -98,17 +111,6 @@ public class StorageNode extends ProtoBuf implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException("Error closing server", e);
         }
-    }
-
-
-    /**
-     * Retrieves the short host name of the current host.
-     *
-     * @return name of the current host
-     */
-    private static String getHostname()
-            throws UnknownHostException {
-        return InetAddress.getLocalHost().getHostName();
     }
 
 
