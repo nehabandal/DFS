@@ -3,7 +3,9 @@ package edu.usfca.cs.dfs.client;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -11,11 +13,10 @@ import java.util.*;
 public class ClientWriteFile {
     private File fileName;
 
-    public ClientWriteFile(File filename) {
-        this.fileName = filename;
+    public ClientWriteFile() {
+
     }
 
-    ClientProtoBuf cp = new ClientProtoBuf();
 
     protected List<byte[]> splitFile(File file) {
         final int CHUNK_SIZE = 1024 * 1024;
@@ -38,8 +39,9 @@ public class ClientWriteFile {
 
     public void write(File fileName) {
         List<byte[]> fileInChunks;
+        ClientProtoBuf cp = new ClientProtoBuf();
         fileInChunks = splitFile(fileName);
-        HashMap<String,Integer> hostPort= new HashMap<String,Integer>();
+        HashMap<String, Integer> hostPort = new HashMap<String, Integer>();
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + "_chunk_" + j;
             // Why does the controller need chunk name = Adding temporary
@@ -48,8 +50,9 @@ public class ClientWriteFile {
             // sp.write(chunk, host);
 //            cp.protoBufToSendReq(9991, chunkname);
 //            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
-            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileInChunks.get(j));
         }
+        cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
+
 
     }
 

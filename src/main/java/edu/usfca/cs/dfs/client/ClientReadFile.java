@@ -1,7 +1,6 @@
 package edu.usfca.cs.dfs.client;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -10,38 +9,23 @@ import java.util.Map;
 public class ClientReadFile {
     String fileName;
 
-    public ClientReadFile(String filename) {
-        this.fileName = filename;
-    }
-
     ClientProtoBuf cp = new ClientProtoBuf();
 
     public void read(String fileName) {
-        HashMap<String, Map<String, Integer>> chunkhostport = new HashMap<>();
-        String hostname = null;
-        int portnumber = 0;
+
+        LinkedHashMap<String, Integer> HostID = new LinkedHashMap<>();
 //        cp.protoBufToSendReq(9993, fileName);
 
-//        hostport = controller.gethostname(); need to get updated with host and chunk details
+//        HostID = controller.gethostname(); need to get updated with host and chunk details
 
-        //Get data from all hostnames
-        Iterator<Map.Entry<String, Map<String, Integer>>> parent = chunkhostport.entrySet().iterator();
-        while (parent.hasNext()) {
 
-            Map.Entry<String, Map<String, Integer>> parentPair = parent.next();
-            System.out.println("parentPair.getKey() :   " + parentPair.getKey() + " parentPair.getValue()  :  " + parentPair.getValue());
-            String chunkname = (String) parentPair.getKey();
-            Iterator<Map.Entry<String, Integer>> child = (parentPair.getValue()).entrySet().iterator();
-            while (child.hasNext()) {
-                Map.Entry childPair = child.next();
-                System.out.println("childPair.getKey() :   " + childPair.getKey() + " childPair.getValue()  :  " + childPair.getValue());
-                hostname = (String) childPair.getKey();
-                portnumber = (Integer) childPair.getValue();
-
-                child.remove();
-            }
-            cp.protoBufToReadfromStorageNode(hostname, portnumber,chunkname);
+        HostID.put("ML-ITS-601927", 1);
+        for (Map.Entry<String, Integer> entry : HostID.entrySet()) {
+            String hostName = entry.getKey();
+            int chunkID = entry.getValue();
+            cp.protoBufToReadfromStorageNode(hostName, 9992, chunkID );
         }
+
     }
 
 }

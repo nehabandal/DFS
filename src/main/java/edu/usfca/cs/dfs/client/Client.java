@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Client {
 
-    final static String FILE_NAME = "expectedOutput8000";
-
     /**
      * client get identifier
      * client put /path/to/file # outputs identifier to stdout
@@ -21,18 +19,20 @@ public class Client {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
+        ClientWriteFile writeFile = new ClientWriteFile();
+        ClientReadFile readFile = new ClientReadFile();
+
+
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("read")) {
                 String fileToRead = args[i + 1];
-                ClientReadFile readFile = new ClientReadFile(fileToRead);
+                readFile.read(fileToRead);
                 System.out.println(args[i + 1]);
             }
             if (args[i].equals("write")) {
                 String fileToWrite = args[i+1];
                 File file = new File(fileToWrite);
-                ClientWriteFile writeFile = new ClientWriteFile(file);
-
-                System.out.println(args[i + 1]);
+                writeFile.write(file);
             }
         }
 

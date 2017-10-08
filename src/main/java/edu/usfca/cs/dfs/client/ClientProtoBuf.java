@@ -30,19 +30,20 @@ public class ClientProtoBuf {
 //
 
 
-    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, byte[] chunk) {
+    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String chunkName, byte[] chunk) {
         try {
 
             ByteString data = ByteString.copyFrom(chunk);
-
             // localhost:9990
             // 12345 ---- localhost:9990
             // 23485 ---------^
             Socket sockController = new Socket(hostname, portnumber);
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
-                    .setChunkId(3)
+                    .setWritefilechunkName(chunkName)
+                    .setChunkId(1)
                     .setWritechunkdata(data)
+                    .setReqtypewrite("write")
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()
@@ -55,12 +56,13 @@ public class ClientProtoBuf {
 
     }
 
-    public void protoBufToReadfromStorageNode(String hostname, int portnumber, String chunkname) {
+    public void protoBufToReadfromStorageNode(String hostname, int portnumber, int chunkID) {
         try {
             Socket sockController = new Socket(hostname, portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
-                    .setReadfileName(chunkname)
+                    .setChunkId(chunkID)
+                    .setReqtyperead("read")
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()
