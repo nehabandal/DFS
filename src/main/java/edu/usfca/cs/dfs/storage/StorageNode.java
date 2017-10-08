@@ -15,6 +15,7 @@ public class StorageNode {
 
     public static void main(String[] args)
             throws Exception {
+
         String hostname = getHostname();
 //        StorageNode server = new StorageNode(9990);
 //        StorageNodeHelper shelper = new StorageNodeHelper();
@@ -36,6 +37,5 @@ public class StorageNode {
             throws UnknownHostException {
         return InetAddress.getLocalHost().getHostName();
     }
-
 
 }

@@ -22,7 +22,6 @@ public class StorageNodeHelper {
         String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
         String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
         if (reqWrite.equals("write")) {
-            System.out.println("write");
             if (recfilechunks.hasStoreChunkMsg()) {
                 StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
                 String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
