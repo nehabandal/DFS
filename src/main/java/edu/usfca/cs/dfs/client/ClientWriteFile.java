@@ -50,8 +50,10 @@ public class ClientWriteFile {
             // sp.write(chunk, host);
 //            cp.protoBufToSendReq(9991, chunkname);
 //            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
+            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
+
         }
-        cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
+//        cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
 
 
     }

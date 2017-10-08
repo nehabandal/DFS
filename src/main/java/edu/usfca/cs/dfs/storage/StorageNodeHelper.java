@@ -1,73 +1,112 @@
 package edu.usfca.cs.dfs.storage;
 
+import com.google.protobuf.ByteString;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Created by npbandal on 10/7/17.
  */
 public class StorageNodeHelper {
+    int count = 0;
 
     LinkedHashMap<Integer, byte[]> chunkIdData = new LinkedHashMap<>();
 
-    public void processClientRequest(int portnumber)
+    public void processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks)
             throws IOException {
-        ServerSocket srvSocket = new ServerSocket(portnumber);
-        Socket clientSocket = srvSocket.accept();
+        if (recfilechunks.hasStoreChunkMsg()) {
 
-        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-        String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
-        String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
-        if (reqWrite.equals("write")) {
-            if (recfilechunks.hasStoreChunkMsg()) {
-                StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
-                String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
-                int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-                String hostName = recfilechunks.getStoreChunkMsgOrBuilder().getHostName();
-                Integer chunkIDobj = chunkID;
-                System.out.println(storeChunkName); //ChunkName
-                System.out.println(chunkID); //chunkID
-//            System.out.println(hostName); //hostname
+            StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
+            String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
+            int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
+            System.out.println(storeChunkName); //ChunkName
+            System.out.println(chunkID); //chunkID
 
-                byte[] bytes = storeChunkMsg.toByteArray();
-                String s = new String(bytes);
-                System.out.println("File is" + s);
+            String chunkNameToStore = storeChunkName + chunkID;
+            System.out.println(chunkNameToStore);
 
-                chunkIdData.put(chunkIDobj, bytes);
-            }
-        } else if (reqRead.equals("read")) {
-            int chunkID = 0;
-            if (recfilechunks.hasRetrieveChunkFileMsg()) {
-                chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
-                System.out.println(chunkID);
-            }
-            System.out.println(chunkIdData.size());
-            for (Map.Entry<Integer, byte[]> entry : chunkIdData.entrySet()) {
-                Integer id = entry.getKey();
-                System.out.println(id);
-            }
+            StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
+                    .setChunkdatat(storeChunkMsg.getWritechunkdata());
 
+            FileOutputStream output = new FileOutputStream(chunkNameToStore);
+            profile.build().writeTo(output);
         }
     }
-//
-//    public void processClientReadRequest(int portnumber) throws IOException {
-//        ServerSocket srvSocket = new ServerSocket(portnumber);
-//        Socket clientSocket = srvSocket.accept();
-//        int chunkID = 0;
-//        StorageProtobuf.StorageMessagePB sendFilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-//        if (sendFilechunks.hasRetrieveChunkFileMsg()) {
-//            chunkID = sendFilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
-//        }
-//
-//        System.out.println(chunkIdData.size());
-//        for (Map.Entry<Integer, byte[]> entry : chunkIdData.entrySet()) {
-//            Integer id = entry.getKey();
-//            System.out.println(id);
-//        }
 
-//    }
+    public byte[] recClientChunkDataRequest(StorageProtobuf.StorageMessagePB recfilechunks) {
+        int chunkID = 0;
+        String fileName = null;
+        byte[] chunkfilecontents = null;
+        if (recfilechunks.hasRetrieveChunkFileMsg()) {
+            chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
+            fileName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
+            String chunkName = fileName + chunkID;
+            String path = findFile(chunkName, new File("/Users/npbandal/BigData/p1-nehabandal"));
+            String chunkfiletoread = path + "/" + chunkName;
+            chunkfilecontents = readChunkFromPath(chunkfiletoread);
+            String s = new String(chunkfilecontents);
+//            System.out.println("File content: " + s);
+        }
+        return chunkfilecontents;
+    }
+
+    public byte[] readChunkFromPath(String path) {
+        File file = new File(path);
+        FileInputStream fin = null;
+        byte fileContent[] = new byte[(int) file.length()];
+        try {
+            fin = new FileInputStream(file);
+            fin.read(fileContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fin != null)
+                    fin.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return fileContent;
+
+    }
+
+    public String findFile(String name, File file) {
+        File[] list = file.listFiles();
+        String pathNname = null;
+        if (list != null)
+            for (File actualFile : list) {
+                if (actualFile.isDirectory()) {
+                    findFile(name, actualFile);
+                } else if (name.equalsIgnoreCase(actualFile.getName())) {
+                    pathNname = String.valueOf(actualFile.getParentFile());
+                }
+            }
+        return pathNname;
+    }
+
+    public void sendChunkDatatoClient(int portnumber, byte[] chunkdata) {
+        String s = new String(chunkdata);
+        ByteString data = ByteString.copyFromUtf8(s);
+        try {
+            Socket sockController = new Socket("localhost", portnumber);
+            StorageProtobuf.RetrieveFile retrieveFile
+                    = StorageProtobuf.RetrieveFile.newBuilder()
+                    .setReadchunkdata(data)
+                    .build();
+            StorageProtobuf.StorageMessagePB msgWrapper =
+                    StorageProtobuf.StorageMessagePB.newBuilder()
+                            .setRetrieveChunkFileMsg(retrieveFile)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

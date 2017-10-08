@@ -4,6 +4,7 @@ import edu.usfca.cs.dfs.client.ClientProtoBuf;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class StorageNode {
@@ -17,13 +18,25 @@ public class StorageNode {
             throws Exception {
 
         String hostname = getHostname();
-//        StorageNode server = new StorageNode(9990);
-//        StorageNodeHelper shelper = new StorageNodeHelper();
-//        server.start();
         System.out.println("Starting storage node on " + hostname + "...");
+        byte[] chunkdata = null;
 //        server.heartbeat();
         StorageNodeHelper shelper = new StorageNodeHelper();
-        shelper.processClientRequest(9992);
+
+        //To process read or write request from client
+        ServerSocket srvSocket = new ServerSocket(9992);
+        Socket clientSocket = srvSocket.accept();
+        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
+        String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
+        String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
+        if (reqWrite.equals("write")) {
+            shelper.processClientWriteRequest(recfilechunks);
+        }
+        if (reqRead.equals("read")) {
+            chunkdata = shelper.recClientChunkDataRequest(recfilechunks);
+        }
+        shelper.sendChunkDatatoClient(9994, chunkdata);
+
     }
 
 

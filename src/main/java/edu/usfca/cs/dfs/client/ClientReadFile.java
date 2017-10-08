@@ -15,16 +15,14 @@ public class ClientReadFile {
 
         LinkedHashMap<String, Integer> HostID = new LinkedHashMap<>();
 //        cp.protoBufToSendReq(9993, fileName);
-
 //        HostID = controller.gethostname(); need to get updated with host and chunk details
-
-
         HostID.put("ML-ITS-601927", 1);
         for (Map.Entry<String, Integer> entry : HostID.entrySet()) {
             String hostName = entry.getKey();
             int chunkID = entry.getValue();
-            cp.protoBufToReadfromStorageNode(hostName, 9992, chunkID );
+            cp.protoBufToSendReadDataToStorageNode(hostName, 9992, fileName, chunkID);
         }
+        cp.receiveChunkdataFromStorageNode(9994);
 
     }
 

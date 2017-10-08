@@ -22,12 +22,10 @@ public class Client {
         ClientWriteFile writeFile = new ClientWriteFile();
         ClientReadFile readFile = new ClientReadFile();
 
-
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("read")) {
                 String fileToRead = args[i + 1];
                 readFile.read(fileToRead);
-                System.out.println(args[i + 1]);
             }
             if (args[i].equals("write")) {
                 String fileToWrite = args[i+1];
