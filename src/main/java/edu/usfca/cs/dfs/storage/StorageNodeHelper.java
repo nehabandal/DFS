@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 
@@ -24,11 +25,11 @@ public class StorageNodeHelper {
             StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
             String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
             int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-            System.out.println(storeChunkName); //ChunkName
-            System.out.println(chunkID); //chunkID
+//            System.out.println(storeChunkName); //ChunkName
+//            System.out.println(chunkID); //chunkID
 
             String chunkNameToStore = storeChunkName + chunkID;
-            System.out.println(chunkNameToStore);
+//            System.out.println(chunkNameToStore);
 
             StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
                     .setChunkdatat(storeChunkMsg.getWritechunkdata());
@@ -107,6 +108,21 @@ public class StorageNodeHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getPortnum() {
+        try {
+            ServerSocket srvSocket = new ServerSocket(9992);
+            Socket clientSocket = srvSocket.accept();
+            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
+            int portnum = recfilechunks.getStoreChunkMsgOrBuilder().getPortNum();
+            System.out.println(portnum);
+        }
+        catch (Exception e)
+        {
+
+        }
+
     }
 }
 

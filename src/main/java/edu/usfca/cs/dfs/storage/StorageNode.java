@@ -1,42 +1,57 @@
 package edu.usfca.cs.dfs.storage;
 
-import edu.usfca.cs.dfs.client.ClientProtoBuf;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class StorageNode {
-    protected Thread runningThread = null;
-    protected ServerSocket serverSocket = null;
-    protected int serverPort;
-    protected boolean isStopped = false;
-    private ClientProtoBuf pb = new ClientProtoBuf();
+
+    static final int PORT = 9990;
 
     public static void main(String[] args)
             throws Exception {
 
         String hostname = getHostname();
         System.out.println("Starting storage node on " + hostname + "...");
-        byte[] chunkdata = null;
+
 //        server.heartbeat();
-        StorageNodeHelper shelper = new StorageNodeHelper();
 
         //To process read or write request from client
-        ServerSocket srvSocket = new ServerSocket(9992);
-        Socket clientSocket = srvSocket.accept();
-        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-        String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
-        String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
-        if (reqWrite.equals("write")) {
-            shelper.processClientWriteRequest(recfilechunks);
-        }
-        if (reqRead.equals("read")) {
-            chunkdata = shelper.recClientChunkDataRequest(recfilechunks);
-        }
-        shelper.sendChunkDatatoClient(9994, chunkdata);
+        ServerSocket srvSocket = null;
+        Socket clientSocket = null;
+        try {
+            srvSocket = new ServerSocket(PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
 
+        }
+        while (srvSocket != null) {
+            try {
+                clientSocket = srvSocket.accept();
+            } catch (IOException e) {
+                System.out.println("I/O error: " + e);
+            }
+            new WriteThread(clientSocket).start();
+        }
+
+
+//        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
+//        String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
+//        String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
+//        if (reqWrite.equals("write")) {
+////            System.out.println("hi");
+//            shelper.processClientWriteRequest(recfilechunks);
+//        }
+//        if (reqRead.equals("read")) {
+//            chunkdata = shelper.recClientChunkDataRequest(recfilechunks);
+//            shelper.sendChunkDatatoClient(9994, chunkdata);
+//        }
+
+//        srvSocket.close();
+//        clientSocket.close();
     }
 
 

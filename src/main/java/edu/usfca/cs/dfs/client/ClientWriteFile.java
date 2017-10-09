@@ -41,21 +41,34 @@ public class ClientWriteFile {
         List<byte[]> fileInChunks;
         ClientProtoBuf cp = new ClientProtoBuf();
         fileInChunks = splitFile(fileName);
-        HashMap<String, Integer> hostPort = new HashMap<String, Integer>();
-        for (int j = 0; j < fileInChunks.size(); j++) {
-            String chunkname = fileName.getName() + "_chunk_" + j;
-            // Why does the controller need chunk name = Adding temporary
-            // List<String> hosts = controllerProtobuf.getHostNames();
-            // StorageProtobuf sp = new StorageProtoBuf(host);
-            // sp.write(chunk, host);
+        HashMap<Integer, String> hostPort = new HashMap<Integer, String>();
+        hostPort.put(9992, "ML-ITS-601927");
+        hostPort.put(9993, "ML-ITS-601927");
+        hostPort.put(9994, "ML-ITS-601927");
+//        hostPort.put(9995, "ML-ITS-601927");
+
+        int i = 0;
+
+
+//        for (int j = 0; j < fileInChunks.size(); j++) {
+        // Why does the controller need chunk name = Adding temporary
+        // List<String> hosts = controllerProtobuf.getHostNames();
+        // StorageProtobuf sp = new StorageProtoBuf(host);
+        // sp.write(chunk, host);
 //            cp.protoBufToSendReq(9991, chunkname);
 //            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
-            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
-
+//            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
+//            cp.protoBufToWriteintoStorageNode(hostname, portnum, fileName.getName(), fileInChunks.get(0));
+        for (Integer portnum : hostPort.keySet()) {
+            String value = hostPort.get(portnum);
+//            cp.setPortnum(portnum);
+//            System.out.println(portnum + " " + value);
+            cp.protoBufToWriteintoStorageNode(value, 9990, fileName.getName(), i + 1, fileInChunks.get(i));
+            i++;
         }
-//        cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
-
 
     }
-
+//        cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
 }
+
+

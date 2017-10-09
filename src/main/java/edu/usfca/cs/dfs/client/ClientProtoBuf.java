@@ -31,20 +31,35 @@ public class ClientProtoBuf {
 //    }
 //
 
+    public void setPortnum(int portnum) {
+        try {
+            Socket sockController = new Socket("localhost", 9992);
+            StorageProtobuf.StoreChunk storeChunkMsg
+                    = StorageProtobuf.StoreChunk.newBuilder()
+                    .setReqtypewrite("write")
+                    .setPortNum(portnum)
+                    .build();
+            StorageProtobuf.StorageMessagePB msgWrapper =
+                    StorageProtobuf.StorageMessagePB.newBuilder()
+                            .setStoreChunkMsg(storeChunkMsg)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, byte[] chunk) {
+
+    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         Socket sockController = null;
         try {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
-            // localhost:9990
-            // 12345 ---- localhost:9990
-            // 23485 ---------^
             sockController = new Socket(hostname, portnumber);
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
                     .setWritefilechunkName(filename)
-                    .setChunkId(1)
+                    .setChunkId(chunkId)
                     .setWritechunkdata(data)
                     .setReqtypewrite("write")
                     .build();
@@ -53,15 +68,9 @@ public class ClientProtoBuf {
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+            sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            try {
-                sockController.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
     }

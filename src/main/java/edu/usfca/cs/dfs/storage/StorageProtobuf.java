@@ -708,6 +708,11 @@ public final class StorageProtobuf {
      */
     com.google.protobuf.ByteString
         getReqtypewriteBytes();
+
+    /**
+     * <code>int32 portNum = 6;</code>
+     */
+    int getPortNum();
   }
   /**
    * Protobuf type {@code StoreChunk}
@@ -727,6 +732,7 @@ public final class StorageProtobuf {
       writechunkdata_ = com.google.protobuf.ByteString.EMPTY;
       hostName_ = "";
       reqtypewrite_ = "";
+      portNum_ = 0;
     }
 
     @java.lang.Override
@@ -783,6 +789,11 @@ public final class StorageProtobuf {
               java.lang.String s = input.readStringRequireUtf8();
 
               reqtypewrite_ = s;
+              break;
+            }
+            case 48: {
+
+              portNum_ = input.readInt32();
               break;
             }
           }
@@ -929,6 +940,15 @@ public final class StorageProtobuf {
       }
     }
 
+    public static final int PORTNUM_FIELD_NUMBER = 6;
+    private int portNum_;
+    /**
+     * <code>int32 portNum = 6;</code>
+     */
+    public int getPortNum() {
+      return portNum_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -956,6 +976,9 @@ public final class StorageProtobuf {
       if (!getReqtypewriteBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, reqtypewrite_);
       }
+      if (portNum_ != 0) {
+        output.writeInt32(6, portNum_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -980,6 +1003,10 @@ public final class StorageProtobuf {
       }
       if (!getReqtypewriteBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, reqtypewrite_);
+      }
+      if (portNum_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, portNum_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1007,6 +1034,8 @@ public final class StorageProtobuf {
           .equals(other.getHostName());
       result = result && getReqtypewrite()
           .equals(other.getReqtypewrite());
+      result = result && (getPortNum()
+          == other.getPortNum());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1028,6 +1057,8 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getHostName().hashCode();
       hash = (37 * hash) + REQTYPEWRITE_FIELD_NUMBER;
       hash = (53 * hash) + getReqtypewrite().hashCode();
+      hash = (37 * hash) + PORTNUM_FIELD_NUMBER;
+      hash = (53 * hash) + getPortNum();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1167,6 +1198,8 @@ public final class StorageProtobuf {
 
         reqtypewrite_ = "";
 
+        portNum_ = 0;
+
         return this;
       }
 
@@ -1194,6 +1227,7 @@ public final class StorageProtobuf {
         result.writechunkdata_ = writechunkdata_;
         result.hostName_ = hostName_;
         result.reqtypewrite_ = reqtypewrite_;
+        result.portNum_ = portNum_;
         onBuilt();
         return result;
       }
@@ -1252,6 +1286,9 @@ public final class StorageProtobuf {
         if (!other.getReqtypewrite().isEmpty()) {
           reqtypewrite_ = other.reqtypewrite_;
           onChanged();
+        }
+        if (other.getPortNum() != 0) {
+          setPortNum(other.getPortNum());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1538,6 +1575,32 @@ public final class StorageProtobuf {
   checkByteStringIsUtf8(value);
         
         reqtypewrite_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int portNum_ ;
+      /**
+       * <code>int32 portNum = 6;</code>
+       */
+      public int getPortNum() {
+        return portNum_;
+      }
+      /**
+       * <code>int32 portNum = 6;</code>
+       */
+      public Builder setPortNum(int value) {
+        
+        portNum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 portNum = 6;</code>
+       */
+      public Builder clearPortNum() {
+        
+        portNum_ = 0;
         onChanged();
         return this;
       }
@@ -3435,16 +3498,17 @@ public final class StorageProtobuf {
     java.lang.String[] descriptorData = {
       "\n\026storage_protobuf.proto\"A\n\007Profile\022\021\n\tc" +
       "hunkname\030\001 \001(\t\022\017\n\007chunkid\030\002 \001(\005\022\022\n\nchunk" +
-      "datat\030\003 \001(\014\"y\n\nStoreChunk\022\032\n\022writefilech" +
-      "unkName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\026\n\016writec" +
-      "hunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\024\n\014reqt" +
-      "ypewrite\030\005 \001(\t\"s\n\014RetrieveFile\022\024\n\014readfi" +
-      "leName\030\001 \001(\t\022\025\n\rreadchunkdata\030\002 \001(\014\022\020\n\010h" +
-      "ostName\030\003 \001(\t\022\017\n\007chunkId\030\004 \001(\005\022\023\n\013reqtyp" +
-      "eread\030\005 \001(\t\"n\n\020StorageMessagePB\022$\n\rstore" +
-      "ChunkMsg\030\001 \001(\0132\013.StoreChunkH\000\022-\n\024retriev",
-      "eChunkFileMsg\030\002 \001(\0132\r.RetrieveFileH\000B\005\n\003" +
-      "msgB\032\n\030edu.usfca.cs.dfs.storageb\006proto3"
+      "datat\030\003 \001(\014\"\212\001\n\nStoreChunk\022\032\n\022writefilec" +
+      "hunkName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\026\n\016write" +
+      "chunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\024\n\014req" +
+      "typewrite\030\005 \001(\t\022\017\n\007portNum\030\006 \001(\005\"s\n\014Retr" +
+      "ieveFile\022\024\n\014readfileName\030\001 \001(\t\022\025\n\rreadch" +
+      "unkdata\030\002 \001(\014\022\020\n\010hostName\030\003 \001(\t\022\017\n\007chunk" +
+      "Id\030\004 \001(\005\022\023\n\013reqtyperead\030\005 \001(\t\"n\n\020Storage" +
+      "MessagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.Store",
+      "ChunkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r." +
+      "RetrieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.df" +
+      "s.storageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3469,7 +3533,7 @@ public final class StorageProtobuf {
     internal_static_StoreChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StoreChunk_descriptor,
-        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "Reqtypewrite", });
+        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "Reqtypewrite", "PortNum", });
     internal_static_RetrieveFile_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_RetrieveFile_fieldAccessorTable = new

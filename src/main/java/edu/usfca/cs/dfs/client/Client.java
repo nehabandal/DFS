@@ -26,11 +26,13 @@ public class Client {
             if (args[i].equals("read")) {
                 String fileToRead = args[i + 1];
                 readFile.read(fileToRead);
+                break;
             }
             if (args[i].equals("write")) {
                 String fileToWrite = args[i+1];
                 File file = new File(fileToWrite);
                 writeFile.write(file);
+                break;
             }
         }
 
