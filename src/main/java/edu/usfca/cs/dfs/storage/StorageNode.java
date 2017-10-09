@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 
 public class StorageNode {
 
-    static final int PORT = 9990;
+    static final int PORT = 9995;
 
     public static void main(String[] args)
             throws Exception {
@@ -37,21 +37,6 @@ public class StorageNode {
             new WriteThread(clientSocket).start();
         }
 
-
-//        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-//        String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
-//        String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
-//        if (reqWrite.equals("write")) {
-////            System.out.println("hi");
-//            shelper.processClientWriteRequest(recfilechunks);
-//        }
-//        if (reqRead.equals("read")) {
-//            chunkdata = shelper.recClientChunkDataRequest(recfilechunks);
-//            shelper.sendChunkDatatoClient(9994, chunkdata);
-//        }
-
-//        srvSocket.close();
-//        clientSocket.close();
     }
 
 

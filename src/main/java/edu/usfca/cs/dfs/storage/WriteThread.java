@@ -8,7 +8,6 @@ import java.net.Socket;
 public class WriteThread extends Thread {
     protected Socket socket;
     private StorageNodeHelper sh = new StorageNodeHelper();
-    private volatile boolean running = true;
 
     public WriteThread(Socket clientSocket) {
         this.socket = clientSocket;
@@ -21,12 +20,13 @@ public class WriteThread extends Thread {
                 String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
                 String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
                 if (reqWrite.equals("write")) {
+                    System.out.println("hi");
                     sh.processClientWriteRequest(recfilechunks);
                 }
                 if (reqRead.equals("read")) {
                     System.out.println("hello");
                     chunkdata = sh.recClientChunkDataRequest(recfilechunks);
-                    sh.sendChunkDatatoClient(9994, chunkdata);
+//                    sh.sendChunkDatatoClient(9996, chunkdata);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

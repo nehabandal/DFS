@@ -51,7 +51,7 @@ public class StorageNodeHelper {
             String chunkfiletoread = path + "/" + chunkName;
             chunkfilecontents = readChunkFromPath(chunkfiletoread);
             String s = new String(chunkfilecontents);
-//            System.out.println("File content: " + s);
+            System.out.println("File content: " + chunkName + ":" + s);
         }
         return chunkfilecontents;
     }
@@ -117,9 +117,7 @@ public class StorageNodeHelper {
             StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
             int portnum = recfilechunks.getStoreChunkMsgOrBuilder().getPortNum();
             System.out.println(portnum);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
 

@@ -57,13 +57,11 @@ public class ClientWriteFile {
         // sp.write(chunk, host);
 //            cp.protoBufToSendReq(9991, chunkname);
 //            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
-//            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9992, fileName.getName(), fileInChunks.get(0));
-//            cp.protoBufToWriteintoStorageNode(hostname, portnum, fileName.getName(), fileInChunks.get(0));
         for (Integer portnum : hostPort.keySet()) {
             String value = hostPort.get(portnum);
 //            cp.setPortnum(portnum);
 //            System.out.println(portnum + " " + value);
-            cp.protoBufToWriteintoStorageNode(value, 9990, fileName.getName(), i + 1, fileInChunks.get(i));
+            cp.protoBufToWriteintoStorageNode(value, 9995, fileName.getName(), i + 1, fileInChunks.get(i));
             i++;
         }
 

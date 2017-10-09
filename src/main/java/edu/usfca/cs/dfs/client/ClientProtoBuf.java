@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.client;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.storage.StorageProtobuf;
+import edu.usfca.cs.dfs.storage.WriteThread;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -77,6 +78,7 @@ public class ClientProtoBuf {
 
     public void protoBufToSendReadDataToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
         try {
+
             Socket sockController = new Socket(hostname, portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
