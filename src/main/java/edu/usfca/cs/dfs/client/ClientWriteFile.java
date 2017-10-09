@@ -47,33 +47,15 @@ public class ClientWriteFile {
         hostPort.put(9994, "ML-ITS-601927");
 
         List<String> hostnames = new ArrayList<>();
-        int j = 0;
 
-//        for (int j = 0; j < fileInChunks.size(); j++) {
-        for (Integer portnum : hostPort.keySet()) {
+        for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
             hostnames = cp.clientToController(9000, chunkname);
             System.out.println(hostnames.size());
-            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9001, fileName.getName(), j + 1, fileInChunks.get(j));
-            j++;
+            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9001, fileName.getName(),
+                    j + 1, fileInChunks.get(j));
             Thread.sleep(100);
         }
-
-
-        // List<String> hosts = controllerProtobuf.getHostNames();
-        // StorageProtobuf sp = new StorageProtoBuf(host);
-        // sp.write(chunk, host);
-//            cp.protoBufToSendReq(9991, chunkname);
-//            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
-
-
-        //Storage node write from client
-//        for (Integer portnum : hostPort.keySet()) {
-//            String value = hostPort.get(portnum);
-//            System.out.println(portnum + " " + value);
-//            cp.protoBufToWriteintoStorageNode(value, 9995, fileName.getName(), i + 1, fileInChunks.get(i));
-//            i++;
-//        }
 
     }
 }
