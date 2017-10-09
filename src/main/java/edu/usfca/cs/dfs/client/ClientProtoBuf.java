@@ -1,36 +1,62 @@
 package edu.usfca.cs.dfs.client;
 
 import com.google.protobuf.ByteString;
+import edu.usfca.cs.dfs.controller.ControllerProtobuf;
 import edu.usfca.cs.dfs.storage.StorageProtobuf;
-import edu.usfca.cs.dfs.storage.WriteThread;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by npbandal on 10/1/17.
  */
 public class ClientProtoBuf {
 
-//    public void protoBufToReceiveRequestFromClientAtController(int portnumber, String msg) throws IOException {
-//        ServerSocket srvSocket = new ServerSocket(portnumber);
-//        try {
-//            Socket client = srvSocket.accept();
-//            StorageProtobuf.StorageMessagePB msgWrapper
-//                    = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(
-//                    client.getInputStream());
-//            if (msgWrapper.hasStoreChunkMsg()) {
-//                StorageMessages.StoreChunk storeChunkMsg
-//                        = msgWrapper.getStoreChunkMsg();
-//                System.out.println(msg + storeChunkMsg.getFileName());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
+    public List<String> clientToController(int portnumber, String chunkname) {
+        System.out.println(chunkname);
+        List<String> hostnames = new ArrayList<>();
+        try {
+            Socket sockController = new Socket("localhost", portnumber);
+            ControllerProtobuf.ClientTalk clientTalk
+                    = ControllerProtobuf.ClientTalk.newBuilder()
+                    .setChunkName(chunkname)
+                    .build();
+            ControllerProtobuf.ControllerMessagePB msgWrapper =
+                    ControllerProtobuf.ControllerMessagePB.newBuilder()
+                            .setClienttalk(clientTalk)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+
+
+            ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
+                    .parseDelimitedFrom(sockController.getInputStream());
+            hostnames = listOfHostnames.getHostnamesList();
+
+
+            sockController.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hostnames;
+    }
+
+    public List<String> receiveHostNames(int portnumber) {
+        List<String> hostnames = null;
+        try {
+            ServerSocket srvSocket = new ServerSocket(portnumber);
+            Socket clientSocket = srvSocket.accept();
+
+            srvSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hostnames;
+    }
 
     public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         Socket sockController = null;
@@ -57,7 +83,7 @@ public class ClientProtoBuf {
 
     }
 
-    public void protoBufToSendReadDataToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
+    public void protoBufToSendReadmetadataToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
         try {
 
             Socket sockController = new Socket(hostname, portnumber);
@@ -72,7 +98,26 @@ public class ClientProtoBuf {
                             .setRetrieveChunkFileMsg(retrieveFile)
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-            sockController.close();
+
+
+            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
+                    .parseDelimitedFrom(sockController.getInputStream());
+            if (recfilechunks.hasRetrieveChunkFileMsg()) {
+                StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
+                ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
+
+                byte[] chunkbytes = chunkdata.toByteArray();
+                System.out.println(new String(chunkbytes));
+
+                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
+                        .setChunkdatat(chunkdata);
+
+                String chunkname = filename + "ThanksGanesha" + chunkID;
+                FileOutputStream output = new FileOutputStream(chunkname);
+                profile.build().writeTo(output);
+
+                sockController.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,7 +127,8 @@ public class ClientProtoBuf {
         try {
             ServerSocket srvSocket = new ServerSocket(portnumber);
             Socket clientSocket = srvSocket.accept();
-            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
+            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
             if (recfilechunks.hasRetrieveChunkFileMsg()) {
                 StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
                 ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
@@ -141,25 +187,8 @@ public class ClientProtoBuf {
 //        }
 //    }
 
-//    Controller protobuf
-//    public void protoBufToSendReq(int portnumber, String chunkname) {
-//        try {
-//            Socket sockController = new Socket("localhost", portnumber);
-//            StorageMessages.StoreChunk storeChunkMsg
-//                    = StorageMessages.StoreChunk.newBuilder()
-//                    .setFileName(chunkname)
-//                    .build();
-//            StorageMessages.StorageMessageWrapper msgWrapper =
-//                    StorageMessages.StorageMessageWrapper.newBuilder()
-//                            .setStoreChunkMsg(storeChunkMsg)
-//                            .build();
-//            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-////            sockController.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-}
 
+}
 
 
 

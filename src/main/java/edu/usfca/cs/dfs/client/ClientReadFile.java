@@ -7,24 +7,22 @@ import java.util.Map;
  * Created by npbandal on 10/7/17.
  */
 public class ClientReadFile {
-    ClientProtoBuf cp = new ClientProtoBuf();
 
-    public void read(String fileName) {
+    public void read(String fileName) throws InterruptedException {
 
         LinkedHashMap<Integer, String> HostID = new LinkedHashMap<>();
 //        cp.protoBufToSendReq(9993, fileName);
+        ClientProtoBuf cp = new ClientProtoBuf();
 //        HostID = controller.gethostname(); need to get updated with host and chunk details
         HostID.put(9992, "ML-ITS-601927");
         HostID.put(9993, "ML-ITS-601927");
         HostID.put(9994, "ML-ITS-601927");
-        int i =1;
+        int i = 1;
         for (Map.Entry<Integer, String> entry : HostID.entrySet()) {
-            Integer portnum = entry.getKey();
-            String hostName = entry.getValue();
-            cp.protoBufToSendReadDataToStorageNode("localhost", 9995, fileName, i);
+            cp.protoBufToSendReadmetadataToStorageNode("localhost", 9001, fileName, i);
             i++;
+            Thread.sleep(100);
         }
-//        cp.receiveChunkdataFromStorageNode(9996);
 
 
     }

@@ -39,21 +39,38 @@ public class StorageNodeHelper {
         }
     }
 
-    public byte[] recClientChunkDataRequest(StorageProtobuf.StorageMessagePB recfilechunks) {
+    public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
+        System.out.println("req rec");
         int chunkID = 0;
         String fileName = null;
         byte[] chunkfilecontents = null;
         if (recfilechunks.hasRetrieveChunkFileMsg()) {
             chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
             fileName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
+
+
             String chunkName = fileName + chunkID;
             String path = findFile(chunkName, new File("/Users/npbandal/BigData/p1-nehabandal"));
             String chunkfiletoread = path + "/" + chunkName;
+
             chunkfilecontents = readChunkFromPath(chunkfiletoread);
+
             String s = new String(chunkfilecontents);
+            ByteString data = ByteString.copyFromUtf8(s);
             System.out.println("File content: " + chunkName + ":" + s);
+
+
+            StorageProtobuf.RetrieveFile retrieveFile
+                    = StorageProtobuf.RetrieveFile.newBuilder()
+                    .setReadchunkdata(data)
+                    .build();
+            StorageProtobuf.StorageMessagePB msgWrapper =
+                    StorageProtobuf.StorageMessagePB.newBuilder()
+                            .setRetrieveChunkFileMsg(retrieveFile)
+                            .build();
+            msgWrapper.writeDelimitedTo(clientSocket.getOutputStream());
+
         }
-        return chunkfilecontents;
     }
 
     public byte[] readChunkFromPath(String path) {
@@ -91,24 +108,7 @@ public class StorageNodeHelper {
         return pathNname;
     }
 
-    public void sendChunkDatatoClient(int portnumber, byte[] chunkdata) {
-        String s = new String(chunkdata);
-        ByteString data = ByteString.copyFromUtf8(s);
-        try {
-            Socket sockController = new Socket("localhost", portnumber);
-            StorageProtobuf.RetrieveFile retrieveFile
-                    = StorageProtobuf.RetrieveFile.newBuilder()
-                    .setReadchunkdata(data)
-                    .build();
-            StorageProtobuf.StorageMessagePB msgWrapper =
-                    StorageProtobuf.StorageMessagePB.newBuilder()
-                            .setRetrieveChunkFileMsg(retrieveFile)
-                            .build();
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }
 
