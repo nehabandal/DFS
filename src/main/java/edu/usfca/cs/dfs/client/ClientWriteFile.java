@@ -59,7 +59,7 @@ public class ClientWriteFile {
 //            hostinfo = pb.protoBufToReceiveResponseFromControllerAtClientSide(9999);
         for (Integer portnum : hostPort.keySet()) {
             String value = hostPort.get(portnum);
-//            cp.setPortnum(portnum);
+            cp.setPortnum(portnum);
 //            System.out.println(portnum + " " + value);
             cp.protoBufToWriteintoStorageNode(value, 9995, fileName.getName(), i + 1, fileInChunks.get(i));
             i++;

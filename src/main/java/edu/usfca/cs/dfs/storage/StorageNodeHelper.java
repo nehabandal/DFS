@@ -110,17 +110,5 @@ public class StorageNodeHelper {
         }
     }
 
-    public void getPortnum() {
-        try {
-            ServerSocket srvSocket = new ServerSocket(9992);
-            Socket clientSocket = srvSocket.accept();
-            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-            int portnum = recfilechunks.getStoreChunkMsgOrBuilder().getPortNum();
-            System.out.println(portnum);
-        } catch (Exception e) {
-
-        }
-
-    }
 }
 

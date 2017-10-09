@@ -32,25 +32,6 @@ public class ClientProtoBuf {
 //    }
 //
 
-    public void setPortnum(int portnum) {
-        try {
-            Socket sockController = new Socket("localhost", 9992);
-            StorageProtobuf.StoreChunk storeChunkMsg
-                    = StorageProtobuf.StoreChunk.newBuilder()
-                    .setReqtypewrite("write")
-                    .setPortNum(portnum)
-                    .build();
-            StorageProtobuf.StorageMessagePB msgWrapper =
-                    StorageProtobuf.StorageMessagePB.newBuilder()
-                            .setStoreChunkMsg(storeChunkMsg)
-                            .build();
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         Socket sockController = null;
         try {
