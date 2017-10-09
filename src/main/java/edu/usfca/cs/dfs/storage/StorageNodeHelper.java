@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 
@@ -14,9 +13,7 @@ import java.util.LinkedHashMap;
  * Created by npbandal on 10/7/17.
  */
 public class StorageNodeHelper {
-    int count = 0;
 
-    LinkedHashMap<Integer, byte[]> chunkIdData = new LinkedHashMap<>();
 
     public void processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks)
             throws IOException {
@@ -31,6 +28,7 @@ public class StorageNodeHelper {
             String chunkNameToStore = storeChunkName + chunkID;
 //            System.out.println(chunkNameToStore);
 
+            //Writing into chunks
             StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
                     .setChunkdatat(storeChunkMsg.getWritechunkdata());
 
@@ -59,7 +57,7 @@ public class StorageNodeHelper {
             ByteString data = ByteString.copyFromUtf8(s);
             System.out.println("File content: " + chunkName + ":" + s);
 
-
+            //Sending chunk data to client
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadchunkdata(data)
@@ -107,7 +105,6 @@ public class StorageNodeHelper {
             }
         return pathNname;
     }
-
 
 
 }

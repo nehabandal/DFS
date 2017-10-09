@@ -21,25 +21,18 @@ public class ControllerHelper {
                         = msgWrapper.getClienttalk();
                 System.out.println(msg + clientReq.getChunkName());
             }
+
+            //Sending response to controller
             ControllerProtobuf.ListOfHostnames msgWrapperRes =
                     ControllerProtobuf.ListOfHostnames.newBuilder()
                             .addAllHostnames(activeHostnames)
                             .build();
             msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
             clientSocket.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void sendHostNamesToClient(int portnumber, List<String> activeHostnames) throws IOException {
-        Socket sockController = new Socket("localhost", portnumber);
-
-        ControllerProtobuf.ListOfHostnames msgWrapper =
-                ControllerProtobuf.ListOfHostnames.newBuilder()
-                        .addAllHostnames(activeHostnames)
-                        .build();
-        msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-        sockController.close();
-    }
 }

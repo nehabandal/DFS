@@ -6,7 +6,6 @@ import edu.usfca.cs.dfs.storage.StorageProtobuf;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +31,7 @@ public class ClientProtoBuf {
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
 
 
+            //Hostnames back from controller
             ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
                     .parseDelimitedFrom(sockController.getInputStream());
             hostnames = listOfHostnames.getHostnamesList();
@@ -45,18 +45,6 @@ public class ClientProtoBuf {
         return hostnames;
     }
 
-    public List<String> receiveHostNames(int portnumber) {
-        List<String> hostnames = null;
-        try {
-            ServerSocket srvSocket = new ServerSocket(portnumber);
-            Socket clientSocket = srvSocket.accept();
-
-            srvSocket.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return hostnames;
-    }
 
     public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         Socket sockController = null;
@@ -83,7 +71,7 @@ public class ClientProtoBuf {
 
     }
 
-    public void protoBufToSendReadmetadataToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
+    public void sendReadReqToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
         try {
 
             Socket sockController = new Socket(hostname, portnumber);
@@ -99,7 +87,7 @@ public class ClientProtoBuf {
                             .build();
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
 
-
+            //Receive chunks from storage nodes
             StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
                     .parseDelimitedFrom(sockController.getInputStream());
             if (recfilechunks.hasRetrieveChunkFileMsg()) {
@@ -122,31 +110,6 @@ public class ClientProtoBuf {
             e.printStackTrace();
         }
     }
-
-    public void receiveChunkdataFromStorageNode(int portnumber) {
-        try {
-            ServerSocket srvSocket = new ServerSocket(portnumber);
-            Socket clientSocket = srvSocket.accept();
-            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
-                    .parseDelimitedFrom(clientSocket.getInputStream());
-            if (recfilechunks.hasRetrieveChunkFileMsg()) {
-                StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
-                ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
-
-//                byte[] chunkbytes = chunkdata.toByteArray();
-//                System.out.println(new String(chunkbytes));
-
-                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
-                        .setChunkdatat(chunkdata);
-
-                FileOutputStream output = new FileOutputStream("ThanksGanesha");
-                profile.build().writeTo(output);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
 //
 //    public void protoBufToSendHeartbeatFromStorageNodeToController(int portnumber, String msg) {
