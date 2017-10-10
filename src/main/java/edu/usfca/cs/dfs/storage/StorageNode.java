@@ -15,25 +15,11 @@ public class StorageNode {
         String hostname = getHostname();
         System.out.println("Starting storage node on " + hostname + "...");
         StorageNodeHelper sh = new StorageNodeHelper();
-//        byte[] chunkdata = null;
 
 //        server.heartbeat();
-        ServerSocket srvSocket = new ServerSocket(9001);
-        while (true) {
-            Socket clientSocket = srvSocket.accept();
-            StorageProtobuf.StorageMessagePB recfilechunks =
-                    StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-            String reqWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqtypewrite();
-            String reqRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqtyperead();
-            if (reqWrite.equals("write")) {
-                System.out.println("hi");
-                sh.processClientWriteRequest(recfilechunks);
-            }
-            if (reqRead.equals("read")) {
-                System.out.println("hello");
-                sh.processClientReadRequest(clientSocket, recfilechunks);
-            }
-        }
+        ServerSocket srvSocket = new ServerSocket(9901);
+        sh.clientRequests(srvSocket);
+
     }
 
 

@@ -11,14 +11,17 @@ import java.util.List;
 public class ControllerHelper {
 
     public void receiveClientReqAtController(ServerSocket srvSocket, String msg, List<String> activeHostnames) throws IOException {
-        try {
+        int chunknum = 0;
+        int chunkID = 0;
+        while (true) {
 
             Socket clientSocket = srvSocket.accept();
             ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
                     .parseDelimitedFrom(clientSocket.getInputStream());
             if (msgWrapper.hasClienttalk()) {
-                ControllerProtobuf.ClientTalk clientReq
-                        = msgWrapper.getClienttalk();
+                ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
+                chunknum = clientReq.getNumChunks();
+                chunkID = clientReq.getChunkId();
                 System.out.println(msg + clientReq.getChunkName());
             }
 
@@ -28,11 +31,12 @@ public class ControllerHelper {
                             .addAllHostnames(activeHostnames)
                             .build();
             msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
-            clientSocket.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            if(chunknum == chunkID)
+            {
+                break;
+            }
         }
+        srvSocket.close();
     }
-
 }

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ClientProtoBuf {
 
-    public List<String> clientToController(int portnumber, String chunkname) {
+    public List<String> clientToController(int portnumber, String chunkname, int chunknum, int chunkId) {
         System.out.println(chunkname);
         List<String> hostnames = new ArrayList<>();
         try {
@@ -23,6 +23,8 @@ public class ClientProtoBuf {
             ControllerProtobuf.ClientTalk clientTalk
                     = ControllerProtobuf.ClientTalk.newBuilder()
                     .setChunkName(chunkname)
+                    .setNumChunks(chunknum)
+                    .setChunkId(chunkId)
                     .build();
             ControllerProtobuf.ControllerMessagePB msgWrapper =
                     ControllerProtobuf.ControllerMessagePB.newBuilder()
@@ -36,7 +38,6 @@ public class ClientProtoBuf {
                     .parseDelimitedFrom(sockController.getInputStream());
             hostnames = listOfHostnames.getHostnamesList();
 
-
             sockController.close();
 
         } catch (IOException e) {
@@ -45,41 +46,46 @@ public class ClientProtoBuf {
         return hostnames;
     }
 
-
-    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
-        Socket sockController = null;
+    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, int chunknum) {
         try {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
-            sockController = new Socket(hostname, portnumber);
+
+            Socket sockController = new Socket("localhost", portnumber);
+
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
                     .setWritefilechunkName(filename)
                     .setChunkId(chunkId)
+                    .setReqTypeWrite("write")
                     .setWritechunkdata(data)
-                    .setReqtypewrite("write")
+                    .setChunkNums(chunknum)
                     .build();
+
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()
                             .setStoreChunkMsg(storeChunkMsg)
                             .build();
+
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-            sockController.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void sendReadReqToStorageNode(String hostname, int portnumber, String filename, int chunkID) {
+    public void sendReadReqToStorageNode(String hostname, int portnumber, String filename, int chunkID, int hostnums) {
+        Socket sockController = null;
         try {
 
-            Socket sockController = new Socket(hostname, portnumber);
+            sockController = new Socket(hostname, portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadfileName(filename)
                     .setChunkId(chunkID)
-                    .setReqtyperead("read")
+                    .setHostNums(hostnums)
+                    .setReqTypeRead("read")
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()
@@ -103,9 +109,9 @@ public class ClientProtoBuf {
                 String chunkname = filename + "ThanksGanesha" + chunkID;
                 FileOutputStream output = new FileOutputStream(chunkname);
                 profile.build().writeTo(output);
-
-                sockController.close();
             }
+
+            sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

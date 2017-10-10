@@ -700,19 +700,24 @@ public final class StorageProtobuf {
         getHostNameBytes();
 
     /**
-     * <code>string reqtypewrite = 5;</code>
-     */
-    java.lang.String getReqtypewrite();
-    /**
-     * <code>string reqtypewrite = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getReqtypewriteBytes();
-
-    /**
-     * <code>int32 portNum = 6;</code>
+     * <code>int32 portNum = 5;</code>
      */
     int getPortNum();
+
+    /**
+     * <code>int32 chunkNums = 6;</code>
+     */
+    int getChunkNums();
+
+    /**
+     * <code>string reqTypeWrite = 7;</code>
+     */
+    java.lang.String getReqTypeWrite();
+    /**
+     * <code>string reqTypeWrite = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getReqTypeWriteBytes();
   }
   /**
    * Protobuf type {@code StoreChunk}
@@ -731,8 +736,9 @@ public final class StorageProtobuf {
       chunkId_ = 0;
       writechunkdata_ = com.google.protobuf.ByteString.EMPTY;
       hostName_ = "";
-      reqtypewrite_ = "";
       portNum_ = 0;
+      chunkNums_ = 0;
+      reqTypeWrite_ = "";
     }
 
     @java.lang.Override
@@ -785,15 +791,20 @@ public final class StorageProtobuf {
               hostName_ = s;
               break;
             }
-            case 42: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 40: {
 
-              reqtypewrite_ = s;
+              portNum_ = input.readInt32();
               break;
             }
             case 48: {
 
-              portNum_ = input.readInt32();
+              chunkNums_ = input.readInt32();
+              break;
+            }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              reqTypeWrite_ = s;
               break;
             }
           }
@@ -906,47 +917,56 @@ public final class StorageProtobuf {
       }
     }
 
-    public static final int REQTYPEWRITE_FIELD_NUMBER = 5;
-    private volatile java.lang.Object reqtypewrite_;
+    public static final int PORTNUM_FIELD_NUMBER = 5;
+    private int portNum_;
     /**
-     * <code>string reqtypewrite = 5;</code>
+     * <code>int32 portNum = 5;</code>
      */
-    public java.lang.String getReqtypewrite() {
-      java.lang.Object ref = reqtypewrite_;
+    public int getPortNum() {
+      return portNum_;
+    }
+
+    public static final int CHUNKNUMS_FIELD_NUMBER = 6;
+    private int chunkNums_;
+    /**
+     * <code>int32 chunkNums = 6;</code>
+     */
+    public int getChunkNums() {
+      return chunkNums_;
+    }
+
+    public static final int REQTYPEWRITE_FIELD_NUMBER = 7;
+    private volatile java.lang.Object reqTypeWrite_;
+    /**
+     * <code>string reqTypeWrite = 7;</code>
+     */
+    public java.lang.String getReqTypeWrite() {
+      java.lang.Object ref = reqTypeWrite_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        reqtypewrite_ = s;
+        reqTypeWrite_ = s;
         return s;
       }
     }
     /**
-     * <code>string reqtypewrite = 5;</code>
+     * <code>string reqTypeWrite = 7;</code>
      */
     public com.google.protobuf.ByteString
-        getReqtypewriteBytes() {
-      java.lang.Object ref = reqtypewrite_;
+        getReqTypeWriteBytes() {
+      java.lang.Object ref = reqTypeWrite_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        reqtypewrite_ = b;
+        reqTypeWrite_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
-    }
-
-    public static final int PORTNUM_FIELD_NUMBER = 6;
-    private int portNum_;
-    /**
-     * <code>int32 portNum = 6;</code>
-     */
-    public int getPortNum() {
-      return portNum_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -973,11 +993,14 @@ public final class StorageProtobuf {
       if (!getHostNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, hostName_);
       }
-      if (!getReqtypewriteBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, reqtypewrite_);
-      }
       if (portNum_ != 0) {
-        output.writeInt32(6, portNum_);
+        output.writeInt32(5, portNum_);
+      }
+      if (chunkNums_ != 0) {
+        output.writeInt32(6, chunkNums_);
+      }
+      if (!getReqTypeWriteBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, reqTypeWrite_);
       }
       unknownFields.writeTo(output);
     }
@@ -1001,12 +1024,16 @@ public final class StorageProtobuf {
       if (!getHostNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, hostName_);
       }
-      if (!getReqtypewriteBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, reqtypewrite_);
-      }
       if (portNum_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, portNum_);
+          .computeInt32Size(5, portNum_);
+      }
+      if (chunkNums_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, chunkNums_);
+      }
+      if (!getReqTypeWriteBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, reqTypeWrite_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1032,10 +1059,12 @@ public final class StorageProtobuf {
           .equals(other.getWritechunkdata());
       result = result && getHostName()
           .equals(other.getHostName());
-      result = result && getReqtypewrite()
-          .equals(other.getReqtypewrite());
       result = result && (getPortNum()
           == other.getPortNum());
+      result = result && (getChunkNums()
+          == other.getChunkNums());
+      result = result && getReqTypeWrite()
+          .equals(other.getReqTypeWrite());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1055,10 +1084,12 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getWritechunkdata().hashCode();
       hash = (37 * hash) + HOSTNAME_FIELD_NUMBER;
       hash = (53 * hash) + getHostName().hashCode();
-      hash = (37 * hash) + REQTYPEWRITE_FIELD_NUMBER;
-      hash = (53 * hash) + getReqtypewrite().hashCode();
       hash = (37 * hash) + PORTNUM_FIELD_NUMBER;
       hash = (53 * hash) + getPortNum();
+      hash = (37 * hash) + CHUNKNUMS_FIELD_NUMBER;
+      hash = (53 * hash) + getChunkNums();
+      hash = (37 * hash) + REQTYPEWRITE_FIELD_NUMBER;
+      hash = (53 * hash) + getReqTypeWrite().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1196,9 +1227,11 @@ public final class StorageProtobuf {
 
         hostName_ = "";
 
-        reqtypewrite_ = "";
-
         portNum_ = 0;
+
+        chunkNums_ = 0;
+
+        reqTypeWrite_ = "";
 
         return this;
       }
@@ -1226,8 +1259,9 @@ public final class StorageProtobuf {
         result.chunkId_ = chunkId_;
         result.writechunkdata_ = writechunkdata_;
         result.hostName_ = hostName_;
-        result.reqtypewrite_ = reqtypewrite_;
         result.portNum_ = portNum_;
+        result.chunkNums_ = chunkNums_;
+        result.reqTypeWrite_ = reqTypeWrite_;
         onBuilt();
         return result;
       }
@@ -1283,12 +1317,15 @@ public final class StorageProtobuf {
           hostName_ = other.hostName_;
           onChanged();
         }
-        if (!other.getReqtypewrite().isEmpty()) {
-          reqtypewrite_ = other.reqtypewrite_;
-          onChanged();
-        }
         if (other.getPortNum() != 0) {
           setPortNum(other.getPortNum());
+        }
+        if (other.getChunkNums() != 0) {
+          setChunkNums(other.getChunkNums());
+        }
+        if (!other.getReqTypeWrite().isEmpty()) {
+          reqTypeWrite_ = other.reqTypeWrite_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1510,84 +1547,15 @@ public final class StorageProtobuf {
         return this;
       }
 
-      private java.lang.Object reqtypewrite_ = "";
-      /**
-       * <code>string reqtypewrite = 5;</code>
-       */
-      public java.lang.String getReqtypewrite() {
-        java.lang.Object ref = reqtypewrite_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          reqtypewrite_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string reqtypewrite = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getReqtypewriteBytes() {
-        java.lang.Object ref = reqtypewrite_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          reqtypewrite_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string reqtypewrite = 5;</code>
-       */
-      public Builder setReqtypewrite(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        reqtypewrite_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string reqtypewrite = 5;</code>
-       */
-      public Builder clearReqtypewrite() {
-        
-        reqtypewrite_ = getDefaultInstance().getReqtypewrite();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string reqtypewrite = 5;</code>
-       */
-      public Builder setReqtypewriteBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        reqtypewrite_ = value;
-        onChanged();
-        return this;
-      }
-
       private int portNum_ ;
       /**
-       * <code>int32 portNum = 6;</code>
+       * <code>int32 portNum = 5;</code>
        */
       public int getPortNum() {
         return portNum_;
       }
       /**
-       * <code>int32 portNum = 6;</code>
+       * <code>int32 portNum = 5;</code>
        */
       public Builder setPortNum(int value) {
         
@@ -1596,11 +1564,106 @@ public final class StorageProtobuf {
         return this;
       }
       /**
-       * <code>int32 portNum = 6;</code>
+       * <code>int32 portNum = 5;</code>
        */
       public Builder clearPortNum() {
         
         portNum_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int chunkNums_ ;
+      /**
+       * <code>int32 chunkNums = 6;</code>
+       */
+      public int getChunkNums() {
+        return chunkNums_;
+      }
+      /**
+       * <code>int32 chunkNums = 6;</code>
+       */
+      public Builder setChunkNums(int value) {
+        
+        chunkNums_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 chunkNums = 6;</code>
+       */
+      public Builder clearChunkNums() {
+        
+        chunkNums_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object reqTypeWrite_ = "";
+      /**
+       * <code>string reqTypeWrite = 7;</code>
+       */
+      public java.lang.String getReqTypeWrite() {
+        java.lang.Object ref = reqTypeWrite_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          reqTypeWrite_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string reqTypeWrite = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getReqTypeWriteBytes() {
+        java.lang.Object ref = reqTypeWrite_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          reqTypeWrite_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string reqTypeWrite = 7;</code>
+       */
+      public Builder setReqTypeWrite(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        reqTypeWrite_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string reqTypeWrite = 7;</code>
+       */
+      public Builder clearReqTypeWrite() {
+        
+        reqTypeWrite_ = getDefaultInstance().getReqTypeWrite();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string reqTypeWrite = 7;</code>
+       */
+      public Builder setReqTypeWriteBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        reqTypeWrite_ = value;
         onChanged();
         return this;
       }
@@ -1688,14 +1751,19 @@ public final class StorageProtobuf {
     int getChunkId();
 
     /**
-     * <code>string reqtyperead = 5;</code>
+     * <code>int32 hostNums = 5;</code>
      */
-    java.lang.String getReqtyperead();
+    int getHostNums();
+
     /**
-     * <code>string reqtyperead = 5;</code>
+     * <code>string reqTypeRead = 6;</code>
+     */
+    java.lang.String getReqTypeRead();
+    /**
+     * <code>string reqTypeRead = 6;</code>
      */
     com.google.protobuf.ByteString
-        getReqtypereadBytes();
+        getReqTypeReadBytes();
   }
   /**
    * Protobuf type {@code RetrieveFile}
@@ -1714,7 +1782,8 @@ public final class StorageProtobuf {
       readchunkdata_ = com.google.protobuf.ByteString.EMPTY;
       hostName_ = "";
       chunkId_ = 0;
-      reqtyperead_ = "";
+      hostNums_ = 0;
+      reqTypeRead_ = "";
     }
 
     @java.lang.Override
@@ -1767,10 +1836,15 @@ public final class StorageProtobuf {
               chunkId_ = input.readInt32();
               break;
             }
-            case 42: {
+            case 40: {
+
+              hostNums_ = input.readInt32();
+              break;
+            }
+            case 50: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              reqtyperead_ = s;
+              reqTypeRead_ = s;
               break;
             }
           }
@@ -1883,34 +1957,43 @@ public final class StorageProtobuf {
       return chunkId_;
     }
 
-    public static final int REQTYPEREAD_FIELD_NUMBER = 5;
-    private volatile java.lang.Object reqtyperead_;
+    public static final int HOSTNUMS_FIELD_NUMBER = 5;
+    private int hostNums_;
     /**
-     * <code>string reqtyperead = 5;</code>
+     * <code>int32 hostNums = 5;</code>
      */
-    public java.lang.String getReqtyperead() {
-      java.lang.Object ref = reqtyperead_;
+    public int getHostNums() {
+      return hostNums_;
+    }
+
+    public static final int REQTYPEREAD_FIELD_NUMBER = 6;
+    private volatile java.lang.Object reqTypeRead_;
+    /**
+     * <code>string reqTypeRead = 6;</code>
+     */
+    public java.lang.String getReqTypeRead() {
+      java.lang.Object ref = reqTypeRead_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        reqtyperead_ = s;
+        reqTypeRead_ = s;
         return s;
       }
     }
     /**
-     * <code>string reqtyperead = 5;</code>
+     * <code>string reqTypeRead = 6;</code>
      */
     public com.google.protobuf.ByteString
-        getReqtypereadBytes() {
-      java.lang.Object ref = reqtyperead_;
+        getReqTypeReadBytes() {
+      java.lang.Object ref = reqTypeRead_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        reqtyperead_ = b;
+        reqTypeRead_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1941,8 +2024,11 @@ public final class StorageProtobuf {
       if (chunkId_ != 0) {
         output.writeInt32(4, chunkId_);
       }
-      if (!getReqtypereadBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, reqtyperead_);
+      if (hostNums_ != 0) {
+        output.writeInt32(5, hostNums_);
+      }
+      if (!getReqTypeReadBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, reqTypeRead_);
       }
       unknownFields.writeTo(output);
     }
@@ -1966,8 +2052,12 @@ public final class StorageProtobuf {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, chunkId_);
       }
-      if (!getReqtypereadBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, reqtyperead_);
+      if (hostNums_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, hostNums_);
+      }
+      if (!getReqTypeReadBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, reqTypeRead_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1993,8 +2083,10 @@ public final class StorageProtobuf {
           .equals(other.getHostName());
       result = result && (getChunkId()
           == other.getChunkId());
-      result = result && getReqtyperead()
-          .equals(other.getReqtyperead());
+      result = result && (getHostNums()
+          == other.getHostNums());
+      result = result && getReqTypeRead()
+          .equals(other.getReqTypeRead());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2014,8 +2106,10 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getHostName().hashCode();
       hash = (37 * hash) + CHUNKID_FIELD_NUMBER;
       hash = (53 * hash) + getChunkId();
+      hash = (37 * hash) + HOSTNUMS_FIELD_NUMBER;
+      hash = (53 * hash) + getHostNums();
       hash = (37 * hash) + REQTYPEREAD_FIELD_NUMBER;
-      hash = (53 * hash) + getReqtyperead().hashCode();
+      hash = (53 * hash) + getReqTypeRead().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2153,7 +2247,9 @@ public final class StorageProtobuf {
 
         chunkId_ = 0;
 
-        reqtyperead_ = "";
+        hostNums_ = 0;
+
+        reqTypeRead_ = "";
 
         return this;
       }
@@ -2181,7 +2277,8 @@ public final class StorageProtobuf {
         result.readchunkdata_ = readchunkdata_;
         result.hostName_ = hostName_;
         result.chunkId_ = chunkId_;
-        result.reqtyperead_ = reqtyperead_;
+        result.hostNums_ = hostNums_;
+        result.reqTypeRead_ = reqTypeRead_;
         onBuilt();
         return result;
       }
@@ -2237,8 +2334,11 @@ public final class StorageProtobuf {
         if (other.getChunkId() != 0) {
           setChunkId(other.getChunkId());
         }
-        if (!other.getReqtyperead().isEmpty()) {
-          reqtyperead_ = other.reqtyperead_;
+        if (other.getHostNums() != 0) {
+          setHostNums(other.getHostNums());
+        }
+        if (!other.getReqTypeRead().isEmpty()) {
+          reqTypeRead_ = other.reqTypeRead_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -2461,71 +2561,97 @@ public final class StorageProtobuf {
         return this;
       }
 
-      private java.lang.Object reqtyperead_ = "";
+      private int hostNums_ ;
       /**
-       * <code>string reqtyperead = 5;</code>
+       * <code>int32 hostNums = 5;</code>
        */
-      public java.lang.String getReqtyperead() {
-        java.lang.Object ref = reqtyperead_;
+      public int getHostNums() {
+        return hostNums_;
+      }
+      /**
+       * <code>int32 hostNums = 5;</code>
+       */
+      public Builder setHostNums(int value) {
+        
+        hostNums_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 hostNums = 5;</code>
+       */
+      public Builder clearHostNums() {
+        
+        hostNums_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object reqTypeRead_ = "";
+      /**
+       * <code>string reqTypeRead = 6;</code>
+       */
+      public java.lang.String getReqTypeRead() {
+        java.lang.Object ref = reqTypeRead_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          reqtyperead_ = s;
+          reqTypeRead_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string reqtyperead = 5;</code>
+       * <code>string reqTypeRead = 6;</code>
        */
       public com.google.protobuf.ByteString
-          getReqtypereadBytes() {
-        java.lang.Object ref = reqtyperead_;
+          getReqTypeReadBytes() {
+        java.lang.Object ref = reqTypeRead_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          reqtyperead_ = b;
+          reqTypeRead_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string reqtyperead = 5;</code>
+       * <code>string reqTypeRead = 6;</code>
        */
-      public Builder setReqtyperead(
+      public Builder setReqTypeRead(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        reqtyperead_ = value;
+        reqTypeRead_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string reqtyperead = 5;</code>
+       * <code>string reqTypeRead = 6;</code>
        */
-      public Builder clearReqtyperead() {
+      public Builder clearReqTypeRead() {
         
-        reqtyperead_ = getDefaultInstance().getReqtyperead();
+        reqTypeRead_ = getDefaultInstance().getReqTypeRead();
         onChanged();
         return this;
       }
       /**
-       * <code>string reqtyperead = 5;</code>
+       * <code>string reqTypeRead = 6;</code>
        */
-      public Builder setReqtypereadBytes(
+      public Builder setReqTypeReadBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        reqtyperead_ = value;
+        reqTypeRead_ = value;
         onChanged();
         return this;
       }
@@ -3498,17 +3624,18 @@ public final class StorageProtobuf {
     java.lang.String[] descriptorData = {
       "\n\026storage_protobuf.proto\"A\n\007Profile\022\021\n\tc" +
       "hunkname\030\001 \001(\t\022\017\n\007chunkid\030\002 \001(\005\022\022\n\nchunk" +
-      "datat\030\003 \001(\014\"\212\001\n\nStoreChunk\022\032\n\022writefilec" +
+      "datat\030\003 \001(\014\"\235\001\n\nStoreChunk\022\032\n\022writefilec" +
       "hunkName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\026\n\016write" +
-      "chunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\024\n\014req" +
-      "typewrite\030\005 \001(\t\022\017\n\007portNum\030\006 \001(\005\"s\n\014Retr" +
-      "ieveFile\022\024\n\014readfileName\030\001 \001(\t\022\025\n\rreadch" +
-      "unkdata\030\002 \001(\014\022\020\n\010hostName\030\003 \001(\t\022\017\n\007chunk" +
-      "Id\030\004 \001(\005\022\023\n\013reqtyperead\030\005 \001(\t\"n\n\020Storage" +
-      "MessagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.Store",
-      "ChunkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r." +
-      "RetrieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.df" +
-      "s.storageb\006proto3"
+      "chunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\017\n\007por" +
+      "tNum\030\005 \001(\005\022\021\n\tchunkNums\030\006 \001(\005\022\024\n\014reqType" +
+      "Write\030\007 \001(\t\"\205\001\n\014RetrieveFile\022\024\n\014readfile" +
+      "Name\030\001 \001(\t\022\025\n\rreadchunkdata\030\002 \001(\014\022\020\n\010hos" +
+      "tName\030\003 \001(\t\022\017\n\007chunkId\030\004 \001(\005\022\020\n\010hostNums" +
+      "\030\005 \001(\005\022\023\n\013reqTypeRead\030\006 \001(\t\"n\n\020StorageMe",
+      "ssagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreCh" +
+      "unkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r.Re" +
+      "trieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.dfs." +
+      "storageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3533,13 +3660,13 @@ public final class StorageProtobuf {
     internal_static_StoreChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StoreChunk_descriptor,
-        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "Reqtypewrite", "PortNum", });
+        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "PortNum", "ChunkNums", "ReqTypeWrite", });
     internal_static_RetrieveFile_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_RetrieveFile_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RetrieveFile_descriptor,
-        new java.lang.String[] { "ReadfileName", "Readchunkdata", "HostName", "ChunkId", "Reqtyperead", });
+        new java.lang.String[] { "ReadfileName", "Readchunkdata", "HostName", "ChunkId", "HostNums", "ReqTypeRead", });
     internal_static_StorageMessagePB_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_StorageMessagePB_fieldAccessorTable = new

@@ -57,6 +57,11 @@ public final class ControllerProtobuf {
      * <code>int32 portNum = 5;</code>
      */
     int getPortNum();
+
+    /**
+     * <code>int32 numChunks = 6;</code>
+     */
+    int getNumChunks();
   }
   /**
    * Protobuf type {@code ClientTalk}
@@ -76,6 +81,7 @@ public final class ControllerProtobuf {
       chunkId_ = 0;
       reqtype_ = "";
       portNum_ = 0;
+      numChunks_ = 0;
     }
 
     @java.lang.Override
@@ -132,6 +138,11 @@ public final class ControllerProtobuf {
             case 40: {
 
               portNum_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              numChunks_ = input.readInt32();
               break;
             }
           }
@@ -278,6 +289,15 @@ public final class ControllerProtobuf {
       return portNum_;
     }
 
+    public static final int NUMCHUNKS_FIELD_NUMBER = 6;
+    private int numChunks_;
+    /**
+     * <code>int32 numChunks = 6;</code>
+     */
+    public int getNumChunks() {
+      return numChunks_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -305,6 +325,9 @@ public final class ControllerProtobuf {
       if (portNum_ != 0) {
         output.writeInt32(5, portNum_);
       }
+      if (numChunks_ != 0) {
+        output.writeInt32(6, numChunks_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -329,6 +352,10 @@ public final class ControllerProtobuf {
       if (portNum_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, portNum_);
+      }
+      if (numChunks_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, numChunks_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -356,6 +383,8 @@ public final class ControllerProtobuf {
           .equals(other.getReqtype());
       result = result && (getPortNum()
           == other.getPortNum());
+      result = result && (getNumChunks()
+          == other.getNumChunks());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -377,6 +406,8 @@ public final class ControllerProtobuf {
       hash = (53 * hash) + getReqtype().hashCode();
       hash = (37 * hash) + PORTNUM_FIELD_NUMBER;
       hash = (53 * hash) + getPortNum();
+      hash = (37 * hash) + NUMCHUNKS_FIELD_NUMBER;
+      hash = (53 * hash) + getNumChunks();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -516,6 +547,8 @@ public final class ControllerProtobuf {
 
         portNum_ = 0;
 
+        numChunks_ = 0;
+
         return this;
       }
 
@@ -543,6 +576,7 @@ public final class ControllerProtobuf {
         result.chunkId_ = chunkId_;
         result.reqtype_ = reqtype_;
         result.portNum_ = portNum_;
+        result.numChunks_ = numChunks_;
         onBuilt();
         return result;
       }
@@ -601,6 +635,9 @@ public final class ControllerProtobuf {
         }
         if (other.getPortNum() != 0) {
           setPortNum(other.getPortNum());
+        }
+        if (other.getNumChunks() != 0) {
+          setNumChunks(other.getNumChunks());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -884,6 +921,32 @@ public final class ControllerProtobuf {
       public Builder clearPortNum() {
         
         portNum_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int numChunks_ ;
+      /**
+       * <code>int32 numChunks = 6;</code>
+       */
+      public int getNumChunks() {
+        return numChunks_;
+      }
+      /**
+       * <code>int32 numChunks = 6;</code>
+       */
+      public Builder setNumChunks(int value) {
+        
+        numChunks_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 numChunks = 6;</code>
+       */
+      public Builder clearNumChunks() {
+        
+        numChunks_ = 0;
         onChanged();
         return this;
       }
@@ -3215,17 +3278,17 @@ public final class ControllerProtobuf {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\031controller_protobuf.proto\"d\n\nClientTal" +
+      "\n\031controller_protobuf.proto\"w\n\nClientTal" +
       "k\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t\022\017" +
       "\n\007chunkId\030\003 \001(\005\022\017\n\007reqtype\030\004 \001(\t\022\017\n\007port" +
-      "Num\030\005 \001(\005\"X\n\017StorageHearbeat\022\021\n\tchunkNam" +
-      "e\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t\022\017\n\007portnum\030\003 \001" +
-      "(\005\022\017\n\007chunkId\030\004 \001(\005\"$\n\017ListOfHostnames\022\021" +
-      "\n\thostnames\030\001 \003(\t\"m\n\023ControllerMessagePB" +
-      "\022!\n\nclienttalk\030\001 \001(\0132\013.ClientTalkH\000\022,\n\020s" +
-      "torageHeartBeat\030\002 \001(\0132\020.StorageHearbeatH" +
-      "\000B\005\n\003msgB\035\n\033edu.usfca.cs.dfs.controllerb",
-      "\006proto3"
+      "Num\030\005 \001(\005\022\021\n\tnumChunks\030\006 \001(\005\"X\n\017StorageH" +
+      "earbeat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002" +
+      " \001(\t\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\"$" +
+      "\n\017ListOfHostnames\022\021\n\thostnames\030\001 \003(\t\"m\n\023" +
+      "ControllerMessagePB\022!\n\nclienttalk\030\001 \001(\0132" +
+      "\013.ClientTalkH\000\022,\n\020storageHeartBeat\030\002 \001(\013" +
+      "2\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033edu.usfca",
+      ".cs.dfs.controllerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3244,7 +3307,7 @@ public final class ControllerProtobuf {
     internal_static_ClientTalk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ClientTalk_descriptor,
-        new java.lang.String[] { "ChunkName", "HostName", "ChunkId", "Reqtype", "PortNum", });
+        new java.lang.String[] { "ChunkName", "HostName", "ChunkId", "Reqtype", "PortNum", "NumChunks", });
     internal_static_StorageHearbeat_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_StorageHearbeat_fieldAccessorTable = new

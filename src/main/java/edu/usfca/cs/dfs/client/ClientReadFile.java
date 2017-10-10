@@ -20,11 +20,11 @@ public class ClientReadFile {
         HostID.put(9994, "ML-ITS-601927");
         int i = 1;
 
-        activeHostnames = cp.clientToController(9000, fileName);
+        activeHostnames = cp.clientToController(9900, fileName, 1, 1);
 
-        System.out.println(activeHostnames.size());
+
         for (String hostname : activeHostnames) {
-            cp.sendReadReqToStorageNode("localhost", 9001, fileName, i);
+            cp.sendReadReqToStorageNode("localhost", 9901, fileName, i, activeHostnames.size());
             i++;
             Thread.sleep(100);
         }

@@ -38,6 +38,7 @@ public class ClientWriteFile {
     }
 
     public void write(File fileName) throws InterruptedException {
+
         List<byte[]> fileInChunks;
         ClientProtoBuf cp = new ClientProtoBuf();
         fileInChunks = splitFile(fileName);
@@ -50,10 +51,9 @@ public class ClientWriteFile {
 
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
-            hostnames = cp.clientToController(9000, chunkname);
-            System.out.println(hostnames.size());
-            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9001, fileName.getName(),
-                    j + 1, fileInChunks.get(j));
+            hostnames = cp.clientToController(9900, chunkname, fileInChunks.size(), (j + 1));
+            int chunkid = j+1;
+            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9901, fileName.getName(), chunkid, fileInChunks.get(j),fileInChunks.size());
             Thread.sleep(100);
         }
 

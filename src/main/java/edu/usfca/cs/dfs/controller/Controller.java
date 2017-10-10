@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,15 +14,11 @@ public class Controller {
 
         System.out.println("Controller listening on port 9998...");
         ControllerHelper cp = new ControllerHelper();
-        ServerSocket srvSocket = new ServerSocket(9000);
-        while (true) {
-            cp.receiveClientReqAtController(srvSocket, "File Received:", activeHostnames);
-//            if(message.equalsIgnoreCase("exit")) break;
-        }
-//        srvSocket.close();
-
-
+        ServerSocket srvSocket = new ServerSocket(9900);
+        cp.receiveClientReqAtController(srvSocket, "File Received: ", activeHostnames);
     }
-
-
 }
+
+
+
+
