@@ -7,6 +7,7 @@ message StorageHearbeat {
     int32 portnum = 3;
     int32 chunkId = 4;
     string controller = 5;
+    string heartbeatmsg = 6;
 }
 
 message ControllerMessagePB {

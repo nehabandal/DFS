@@ -22,26 +22,22 @@ public class ControllerHeartBeat {
                     .parseDelimitedFrom(clientSocket.getInputStream());
             if (msgWrapper.hasStorageHeartBeat()) {
                 String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
-                Thread host = new Thread(new Heartbeat(hostname));
-                host.setName(hostname);
-                host.start();
-
-                if (host.getName() == InetAddress.getLocalHost().getHostName()) {
-                    break;
-                }
+                String msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
+                System.out.println(msg+hostname);
             }
-        }
-        try {
-            // Wait 5 seconds
-            Thread.currentThread().sleep(5000);
-        } catch (InterruptedException e) {
-        }
+            try {
+                // Wait 5 seconds
+                Thread.currentThread().sleep(5000);
+            } catch (InterruptedException e) {
+            }
 
 //        table.hit("DONE"); // cause the players to quit their threads.
-        try {
-            Thread.currentThread().sleep(100);
-        } catch (InterruptedException e) {
+            try {
+                Thread.currentThread().sleep(100);
+            } catch (InterruptedException e) {
+            }
         }
+
     }
 }
 

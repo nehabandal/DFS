@@ -1,43 +1,30 @@
 package edu.usfca.cs.dfs.storage;
 
-import edu.usfca.cs.dfs.controller.ProtoHeartbeat;
+import edu.usfca.cs.dfs.controller.Heartbeat;
 
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Objects;
 
 /**
  * Created by npbandal on 10/9/17.
  */
 public class StorageNodeHeartBeat {
 
-
-    public static void main(String[] args) {
-        try {
-            String hostname = getHostname();
-            while (hostname!=null) { //should be not equal in actual code
-                Socket sockController = new Socket(args[0], 8080);
-                ProtoHeartbeat.StorageHearbeat heartbeat
-                        = ProtoHeartbeat.StorageHearbeat.newBuilder()
-                        .setHostName(hostname)
-                        .build();
-                ProtoHeartbeat.ControllerMessagePB msgWrapper =
-                        ProtoHeartbeat.ControllerMessagePB.newBuilder()
-                                .setStorageHeartBeat(heartbeat)
-                                .build();
-
-                msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-            }
-            Thread.sleep(100);
-        } catch (Exception e) {
-
+    public static void main(String[] args) throws UnknownHostException {
+        String controllerName = args[0];
+        int portnumber = Integer.parseInt(args[1]);
+        String hostname = getHostname();
+        while (true) {
+            Heartbeat heartbeat = new Heartbeat(controllerName, hostname, portnumber);
+            heartbeat.run();
         }
+
     }
 
     private static String getHostname() throws UnknownHostException {
         return InetAddress.getLocalHost().getHostName();
     }
+
 
 }
 

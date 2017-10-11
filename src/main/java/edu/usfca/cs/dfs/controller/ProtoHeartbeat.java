@@ -57,6 +57,16 @@ public final class ProtoHeartbeat {
      */
     com.google.protobuf.ByteString
         getControllerBytes();
+
+    /**
+     * <code>string heartbeatmsg = 6;</code>
+     */
+    java.lang.String getHeartbeatmsg();
+    /**
+     * <code>string heartbeatmsg = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getHeartbeatmsgBytes();
   }
   /**
    * Protobuf type {@code StorageHearbeat}
@@ -76,6 +86,7 @@ public final class ProtoHeartbeat {
       portnum_ = 0;
       chunkId_ = 0;
       controller_ = "";
+      heartbeatmsg_ = "";
     }
 
     @java.lang.Override
@@ -132,6 +143,12 @@ public final class ProtoHeartbeat {
               java.lang.String s = input.readStringRequireUtf8();
 
               controller_ = s;
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              heartbeatmsg_ = s;
               break;
             }
           }
@@ -278,6 +295,40 @@ public final class ProtoHeartbeat {
       }
     }
 
+    public static final int HEARTBEATMSG_FIELD_NUMBER = 6;
+    private volatile java.lang.Object heartbeatmsg_;
+    /**
+     * <code>string heartbeatmsg = 6;</code>
+     */
+    public java.lang.String getHeartbeatmsg() {
+      java.lang.Object ref = heartbeatmsg_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        heartbeatmsg_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string heartbeatmsg = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHeartbeatmsgBytes() {
+      java.lang.Object ref = heartbeatmsg_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        heartbeatmsg_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -305,6 +356,9 @@ public final class ProtoHeartbeat {
       if (!getControllerBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, controller_);
       }
+      if (!getHeartbeatmsgBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, heartbeatmsg_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -329,6 +383,9 @@ public final class ProtoHeartbeat {
       }
       if (!getControllerBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, controller_);
+      }
+      if (!getHeartbeatmsgBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, heartbeatmsg_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -356,6 +413,8 @@ public final class ProtoHeartbeat {
           == other.getChunkId());
       result = result && getController()
           .equals(other.getController());
+      result = result && getHeartbeatmsg()
+          .equals(other.getHeartbeatmsg());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -377,6 +436,8 @@ public final class ProtoHeartbeat {
       hash = (53 * hash) + getChunkId();
       hash = (37 * hash) + CONTROLLER_FIELD_NUMBER;
       hash = (53 * hash) + getController().hashCode();
+      hash = (37 * hash) + HEARTBEATMSG_FIELD_NUMBER;
+      hash = (53 * hash) + getHeartbeatmsg().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -516,6 +577,8 @@ public final class ProtoHeartbeat {
 
         controller_ = "";
 
+        heartbeatmsg_ = "";
+
         return this;
       }
 
@@ -543,6 +606,7 @@ public final class ProtoHeartbeat {
         result.portnum_ = portnum_;
         result.chunkId_ = chunkId_;
         result.controller_ = controller_;
+        result.heartbeatmsg_ = heartbeatmsg_;
         onBuilt();
         return result;
       }
@@ -600,6 +664,10 @@ public final class ProtoHeartbeat {
         }
         if (!other.getController().isEmpty()) {
           controller_ = other.controller_;
+          onChanged();
+        }
+        if (!other.getHeartbeatmsg().isEmpty()) {
+          heartbeatmsg_ = other.heartbeatmsg_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -884,6 +952,75 @@ public final class ProtoHeartbeat {
   checkByteStringIsUtf8(value);
         
         controller_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object heartbeatmsg_ = "";
+      /**
+       * <code>string heartbeatmsg = 6;</code>
+       */
+      public java.lang.String getHeartbeatmsg() {
+        java.lang.Object ref = heartbeatmsg_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          heartbeatmsg_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string heartbeatmsg = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getHeartbeatmsgBytes() {
+        java.lang.Object ref = heartbeatmsg_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          heartbeatmsg_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string heartbeatmsg = 6;</code>
+       */
+      public Builder setHeartbeatmsg(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        heartbeatmsg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string heartbeatmsg = 6;</code>
+       */
+      public Builder clearHeartbeatmsg() {
+        
+        heartbeatmsg_ = getDefaultInstance().getHeartbeatmsg();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string heartbeatmsg = 6;</code>
+       */
+      public Builder setHeartbeatmsgBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        heartbeatmsg_ = value;
         onChanged();
         return this;
       }
@@ -1627,13 +1764,13 @@ public final class ProtoHeartbeat {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025proto_heartbeat.proto\"l\n\017StorageHearbe" +
-      "at\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t\022" +
-      "\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\022\022\n\ncon" +
-      "troller\030\005 \001(\t\"J\n\023ControllerMessagePB\022,\n\020" +
-      "storageHeartBeat\030\001 \001(\0132\020.StorageHearbeat" +
-      "H\000B\005\n\003msgB\035\n\033edu.usfca.cs.dfs.controller" +
-      "b\006proto3"
+      "\n\025proto_heartbeat.proto\"\202\001\n\017StorageHearb" +
+      "eat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t" +
+      "\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\022\022\n\nco" +
+      "ntroller\030\005 \001(\t\022\024\n\014heartbeatmsg\030\006 \001(\t\"J\n\023" +
+      "ControllerMessagePB\022,\n\020storageHeartBeat\030" +
+      "\001 \001(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033edu." +
+      "usfca.cs.dfs.controllerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1652,7 +1789,7 @@ public final class ProtoHeartbeat {
     internal_static_StorageHearbeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StorageHearbeat_descriptor,
-        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", });
+        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", "Heartbeatmsg", });
     internal_static_ControllerMessagePB_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ControllerMessagePB_fieldAccessorTable = new
