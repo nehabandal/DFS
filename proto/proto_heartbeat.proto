@@ -1,0 +1,18 @@
+syntax = "proto3";
+option java_package = "edu.usfca.cs.dfs.controller";
+
+message StorageHearbeat {
+    string chunkName = 1;
+    string hostName = 2;
+    int32 portnum = 3;
+    int32 chunkId = 4;
+    string controller = 5;
+}
+
+message ControllerMessagePB {
+    oneof msg {
+        StorageHearbeat storageHeartBeat = 1;
+    }
+
+
+}

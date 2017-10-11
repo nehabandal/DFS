@@ -1,0 +1,36 @@
+syntax = "proto3";
+option java_package = "edu.usfca.cs.dfs.storage";
+
+message Profile {
+   string chunkname=1;
+   int32 chunkid=2;
+   bytes chunkdatat=3;
+}
+
+message StoreChunk {
+    string writefilechunkName = 1;
+    int32 chunkId = 2;
+    bytes writechunkdata = 3;
+    string hostName = 4;
+    int32 portNum = 5;
+    int32 chunkNums = 6;
+    string reqTypeWrite = 7;
+}
+
+message RetrieveFile {
+    string readfileName = 1;
+    bytes readchunkdata = 2;
+    string hostName = 3;
+    int32 chunkId = 4;
+    int32 hostNums = 5;
+    string reqTypeRead = 6;
+}
+
+message StorageMessagePB {
+    oneof msg {
+        StoreChunk storeChunkMsg = 1;
+        RetrieveFile retrieveChunkFileMsg = 2;
+    }
+
+
+}
