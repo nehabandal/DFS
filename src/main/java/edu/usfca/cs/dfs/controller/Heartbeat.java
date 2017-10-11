@@ -35,7 +35,7 @@ public class Heartbeat implements Runnable {
                 long t1 = System.currentTimeMillis();
                 wait(3000);
                 if ((System.currentTimeMillis() - t1) > 3000) {
-                    System.out.println("****** TIMEOUT! " + x +
+                    System.out.println("****** TIMEOUT! " + x.getName() +
                             " is waiting for " + currenthost );
                 }
             } catch (InterruptedException e) {
