@@ -1,7 +1,6 @@
 package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,28 +14,9 @@ public class ControllerHeartBeat {
     public static void main(String[] args) throws IOException {
 
         ServerSocket srvSocket = new ServerSocket(8080);
-
-        while (true) {
-            Socket clientSocket = srvSocket.accept();
-            ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
-                    .parseDelimitedFrom(clientSocket.getInputStream());
-            if (msgWrapper.hasStorageHeartBeat()) {
-                String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
-                String msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
-                System.out.println(msg+hostname);
-            }
-            try {
-                // Wait 5 seconds
-                Thread.currentThread().sleep(5000);
-            } catch (InterruptedException e) {
-            }
-
-//        table.hit("DONE"); // cause the players to quit their threads.
-            try {
-                Thread.currentThread().sleep(100);
-            } catch (InterruptedException e) {
-            }
-        }
+        System.out.println("Controller is ready to receive heartbeat");
+        Heartbeat heartbeat = new Heartbeat();
+        heartbeat.receive(srvSocket);
 
     }
 }

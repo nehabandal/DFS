@@ -1,8 +1,8 @@
 package edu.usfca.cs.dfs.controller;
 
-import java.net.InetAddress;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -17,6 +17,10 @@ public class Heartbeat implements Runnable {
         controllerhost = ControllerName;
         hostName = hostname;
         portNum = portnum;
+
+    }
+
+    public Heartbeat() {
 
     }
 
@@ -47,19 +51,37 @@ public class Heartbeat implements Runnable {
                                 .build();
 
                 msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+                Thread.sleep(3000);
             }
-            Thread.sleep(100);
         } catch (Exception e) {
         }
         try {
             long t1 = System.currentTimeMillis();
-            wait(3000);
-            if ((System.currentTimeMillis() - t1) > 3000) {
-                System.out.println(hostname + "is dead");
+            wait(5000);
+            if ((System.currentTimeMillis() - t1) > 5000) {
+                System.out.println(hostname + " is dead");
             }
         } catch (InterruptedException e) {
         }
         return true;
     }
 
+    public void receive(ServerSocket srvSocket) throws IOException {
+        String hostname = null;
+        String msg = null;
+        while (true) {
+            Socket clientSocket = srvSocket.accept();
+            ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
+            if (msgWrapper.hasStorageHeartBeat()) {
+                hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
+                msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
+                System.out.println(msg + hostname);
+            }
+            if (hostname == null && msg == null) {
+                break;
+            }
+        }
+        srvSocket.close();
+    }
 }

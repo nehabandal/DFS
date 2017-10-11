@@ -14,6 +14,7 @@ public class StorageNodeHeartBeat {
         String controllerName = args[0];
         int portnumber = Integer.parseInt(args[1]);
         String hostname = getHostname();
+//        System.out.println(hostname);
         while (true) {
             Heartbeat heartbeat = new Heartbeat(controllerName, hostname, portnumber);
             heartbeat.run();
@@ -25,55 +26,4 @@ public class StorageNodeHeartBeat {
         return InetAddress.getLocalHost().getHostName();
     }
 
-
 }
-
-
-//    public static void main(String args[]) throws Exception {
-//        String hostname = getHostname();
-//
-//        Socket sockController = null;
-//        try {
-//            sockController = new Socket(hostname, 8080);
-//            ProtoHeartbeat.StorageHearbeat heartbeat
-//                    = ProtoHeartbeat.StorageHearbeat.newBuilder()
-//                    .setHostName(hostname)
-//                    .build();
-//
-//            ProtoHeartbeat.ControllerMessagePB msgWrapper =
-//                    ProtoHeartbeat.ControllerMessagePB.newBuilder()
-//                            .setStorageHeartBeat(heartbeat)
-//                            .build();
-//
-//            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            // Wait 5 seconds
-//            Thread.currentThread().sleep(3000);
-//        } catch (InterruptedException e) {
-//        }
-//        try {
-//            Thread.currentThread().sleep(100);
-//        } catch (InterruptedException e) {
-//        }
-//    }
-//
-//
-//}
-
-
-//        List<Thread> hostnames = new ArrayList<>();
-//        hostnames.add(host);
-//        hostnames.add(host2);
-//        hostnames.add(host3);
-
-//        for(Thread hostName: hostnames)
-
-//        while (hostname != null) {
-//            Thread host = new Thread(new StorageNode(hostname, heartBeat));
-//            host.setName(hostname);
-//            host.start();
-//        }
