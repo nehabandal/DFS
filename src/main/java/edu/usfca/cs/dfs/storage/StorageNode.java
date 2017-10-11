@@ -3,7 +3,6 @@ package edu.usfca.cs.dfs.storage;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class StorageNode {
