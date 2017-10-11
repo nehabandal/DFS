@@ -78,12 +78,6 @@ public class StorageNodeHeartBeat {
 //}
 
 
-//        Thread host2 = new Thread(new Controller("bob", heartBeat));
-//        Thread host3 = new Thread(new Controller("alice", heartBeat));
-
-//        host2.setName("bob");
-//        host3.setName("alice");
-
 //        List<Thread> hostnames = new ArrayList<>();
 //        hostnames.add(host);
 //        hostnames.add(host2);
