@@ -14,11 +14,10 @@ public class StorageNodeHeartBeat {
 
 
     public static void main(String[] args) {
-
         try {
             String hostname = getHostname();
             while (hostname!=null) { //should be not equal in actual code
-                Socket sockController = new Socket("localhost", 8080);
+                Socket sockController = new Socket(args[0], 8080);
                 ProtoHeartbeat.StorageHearbeat heartbeat
                         = ProtoHeartbeat.StorageHearbeat.newBuilder()
                         .setHostName(hostname)

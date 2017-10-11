@@ -4,17 +4,17 @@ package edu.usfca.cs.dfs.controller;
  * Created by npbandal on 10/7/17.
  */
 public class Heartbeat implements Runnable {
-    String myOpponent;
+    String newhost;
 
-    private String whoseTurn = null;
+    private String currenthost = null;
 
     public Heartbeat(String hostname) {
-        myOpponent = hostname;
+        newhost = hostname;
     }
 
     @Override
     public void run() {
-        while (send(myOpponent))
+        while (send(newhost))
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -36,7 +36,7 @@ public class Heartbeat implements Runnable {
                 wait(3000);
                 if ((System.currentTimeMillis() - t1) > 3000) {
                     System.out.println("****** TIMEOUT! " + x +
-                            " is waiting for " + whoseTurn + " to play.");
+                            " is waiting for " + currenthost );
                 }
             } catch (InterruptedException e) {
             }
