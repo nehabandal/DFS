@@ -5,48 +5,78 @@ import edu.usfca.cs.dfs.controller.ProtoHeartbeat;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 /**
  * Created by npbandal on 10/9/17.
  */
 public class StorageNodeHeartBeat {
 
-    public static void main(String args[]) throws Exception {
-        String hostname = getHostname();
 
-        Socket sockController = null;
+    public static void main(String[] args) {
+
         try {
-            sockController = new Socket(hostname, 8080);
-            ProtoHeartbeat.StorageHearbeat heartbeat
-                    = ProtoHeartbeat.StorageHearbeat.newBuilder()
-                    .setHostName(hostname)
-                    .build();
+            String hostname = getHostname();
+            while (hostname!=null) { //should be not equal in actual code
+                Socket sockController = new Socket("localhost", 8080);
+                ProtoHeartbeat.StorageHearbeat heartbeat
+                        = ProtoHeartbeat.StorageHearbeat.newBuilder()
+                        .setHostName(hostname)
+                        .build();
+                ProtoHeartbeat.ControllerMessagePB msgWrapper =
+                        ProtoHeartbeat.ControllerMessagePB.newBuilder()
+                                .setStorageHeartBeat(heartbeat)
+                                .build();
 
-            ProtoHeartbeat.ControllerMessagePB msgWrapper =
-                    ProtoHeartbeat.ControllerMessagePB.newBuilder()
-                            .setStorageHeartBeat(heartbeat)
-                            .build();
-
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+                msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+            }
+            Thread.sleep(100);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
-            // Wait 5 seconds
-            Thread.currentThread().sleep(3000);
-        } catch (InterruptedException e) {
-        }
-        try {
-            Thread.currentThread().sleep(100);
-        } catch (InterruptedException e) {
         }
     }
 
     private static String getHostname() throws UnknownHostException {
         return InetAddress.getLocalHost().getHostName();
     }
+
 }
+
+
+//    public static void main(String args[]) throws Exception {
+//        String hostname = getHostname();
+//
+//        Socket sockController = null;
+//        try {
+//            sockController = new Socket(hostname, 8080);
+//            ProtoHeartbeat.StorageHearbeat heartbeat
+//                    = ProtoHeartbeat.StorageHearbeat.newBuilder()
+//                    .setHostName(hostname)
+//                    .build();
+//
+//            ProtoHeartbeat.ControllerMessagePB msgWrapper =
+//                    ProtoHeartbeat.ControllerMessagePB.newBuilder()
+//                            .setStorageHeartBeat(heartbeat)
+//                            .build();
+//
+//            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            // Wait 5 seconds
+//            Thread.currentThread().sleep(3000);
+//        } catch (InterruptedException e) {
+//        }
+//        try {
+//            Thread.currentThread().sleep(100);
+//        } catch (InterruptedException e) {
+//        }
+//    }
+//
+//
+//}
 
 
 //        Thread host2 = new Thread(new Controller("bob", heartBeat));
