@@ -28,7 +28,6 @@ public class Heartbeat implements Runnable {
 
         if (x.isAlive()) {
             System.out.println("PING! (" + x.getName() + ")");
-//            whoseTurn = myOpponent;
             notifyAll();
         } else {
             try {
