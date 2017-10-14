@@ -3,9 +3,7 @@ package edu.usfca.cs.dfs.controller;
 import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -15,6 +13,7 @@ public class Heartbeat implements Runnable {
     private String controllerhost;
     private String hostName;
     private int portNum;
+
 
     public Heartbeat(String ControllerName, String hostname, int portnum) {
         controllerhost = ControllerName;
@@ -41,14 +40,16 @@ public class Heartbeat implements Runnable {
 
         try {
             while (hostname != null) { //should be not equal in actual code
+
                 long space = new File("/").getFreeSpace();
+                long spaceMB = space / (1024 * 1024);
+
                 Socket sockController = new Socket(controllerhost, portnum);
                 ProtoHeartbeat.StorageHearbeat heartbeat
                         = ProtoHeartbeat.StorageHearbeat.newBuilder()
                         .setHostName(hostname)
-                        .setFreespace((int) space)
+                        .setFreespace(spaceMB)
                         .setHeartbeatmsg("Hi from ")
-
                         .build();
                 ProtoHeartbeat.ControllerMessagePB msgWrapper =
                         ProtoHeartbeat.ControllerMessagePB.newBuilder()
@@ -59,26 +60,27 @@ public class Heartbeat implements Runnable {
                 Thread.sleep(3000);
             }
         } catch (Exception e) {
-        }
-        try {
-            long t1 = System.currentTimeMillis();
-            wait(5000);
-            if ((System.currentTimeMillis() - t1) > 5000) {
-                System.out.println(hostname + " is dead");
+            try {
+                long t1 = System.currentTimeMillis();
+                wait(5000);
+                if ((System.currentTimeMillis() - t1) > 5000) {
+                    System.out.println(hostname + " is dead");
+                }
+            } catch (InterruptedException e1) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
         }
+
         return true;
     }
 
 
-    public HashMap<String, Integer> receive(ServerSocket srvSocket) {
+    public void receive(ServerSocket srvSocket) {
         String hostname = null;
         String msg = null;
-        HashMap<String, Integer> hostNameSize = new HashMap<>();
-        List<String> hosta = new ArrayList<>();
+        HashMap<String, Long> hostnamesize;
+        Long freespace;
 
-        int freespace = 0;
         try {
             while (true) {
                 Socket clientSocket = srvSocket.accept();
@@ -88,19 +90,11 @@ public class Heartbeat implements Runnable {
                     hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
                     msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
                     freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
-
-                    System.out.println(msg + "Host: " + hostname + "Available size: " + freespace);
-
-                    hostNameSize.put(hostname, freespace);
-
-                    if (hostNameSize.size() == 3) {
-                        return hostNameSize;
-                    }
+                    System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return hostNameSize;
     }
 }

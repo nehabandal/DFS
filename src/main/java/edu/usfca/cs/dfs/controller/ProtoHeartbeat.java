@@ -69,9 +69,9 @@ public final class ProtoHeartbeat {
         getHeartbeatmsgBytes();
 
     /**
-     * <code>int32 freespace = 7;</code>
+     * <code>int64 freespace = 7;</code>
      */
-    int getFreespace();
+    long getFreespace();
   }
   /**
    * Protobuf type {@code StorageHearbeat}
@@ -92,7 +92,7 @@ public final class ProtoHeartbeat {
       chunkId_ = 0;
       controller_ = "";
       heartbeatmsg_ = "";
-      freespace_ = 0;
+      freespace_ = 0L;
     }
 
     @java.lang.Override
@@ -159,7 +159,7 @@ public final class ProtoHeartbeat {
             }
             case 56: {
 
-              freespace_ = input.readInt32();
+              freespace_ = input.readInt64();
               break;
             }
           }
@@ -341,11 +341,11 @@ public final class ProtoHeartbeat {
     }
 
     public static final int FREESPACE_FIELD_NUMBER = 7;
-    private int freespace_;
+    private long freespace_;
     /**
-     * <code>int32 freespace = 7;</code>
+     * <code>int64 freespace = 7;</code>
      */
-    public int getFreespace() {
+    public long getFreespace() {
       return freespace_;
     }
 
@@ -379,8 +379,8 @@ public final class ProtoHeartbeat {
       if (!getHeartbeatmsgBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, heartbeatmsg_);
       }
-      if (freespace_ != 0) {
-        output.writeInt32(7, freespace_);
+      if (freespace_ != 0L) {
+        output.writeInt64(7, freespace_);
       }
       unknownFields.writeTo(output);
     }
@@ -410,9 +410,9 @@ public final class ProtoHeartbeat {
       if (!getHeartbeatmsgBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, heartbeatmsg_);
       }
-      if (freespace_ != 0) {
+      if (freespace_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, freespace_);
+          .computeInt64Size(7, freespace_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -468,7 +468,8 @@ public final class ProtoHeartbeat {
       hash = (37 * hash) + HEARTBEATMSG_FIELD_NUMBER;
       hash = (53 * hash) + getHeartbeatmsg().hashCode();
       hash = (37 * hash) + FREESPACE_FIELD_NUMBER;
-      hash = (53 * hash) + getFreespace();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getFreespace());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -610,7 +611,7 @@ public final class ProtoHeartbeat {
 
         heartbeatmsg_ = "";
 
-        freespace_ = 0;
+        freespace_ = 0L;
 
         return this;
       }
@@ -704,7 +705,7 @@ public final class ProtoHeartbeat {
           heartbeatmsg_ = other.heartbeatmsg_;
           onChanged();
         }
-        if (other.getFreespace() != 0) {
+        if (other.getFreespace() != 0L) {
           setFreespace(other.getFreespace());
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -1062,28 +1063,28 @@ public final class ProtoHeartbeat {
         return this;
       }
 
-      private int freespace_ ;
+      private long freespace_ ;
       /**
-       * <code>int32 freespace = 7;</code>
+       * <code>int64 freespace = 7;</code>
        */
-      public int getFreespace() {
+      public long getFreespace() {
         return freespace_;
       }
       /**
-       * <code>int32 freespace = 7;</code>
+       * <code>int64 freespace = 7;</code>
        */
-      public Builder setFreespace(int value) {
+      public Builder setFreespace(long value) {
         
         freespace_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 freespace = 7;</code>
+       * <code>int64 freespace = 7;</code>
        */
       public Builder clearFreespace() {
         
-        freespace_ = 0;
+        freespace_ = 0L;
         onChanged();
         return this;
       }
@@ -1831,7 +1832,7 @@ public final class ProtoHeartbeat {
       "eat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t" +
       "\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\022\022\n\nco" +
       "ntroller\030\005 \001(\t\022\024\n\014heartbeatmsg\030\006 \001(\t\022\021\n\t" +
-      "freespace\030\007 \001(\005\"J\n\023ControllerMessagePB\022," +
+      "freespace\030\007 \001(\003\"J\n\023ControllerMessagePB\022," +
       "\n\020storageHeartBeat\030\001 \001(\0132\020.StorageHearbe" +
       "atH\000B\005\n\003msgB\035\n\033edu.usfca.cs.dfs.controll" +
       "erb\006proto3"

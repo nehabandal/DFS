@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,8 +23,7 @@ public class Controller {
                     e.printStackTrace();
                 }
                 Heartbeat heartbeat = new Heartbeat();
-                activeHostnames = heartbeat.receive(srvSocket);
-                System.out.println(activeHostnames.size());
+                heartbeat.receive(srvSocket);
             }
         };
 
