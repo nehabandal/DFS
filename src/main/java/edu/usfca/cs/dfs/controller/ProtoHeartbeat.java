@@ -67,6 +67,11 @@ public final class ProtoHeartbeat {
      */
     com.google.protobuf.ByteString
         getHeartbeatmsgBytes();
+
+    /**
+     * <code>int32 freespace = 7;</code>
+     */
+    int getFreespace();
   }
   /**
    * Protobuf type {@code StorageHearbeat}
@@ -87,6 +92,7 @@ public final class ProtoHeartbeat {
       chunkId_ = 0;
       controller_ = "";
       heartbeatmsg_ = "";
+      freespace_ = 0;
     }
 
     @java.lang.Override
@@ -149,6 +155,11 @@ public final class ProtoHeartbeat {
               java.lang.String s = input.readStringRequireUtf8();
 
               heartbeatmsg_ = s;
+              break;
+            }
+            case 56: {
+
+              freespace_ = input.readInt32();
               break;
             }
           }
@@ -329,6 +340,15 @@ public final class ProtoHeartbeat {
       }
     }
 
+    public static final int FREESPACE_FIELD_NUMBER = 7;
+    private int freespace_;
+    /**
+     * <code>int32 freespace = 7;</code>
+     */
+    public int getFreespace() {
+      return freespace_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -359,6 +379,9 @@ public final class ProtoHeartbeat {
       if (!getHeartbeatmsgBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, heartbeatmsg_);
       }
+      if (freespace_ != 0) {
+        output.writeInt32(7, freespace_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -386,6 +409,10 @@ public final class ProtoHeartbeat {
       }
       if (!getHeartbeatmsgBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, heartbeatmsg_);
+      }
+      if (freespace_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, freespace_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -415,6 +442,8 @@ public final class ProtoHeartbeat {
           .equals(other.getController());
       result = result && getHeartbeatmsg()
           .equals(other.getHeartbeatmsg());
+      result = result && (getFreespace()
+          == other.getFreespace());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -438,6 +467,8 @@ public final class ProtoHeartbeat {
       hash = (53 * hash) + getController().hashCode();
       hash = (37 * hash) + HEARTBEATMSG_FIELD_NUMBER;
       hash = (53 * hash) + getHeartbeatmsg().hashCode();
+      hash = (37 * hash) + FREESPACE_FIELD_NUMBER;
+      hash = (53 * hash) + getFreespace();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -579,6 +610,8 @@ public final class ProtoHeartbeat {
 
         heartbeatmsg_ = "";
 
+        freespace_ = 0;
+
         return this;
       }
 
@@ -607,6 +640,7 @@ public final class ProtoHeartbeat {
         result.chunkId_ = chunkId_;
         result.controller_ = controller_;
         result.heartbeatmsg_ = heartbeatmsg_;
+        result.freespace_ = freespace_;
         onBuilt();
         return result;
       }
@@ -669,6 +703,9 @@ public final class ProtoHeartbeat {
         if (!other.getHeartbeatmsg().isEmpty()) {
           heartbeatmsg_ = other.heartbeatmsg_;
           onChanged();
+        }
+        if (other.getFreespace() != 0) {
+          setFreespace(other.getFreespace());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1021,6 +1058,32 @@ public final class ProtoHeartbeat {
   checkByteStringIsUtf8(value);
         
         heartbeatmsg_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int freespace_ ;
+      /**
+       * <code>int32 freespace = 7;</code>
+       */
+      public int getFreespace() {
+        return freespace_;
+      }
+      /**
+       * <code>int32 freespace = 7;</code>
+       */
+      public Builder setFreespace(int value) {
+        
+        freespace_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 freespace = 7;</code>
+       */
+      public Builder clearFreespace() {
+        
+        freespace_ = 0;
         onChanged();
         return this;
       }
@@ -1764,13 +1827,14 @@ public final class ProtoHeartbeat {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025proto_heartbeat.proto\"\202\001\n\017StorageHearb" +
+      "\n\025proto_heartbeat.proto\"\225\001\n\017StorageHearb" +
       "eat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t" +
       "\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\022\022\n\nco" +
-      "ntroller\030\005 \001(\t\022\024\n\014heartbeatmsg\030\006 \001(\t\"J\n\023" +
-      "ControllerMessagePB\022,\n\020storageHeartBeat\030" +
-      "\001 \001(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033edu." +
-      "usfca.cs.dfs.controllerb\006proto3"
+      "ntroller\030\005 \001(\t\022\024\n\014heartbeatmsg\030\006 \001(\t\022\021\n\t" +
+      "freespace\030\007 \001(\005\"J\n\023ControllerMessagePB\022," +
+      "\n\020storageHeartBeat\030\001 \001(\0132\020.StorageHearbe" +
+      "atH\000B\005\n\003msgB\035\n\033edu.usfca.cs.dfs.controll" +
+      "erb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1789,7 +1853,7 @@ public final class ProtoHeartbeat {
     internal_static_StorageHearbeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StorageHearbeat_descriptor,
-        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", "Heartbeatmsg", });
+        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", "Heartbeatmsg", "Freespace", });
     internal_static_ControllerMessagePB_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ControllerMessagePB_fieldAccessorTable = new

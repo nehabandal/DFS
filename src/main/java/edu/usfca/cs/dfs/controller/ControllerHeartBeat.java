@@ -11,7 +11,7 @@ import java.net.Socket;
 public class ControllerHeartBeat {
     String hostName;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         ServerSocket srvSocket = new ServerSocket(8080);
         System.out.println("Controller is ready to receive heartbeat");
