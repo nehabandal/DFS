@@ -22,7 +22,6 @@ public class ClientReadFile {
 
         activeHostnames = cp.clientToController(9900, fileName, 1, 1);
 
-
         for (String hostname : activeHostnames) {
             cp.sendReadReqToStorageNode("localhost", 9901, fileName, i, activeHostnames.size());
             i++;

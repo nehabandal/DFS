@@ -34,8 +34,6 @@ public class Controller {
                         }
                         System.out.println("Sublist size: " + sublist[0].size());
                     }
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -50,9 +48,7 @@ public class Controller {
                 ControllerHelper cp = new ControllerHelper();
                 ServerSocket srvSocket = null;
                 try {
-                    srvSocket = new ServerSocket(9900);
                     cp.receiveClientReqAtController(srvSocket, "File received ", sublist[0]);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -64,7 +60,6 @@ public class Controller {
 
         thread1.join();
         thread2.join();
-
 
     }
 }

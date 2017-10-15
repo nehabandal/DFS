@@ -11,32 +11,28 @@ import java.util.List;
 public class ControllerHelper {
 
     public void receiveClientReqAtController(ServerSocket srvSocket, String msg, List<String> sublist) throws IOException {
-        while (true) {
-            int chunknum = 0;
-            int chunkID = 0;
-            Socket clientSocket = srvSocket.accept();
-            ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
-                    .parseDelimitedFrom(clientSocket.getInputStream());
-            if (msgWrapper.hasClienttalk()) {
-                ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
-                chunkID = clientReq.getChunkId();
-                chunknum = clientReq.getNumChunks();
-                System.out.println(chunkID);
-                System.out.println(msg + clientReq.getChunkName());
-            }
-
-            //Sending response to controller
-            System.out.println("Size of activeNodes from controller " + sublist.size());
-            ControllerProtobuf.ListOfHostnames msgWrapperRes =
-                    ControllerProtobuf.ListOfHostnames.newBuilder()
-                            .addAllHostnames(sublist)
-                            .build();
-            msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
-
-            if (chunkID == chunknum) {
-                break;
-            }
+        int chunknum = 0;
+        int chunkID = 0;
+        System.out.println("hey");
+        srvSocket = new ServerSocket(9900);
+        Socket clientSocket = srvSocket.accept();
+        ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
+                .parseDelimitedFrom(clientSocket.getInputStream());
+        if (msgWrapper.hasClienttalk()) {
+            ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
+            chunkID = clientReq.getChunkId();
+            chunknum = clientReq.getNumChunks();
+            System.out.println(chunkID);
+            System.out.println(msg + clientReq.getChunkName());
         }
-        srvSocket.close();
+
+        //Sending response to controller
+        System.out.println("Size of activeNodes from controller to write file " + sublist.size());
+        ControllerProtobuf.ListOfHostnames msgWrapperRes =
+                ControllerProtobuf.ListOfHostnames.newBuilder()
+                        .addAllHostnames(sublist)
+                        .build();
+        msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
+        clientSocket.close();
     }
 }
