@@ -42,18 +42,14 @@ public class ClientWriteFile {
         List<byte[]> fileInChunks;
         ClientProtoBuf cp = new ClientProtoBuf();
         fileInChunks = splitFile(fileName);
-        HashMap<Integer, String> hostPort = new HashMap<Integer, String>();
-        hostPort.put(9992, "ML-ITS-601927");
-        hostPort.put(9993, "ML-ITS-601927");
-        hostPort.put(9994, "ML-ITS-601927");
-
-        List<String> hostnames = new ArrayList<>();
 
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
+            List<String> hostnames = new ArrayList<>();
             hostnames = cp.clientToController(9900, chunkname, fileInChunks.size(), (j + 1));
             int chunkid = j+1;
-            cp.protoBufToWriteintoStorageNode("ML-ITS-601927", 9901, fileName.getName(), chunkid, fileInChunks.get(j),fileInChunks.size());
+//            System.out.println(hostnames.get(0));
+            cp.protoBufToWriteintoStorageNode(hostnames.get(0), 9901, fileName.getName(), chunkid, fileInChunks.get(j),fileInChunks.size());
             Thread.sleep(100);
         }
 

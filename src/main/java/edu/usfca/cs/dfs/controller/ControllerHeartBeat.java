@@ -16,7 +16,7 @@ public class ControllerHeartBeat {
         ServerSocket srvSocket = new ServerSocket(8080);
         System.out.println("Controller is ready to receive heartbeat");
         Heartbeat heartbeat = new Heartbeat();
-        heartbeat.receive(srvSocket);
+//        heartbeat.receive(srvSocket);
 
     }
 }

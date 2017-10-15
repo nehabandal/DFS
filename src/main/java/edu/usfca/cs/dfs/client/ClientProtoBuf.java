@@ -37,8 +37,9 @@ public class ClientProtoBuf {
             ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
                     .parseDelimitedFrom(sockController.getInputStream());
             hostnames = listOfHostnames.getHostnamesList();
+            System.out.println("Hosts from controller: " + hostnames.size());
 
-            sockController.close();
+//            sockController.close();
 
         } catch (IOException e) {
             e.printStackTrace();

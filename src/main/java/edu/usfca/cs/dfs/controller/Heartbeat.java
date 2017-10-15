@@ -13,6 +13,7 @@ public class Heartbeat implements Runnable {
     private String controllerhost;
     private String hostName;
     private int portNum;
+    int count = 0;
 
 
     public Heartbeat(String ControllerName, String hostname, int portnum) {
@@ -75,26 +76,26 @@ public class Heartbeat implements Runnable {
     }
 
 
-    public void receive(ServerSocket srvSocket) {
+    public String receive(ServerSocket srvSocket) {
         String hostname = null;
         String msg = null;
         HashMap<String, Long> hostnamesize;
         Long freespace;
 
         try {
-            while (true) {
-                Socket clientSocket = srvSocket.accept();
-                ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
-                        .parseDelimitedFrom(clientSocket.getInputStream());
-                if (msgWrapper.hasStorageHeartBeat()) {
-                    hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
-                    msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
-                    freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
-                    System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
-                }
+            Socket clientSocket = srvSocket.accept();
+            ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
+            if (msgWrapper.hasStorageHeartBeat()) {
+                hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
+                msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
+                freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
+                System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return hostname;
     }
 }

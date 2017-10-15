@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,18 +13,26 @@ public class Controller {
         LinkedHashMap<String, List<String>> hostChunkNames = new LinkedHashMap<>();
 
         System.out.println("Controller receiving heartbeats on port 8080...");
-
+        final List<String> hosts = new ArrayList<>();
         Thread thread1 = new Thread() {
             public void run() {
                 ServerSocket srvSocket = null;
                 HashMap<String, Integer> activeHostnames = new HashMap<>();
                 try {
                     srvSocket = new ServerSocket(8080);
+                    int i = 0;
+                    while (!srvSocket.isClosed()) {
+                        Heartbeat heartbeat = new Heartbeat();
+                        String hostname = heartbeat.receive(srvSocket);
+                        hosts.add(hostname);
+                        System.out.println(hosts.size());
+                        System.out.println(hosts.get(i));
+                        i++;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Heartbeat heartbeat = new Heartbeat();
-                heartbeat.receive(srvSocket);
+
             }
         };
 
@@ -35,8 +44,10 @@ public class Controller {
                 ServerSocket srvSocket = null;
                 try {
                     srvSocket = new ServerSocket(9900);
-                    HashMap<String, Integer> activeHostnames = new HashMap<>();
-                    cp.receiveClientReqAtController(srvSocket, "File Received: ", activeHostnames);
+                    List<String> activeNodes = new ArrayList<>();
+                    int i = 0;
+                            cp.receiveClientReqAtController(srvSocket, "File Received: ", hosts);
+                    System.out.println("Waiting for storage nodes");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -48,6 +59,7 @@ public class Controller {
 
         thread1.join();
         thread2.join();
+
 
     }
 }
