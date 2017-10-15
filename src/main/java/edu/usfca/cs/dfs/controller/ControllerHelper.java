@@ -10,28 +10,33 @@ import java.util.List;
  */
 public class ControllerHelper {
 
-    public void receiveClientReqAtController(ServerSocket srvSocket, String msg, List<String> activeHostnames) throws IOException {
-        int chunknum = 0;
-        int chunkID = 0;
-        Socket clientSocket = srvSocket.accept();
-        ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
-                .parseDelimitedFrom(clientSocket.getInputStream());
-        if (msgWrapper.hasClienttalk()) {
-            ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
-            chunknum = clientReq.getNumChunks();
-            System.out.println(chunknum);
-            chunkID = clientReq.getChunkId();
-            System.out.println(chunkID);
-            System.out.println(msg + clientReq.getChunkName());
-        }
-        //Sending response to controller
-        System.out.println("Size of activeNode from controller " + activeHostnames);
+    public void receiveClientReqAtController(ServerSocket srvSocket, String msg, List<String> sublist) throws IOException {
+        while (true) {
+            int chunknum = 0;
+            int chunkID = 0;
+            Socket clientSocket = srvSocket.accept();
+            ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
+            if (msgWrapper.hasClienttalk()) {
+                ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
+                chunkID = clientReq.getChunkId();
+                chunknum = clientReq.getNumChunks();
+                System.out.println(chunkID);
+                System.out.println(msg + clientReq.getChunkName());
+            }
+
+            //Sending response to controller
+            System.out.println("Size of activeNodes from controller " + sublist.size());
             ControllerProtobuf.ListOfHostnames msgWrapperRes =
                     ControllerProtobuf.ListOfHostnames.newBuilder()
-//                            .addAllHostnames(activeHostnames)
+                            .addAllHostnames(sublist)
                             .build();
             msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
 
+            if (chunkID == chunknum) {
+                break;
+            }
+        }
+        srvSocket.close();
     }
-//        srvSocket.close();
 }

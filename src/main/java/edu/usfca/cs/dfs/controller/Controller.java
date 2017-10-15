@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -47,37 +46,11 @@ public class Controller {
 
         final Thread thread2 = new Thread() {
             public void run() {
-//                ControllerHelper cp = new ControllerHelper();
+                ControllerHelper cp = new ControllerHelper();
                 ServerSocket srvSocket = null;
                 try {
                     srvSocket = new ServerSocket(9900);
-                    while (true) {
-                        int chunknum = 0;
-                        int chunkID = 0;
-                        Socket clientSocket = srvSocket.accept();
-                        ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
-                                .parseDelimitedFrom(clientSocket.getInputStream());
-                        if (msgWrapper.hasClienttalk()) {
-                            ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
-                            chunkID = clientReq.getChunkId();
-                            chunknum = clientReq.getNumChunks();
-                            System.out.println(chunkID);
-                            System.out.println("file received" + clientReq.getChunkName());
-                        }
-                        //Sending response to controller
-
-                        System.out.println("Size of activeNode from controller " + sublist[0]);
-                        ControllerProtobuf.ListOfHostnames msgWrapperRes =
-                                ControllerProtobuf.ListOfHostnames.newBuilder()
-                                        .addAllHostnames(sublist[0])
-                                        .build();
-                        msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
-
-                        if (chunkID == chunknum) {
-                            break;
-                        }
-                    }
-                    srvSocket.close();
+                    cp.receiveClientReqAtController(srvSocket, "File received ", sublist[0]);
 
                 } catch (IOException e) {
                     e.printStackTrace();
