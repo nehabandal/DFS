@@ -24,12 +24,11 @@ public class ControllerHelper {
             System.out.println(chunkID);
             System.out.println(msg + clientReq.getChunkName());
         }
-        System.out.println(activeHostnames.size());
         //Sending response to controller
-        System.out.println("Size of activeNodes heartbeats: " + activeHostnames.size());
+        System.out.println("Size of activeNode from controller " + activeHostnames);
             ControllerProtobuf.ListOfHostnames msgWrapperRes =
                     ControllerProtobuf.ListOfHostnames.newBuilder()
-                            .addAllHostnames(activeHostnames)
+//                            .addAllHostnames(activeHostnames)
                             .build();
             msgWrapperRes.writeDelimitedTo(clientSocket.getOutputStream());
 

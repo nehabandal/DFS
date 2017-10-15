@@ -33,11 +33,11 @@ public class ClientProtoBuf {
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
 
 
-            //Hostnames back from controller
+//            Hostnames back from controller
             ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
                     .parseDelimitedFrom(sockController.getInputStream());
             hostnames = listOfHostnames.getHostnamesList();
-            System.out.println("Hosts from controller: " + hostnames.size());
+//            System.out.println("Hosts from controller: " + hostnames.size());
 
 //            sockController.close();
 
