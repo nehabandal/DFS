@@ -21,12 +21,11 @@ public class Controller {
                 HashMap<String, Integer> activeHostnames = new HashMap<>();
                 try {
                     srvSocket = new ServerSocket(8080);
-                    int i = 0, j = 0;
+                    int j = 0;
                     while (!srvSocket.isClosed()) {
                         Heartbeat heartbeat = new Heartbeat();
                         String hostname = heartbeat.receive(srvSocket);
                         hosts.add(hostname);
-                        i++;
                         if (hosts.size() == 3) {
                             while (j < 3) {
                                 sublist[0].add(hosts.get(j));
