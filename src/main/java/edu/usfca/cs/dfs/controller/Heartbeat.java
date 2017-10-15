@@ -79,9 +79,7 @@ public class Heartbeat implements Runnable {
     public String receive(ServerSocket srvSocket) {
         String hostname = null;
         String msg = null;
-        HashMap<String, Long> hostnamesize;
         Long freespace;
-
         try {
             Socket clientSocket = srvSocket.accept();
             ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB

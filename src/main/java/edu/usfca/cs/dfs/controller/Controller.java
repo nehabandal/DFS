@@ -27,11 +27,13 @@ public class Controller {
                         String hostname = heartbeat.receive(srvSocket);
                         hosts.add(hostname);
                         i++;
-                        while (j < 3) {
-                            sublist[0].add(hosts.get(0));
-                            j++;
+                        if (hosts.size() == 3) {
+                            while (j < 3) {
+                                sublist[0].add(hosts.get(j));
+                                j++;
+                            }
                         }
-                        System.out.println(sublist[0].size());
+                        System.out.println("Sublist size: " + sublist[0].size());
                     }
 
 
