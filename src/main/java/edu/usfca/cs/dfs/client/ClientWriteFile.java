@@ -10,12 +10,10 @@ import java.util.List;
  * Created by npbandal on 10/7/17.
  */
 public class ClientWriteFile {
-    private File fileName;
 
     public ClientWriteFile() {
 
     }
-
 
     protected List<byte[]> splitFile(File file) {
         final int CHUNK_SIZE = 1024 * 1024;
@@ -46,7 +44,7 @@ public class ClientWriteFile {
             String chunkname = fileName.getName() + (j + 1);
             List<String> hostnames;
             hostnames = cp.clientToController(9900, chunkname, fileInChunks.size(), (j + 1));
-            System.out.println("Host from controller: "+hostnames.size());
+            System.out.println("Host from controller: " + hostnames.size());
             int chunkid = j + 1;
             cp.protoBufToWriteintoStorageNode(hostnames.get(0), 9901, fileName.getName(), chunkid, fileInChunks.get(j), fileInChunks.size());
             Thread.sleep(100);
