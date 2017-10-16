@@ -3,6 +3,7 @@ package edu.usfca.cs.dfs.client;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,7 @@ public class ClientWriteFile {
         return fileInChunks;
     }
 
-    public void write(File fileName) throws InterruptedException {
-
+    public void write(String controllerHost, File fileName) throws InterruptedException, UnknownHostException {
         List<byte[]> fileInChunks;
         ClientProtoBuf cp = new ClientProtoBuf();
         fileInChunks = splitFile(fileName);
@@ -43,7 +43,7 @@ public class ClientWriteFile {
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
             List<String> hostnames;
-            hostnames = cp.clientToController(9900, chunkname, fileInChunks.size(), (j + 1));
+            hostnames = cp.clientToController(controllerHost, 9900, chunkname, fileInChunks.size(), (j + 1));
             System.out.println("Host from controller: " + hostnames.size());
             int chunkid = j + 1;
             cp.protoBufToWriteintoStorageNode(hostnames.get(0), 9901, fileName.getName(), chunkid, fileInChunks.get(j), fileInChunks.size());

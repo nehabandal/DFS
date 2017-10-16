@@ -15,11 +15,11 @@ import java.util.List;
  */
 public class ClientProtoBuf {
 
-    public List<String> clientToController(int portnumber, String chunkname, int chunknum, int chunkId) {
+    public List<String> clientToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId) {
         System.out.println(chunkname);
         List<String> hostnames = new ArrayList<>();
         try {
-            Socket sockController = new Socket("localhost", portnumber);
+            Socket sockController = new Socket(controllerHost, portnumber);
             ControllerProtobuf.ClientTalk clientTalk
                     = ControllerProtobuf.ClientTalk.newBuilder()
                     .setChunkName(chunkname)

@@ -22,12 +22,14 @@ public class Client {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("read")) {
                 String fileToRead = args[i + 1];
-                readFile.read(fileToRead);
+                String controllerName = args[i + 2];
+                readFile.read(controllerName, fileToRead);
             }
             if (args[i].equals("write")) {
-                String fileToWrite = args[i+1];
+                String fileToWrite = args[i + 1];
+                String controllerName = args[i + 2];
                 File file = new File(fileToWrite);
-                writeFile.write(file);
+                writeFile.write(controllerName, file);
             }
         }
 

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ClientReadFile {
 
-    public void read(String fileName) throws InterruptedException {
+    public void read(String controllerHost, String fileName) throws InterruptedException {
 
         LinkedHashMap<Integer, String> HostID = new LinkedHashMap<>();
         List<String> activeHostnames = Arrays.asList("Bass1", "Bass2", "Bass3");
@@ -20,7 +20,7 @@ public class ClientReadFile {
         HostID.put(9994, "ML-ITS-601927");
         int i = 1;
 
-        activeHostnames = cp.clientToController(9900, fileName, 1, 1);
+        activeHostnames = cp.clientToController(controllerHost, 9900, fileName, 1, 1);
 
         for (String hostname : activeHostnames) {
             cp.sendReadReqToStorageNode("localhost", 9901, fileName, i, activeHostnames.size());
