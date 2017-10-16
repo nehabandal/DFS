@@ -79,7 +79,7 @@ public class ClientProtoBuf {
         Socket sockController = null;
         try {
 
-            sockController = new Socket(hostname, portnumber);
+            sockController = new Socket("localhost", portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadfileName(filename)

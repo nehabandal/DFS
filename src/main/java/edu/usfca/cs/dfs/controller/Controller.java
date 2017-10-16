@@ -105,23 +105,6 @@ public class Controller {
             }
         };
     }
-
-    private List<String> getAliveHosts(Map<String, Controller.OnlineStorageNode> heartbeatMap) {
-        final List<String> hosts = new ArrayList<>();
-        for (String host : heartbeatMap.keySet()) {
-            System.out.println("Heartbeat: " + host);
-            Controller.OnlineStorageNode node = heartbeatMap.get(host);
-            if (node.lastSeenTime - System.currentTimeMillis() < TIMEOUT_MS) {
-                if (node.availableSpace > 10) {
-                    hosts.add(host);
-                }
-            }
-            if (hosts.size() == 3) {
-                break;
-            }
-        }
-        return hosts;
-    }
 }
 
 

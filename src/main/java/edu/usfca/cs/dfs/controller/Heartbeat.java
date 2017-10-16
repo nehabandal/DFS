@@ -43,7 +43,6 @@ public class Heartbeat implements Runnable {
 
 
         try {
-//            System.out.println(hostname);
             while (hostname != null) { //should be not equal in actual code
 //                for (String host : hostname.keySet()) {
 
@@ -64,6 +63,7 @@ public class Heartbeat implements Runnable {
 
                 msgWrapper.writeDelimitedTo(sockController.getOutputStream());
                 Thread.sleep(3000);
+//                }
             }
         } catch (Exception e) {
             try {

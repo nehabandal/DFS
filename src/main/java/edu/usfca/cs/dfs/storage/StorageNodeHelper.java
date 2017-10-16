@@ -48,18 +48,14 @@ public class StorageNodeHelper {
                 chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
                 chunknums = recfilechunks.getStoreChunkMsgOrBuilder().getChunkNums();
                 processClientWriteRequest(recfilechunks);
-                if (chunkID == chunknums)
-                    break;
+
             }
             if (reqTypeRead.equals("read")) {
                 chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
                 hostnum = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getHostNums();
                 processClientReadRequest(clientSocket, recfilechunks);
-                if (chunkID == hostnum)
-                    break;
             }
         }
-        srvSocket.close();
     }
 
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {

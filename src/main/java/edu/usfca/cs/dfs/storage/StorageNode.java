@@ -66,7 +66,7 @@ public class StorageNode {
         };
     }
 
-    //    private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails, final int portnumber) {
+//        private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails, final int portnumber) {
     private Thread threadHeartBeat(final String controllerName, final String hostdetails, final int portnumber) {
         return new Thread() {
             public void run() {

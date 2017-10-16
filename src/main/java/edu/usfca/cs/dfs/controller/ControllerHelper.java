@@ -3,9 +3,7 @@ package edu.usfca.cs.dfs.controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
 
@@ -44,18 +42,29 @@ public class ControllerHelper {
 
     private List<String> getAliveHosts(Map<String, Controller.OnlineStorageNode> heartbeatMap) {
         final List<String> hosts = new ArrayList<>();
-        for (String host : heartbeatMap.keySet()) {
-            System.out.println("Heartbeat: " + host);
-            Controller.OnlineStorageNode node = heartbeatMap.get(host);
+        Random random = new Random();
+        Set<String> a = new HashSet<String>(heartbeatMap.keySet());
+        List<String> keys = new ArrayList<String>(heartbeatMap.keySet());
+        int i = 0;
+        while (i < heartbeatMap.size()) {
+            String randomKey = keys.get(random.nextInt(keys.size()));
+            Controller.OnlineStorageNode node = heartbeatMap.get(randomKey);
             if (node.lastSeenTime - System.currentTimeMillis() < TIMEOUT_MS) {
                 if (node.availableSpace > 10) {
-                    hosts.add(host);
+                    if (hosts.contains(randomKey)) {
+                        continue;
+                    } else
+                        hosts.add(randomKey);
+
+                    System.out.println("Heartbeat: " + randomKey);
                 }
             }
             if (hosts.size() == 3) {
                 break;
             }
+            i++;
         }
         return hosts;
+
     }
 }
