@@ -16,8 +16,8 @@ public class StorageNodeHeartBeat {
         String hostname = getHostname();
 //        System.out.println(hostname);
         while (true) {
-            Heartbeat heartbeat = new Heartbeat(controllerName, hostname, portnumber);
-            heartbeat.run();
+//            Heartbeat heartbeat = new Heartbeat(controllerName, hostname, portnumber);
+//            heartbeat.run();
         }
 
     }

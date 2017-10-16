@@ -12,6 +12,7 @@ public class Heartbeat implements Runnable {
 
     private String controllerhost;
     private String hostName;
+    private HashMap<String, Integer> hostdetails;
     private int portNum;
     int count = 0;
 
@@ -37,10 +38,14 @@ public class Heartbeat implements Runnable {
             }
     }
 
+    //    public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
     public synchronized boolean send(String controllerhost, String hostname, int portnum) {
 
+
         try {
+//            System.out.println(hostname);
             while (hostname != null) { //should be not equal in actual code
+//                for (String host : hostname.keySet()) {
 
                 long space = new File("/").getFreeSpace();
                 long spaceMB = space / (1024 * 1024);
@@ -65,7 +70,7 @@ public class Heartbeat implements Runnable {
                 long t1 = System.currentTimeMillis();
                 wait(5000);
                 if ((System.currentTimeMillis() - t1) > 5000) {
-                    System.out.println(hostname + " is dead");
+                    System.out.println(controllerhost + " is dead");
                 }
             } catch (InterruptedException e1) {
                 e.printStackTrace();
@@ -76,24 +81,26 @@ public class Heartbeat implements Runnable {
     }
 
 
-    public String receive(ServerSocket srvSocket) {
-        String hostname = null;
+    public HashMap<String, Long> receive(ServerSocket srvSocket) {
         String msg = null;
-        Long freespace;
+        HashMap<String, Long> hostNameSpace = new HashMap<>();
         try {
             Socket clientSocket = srvSocket.accept();
+
             ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
                     .parseDelimitedFrom(clientSocket.getInputStream());
             if (msgWrapper.hasStorageHeartBeat()) {
-                hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
+                String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
                 msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
-                freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
+                Long freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
                 System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
+                if (hostname != null && freespace != 0) {
+                    hostNameSpace.put(hostname, freespace);
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return hostname;
+        return hostNameSpace;
     }
 }
