@@ -25,7 +25,7 @@ public class StorageNodeHelper {
             chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
 //            hostnums = recfilechunks.getStoreChunkMsgOrBuilder().getChunkNums();
 
-            String chunkNameToStore = storeChunkName + chunkID;
+            String chunkNameToStore = storeChunkName + "_" + chunkID;
 
             //Writing into chunks
             StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
@@ -60,7 +60,7 @@ public class StorageNodeHelper {
 
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
         System.out.println("req rec");
-        int chunkID , hostnums = 0;
+        int chunkID, hostnums = 0;
         String fileName = null;
         byte[] chunkfilecontents = null;
         if (recfilechunks.hasRetrieveChunkFileMsg()) {

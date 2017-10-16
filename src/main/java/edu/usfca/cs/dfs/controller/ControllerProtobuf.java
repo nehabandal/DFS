@@ -2360,6 +2360,699 @@ public final class ControllerProtobuf {
 
   }
 
+  public interface HostNamesFilesOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:HostNamesFiles)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+    int getHostNameFileCount();
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+    boolean containsHostNameFile(
+        java.lang.String key);
+    /**
+     * Use {@link #getHostNameFileMap()} instead.
+     */
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.String>
+    getHostNameFile();
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.String>
+    getHostNameFileMap();
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    java.lang.String getHostNameFileOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue);
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    java.lang.String getHostNameFileOrThrow(
+        java.lang.String key);
+  }
+  /**
+   * Protobuf type {@code HostNamesFiles}
+   */
+  public  static final class HostNamesFiles extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:HostNamesFiles)
+      HostNamesFilesOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use HostNamesFiles.newBuilder() to construct.
+    private HostNamesFiles(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private HostNamesFiles() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private HostNamesFiles(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownFieldProto3(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                hostNameFile_ = com.google.protobuf.MapField.newMapField(
+                    HostNameFileDefaultEntryHolder.defaultEntry);
+                mutable_bitField0_ |= 0x00000001;
+              }
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+              hostNameFile__ = input.readMessage(
+                  HostNameFileDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              hostNameFile_.getMutableMap().put(
+                  hostNameFile__.getKey(), hostNameFile__.getValue());
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_descriptor;
+    }
+
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 1:
+          return internalGetHostNameFile();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.class, edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.Builder.class);
+    }
+
+    public static final int HOSTNAMEFILE_FIELD_NUMBER = 1;
+    private static final class HostNameFileDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.String> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.String>newDefaultInstance(
+                  edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_HostNameFileEntry_descriptor, 
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "");
+    }
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.String> hostNameFile_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+    internalGetHostNameFile() {
+      if (hostNameFile_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            HostNameFileDefaultEntryHolder.defaultEntry);
+      }
+      return hostNameFile_;
+    }
+
+    public int getHostNameFileCount() {
+      return internalGetHostNameFile().getMap().size();
+    }
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    public boolean containsHostNameFile(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetHostNameFile().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getHostNameFileMap()} instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.String> getHostNameFile() {
+      return getHostNameFileMap();
+    }
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    public java.util.Map<java.lang.String, java.lang.String> getHostNameFileMap() {
+      return internalGetHostNameFile().getMap();
+    }
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    public java.lang.String getHostNameFileOrDefault(
+        java.lang.String key,
+        java.lang.String defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetHostNameFile().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+     */
+
+    public java.lang.String getHostNameFileOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.String> map =
+          internalGetHostNameFile().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      com.google.protobuf.GeneratedMessageV3
+        .serializeStringMapTo(
+          output,
+          internalGetHostNameFile(),
+          HostNameFileDefaultEntryHolder.defaultEntry,
+          1);
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
+           : internalGetHostNameFile().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
+        hostNameFile__ = HostNameFileDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, hostNameFile__);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles)) {
+        return super.equals(obj);
+      }
+      edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles other = (edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles) obj;
+
+      boolean result = true;
+      result = result && internalGetHostNameFile().equals(
+          other.internalGetHostNameFile());
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (!internalGetHostNameFile().getMap().isEmpty()) {
+        hash = (37 * hash) + HOSTNAMEFILE_FIELD_NUMBER;
+        hash = (53 * hash) + internalGetHostNameFile().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code HostNamesFiles}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:HostNamesFiles)
+        edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFilesOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_descriptor;
+      }
+
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 1:
+            return internalGetHostNameFile();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMutableMapField(
+          int number) {
+        switch (number) {
+          case 1:
+            return internalGetMutableHostNameFile();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.class, edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.Builder.class);
+      }
+
+      // Construct using edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        internalGetMutableHostNameFile().clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_HostNamesFiles_descriptor;
+      }
+
+      public edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles getDefaultInstanceForType() {
+        return edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.getDefaultInstance();
+      }
+
+      public edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles build() {
+        edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles buildPartial() {
+        edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles result = new edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles(this);
+        int from_bitField0_ = bitField0_;
+        result.hostNameFile_ = internalGetHostNameFile();
+        result.hostNameFile_.makeImmutable();
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles) {
+          return mergeFrom((edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles other) {
+        if (other == edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles.getDefaultInstance()) return this;
+        internalGetMutableHostNameFile().mergeFrom(
+            other.internalGetHostNameFile());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.String> hostNameFile_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetHostNameFile() {
+        if (hostNameFile_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              HostNameFileDefaultEntryHolder.defaultEntry);
+        }
+        return hostNameFile_;
+      }
+      private com.google.protobuf.MapField<java.lang.String, java.lang.String>
+      internalGetMutableHostNameFile() {
+        onChanged();;
+        if (hostNameFile_ == null) {
+          hostNameFile_ = com.google.protobuf.MapField.newMapField(
+              HostNameFileDefaultEntryHolder.defaultEntry);
+        }
+        if (!hostNameFile_.isMutable()) {
+          hostNameFile_ = hostNameFile_.copy();
+        }
+        return hostNameFile_;
+      }
+
+      public int getHostNameFileCount() {
+        return internalGetHostNameFile().getMap().size();
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public boolean containsHostNameFile(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return internalGetHostNameFile().getMap().containsKey(key);
+      }
+      /**
+       * Use {@link #getHostNameFileMap()} instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String> getHostNameFile() {
+        return getHostNameFileMap();
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public java.util.Map<java.lang.String, java.lang.String> getHostNameFileMap() {
+        return internalGetHostNameFile().getMap();
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public java.lang.String getHostNameFileOrDefault(
+          java.lang.String key,
+          java.lang.String defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetHostNameFile().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public java.lang.String getHostNameFileOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.String> map =
+            internalGetHostNameFile().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
+      }
+
+      public Builder clearHostNameFile() {
+        internalGetMutableHostNameFile().getMutableMap()
+            .clear();
+        return this;
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public Builder removeHostNameFile(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableHostNameFile().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.String>
+      getMutableHostNameFile() {
+        return internalGetMutableHostNameFile().getMutableMap();
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+      public Builder putHostNameFile(
+          java.lang.String key,
+          java.lang.String value) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        if (value == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableHostNameFile().getMutableMap()
+            .put(key, value);
+        return this;
+      }
+      /**
+       * <code>map&lt;string, string&gt; hostNameFile = 1;</code>
+       */
+
+      public Builder putAllHostNameFile(
+          java.util.Map<java.lang.String, java.lang.String> values) {
+        internalGetMutableHostNameFile().getMutableMap()
+            .putAll(values);
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFieldsProto3(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:HostNamesFiles)
+    }
+
+    // @@protoc_insertion_point(class_scope:HostNamesFiles)
+    private static final edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles();
+    }
+
+    public static edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<HostNamesFiles>
+        PARSER = new com.google.protobuf.AbstractParser<HostNamesFiles>() {
+      public HostNamesFiles parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new HostNamesFiles(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<HostNamesFiles> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<HostNamesFiles> getParserForType() {
+      return PARSER;
+    }
+
+    public edu.usfca.cs.dfs.controller.ControllerProtobuf.HostNamesFiles getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface ControllerMessagePBOrBuilder extends
       // @@protoc_insertion_point(interface_extends:ControllerMessagePB)
       com.google.protobuf.MessageOrBuilder {
@@ -3265,6 +3958,16 @@ public final class ControllerProtobuf {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ListOfHostnames_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_HostNamesFiles_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_HostNamesFiles_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_HostNamesFiles_HostNameFileEntry_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_HostNamesFiles_HostNameFileEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ControllerMessagePB_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3284,11 +3987,14 @@ public final class ControllerProtobuf {
       "Num\030\005 \001(\005\022\021\n\tnumChunks\030\006 \001(\005\"X\n\017StorageH" +
       "earbeat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002" +
       " \001(\t\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\"$" +
-      "\n\017ListOfHostnames\022\021\n\thostnames\030\001 \003(\t\"m\n\023" +
-      "ControllerMessagePB\022!\n\nclienttalk\030\001 \001(\0132" +
-      "\013.ClientTalkH\000\022,\n\020storageHeartBeat\030\002 \001(\013" +
-      "2\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033edu.usfca",
-      ".cs.dfs.controllerb\006proto3"
+      "\n\017ListOfHostnames\022\021\n\thostnames\030\001 \003(\t\"~\n\016" +
+      "HostNamesFiles\0227\n\014hostNameFile\030\001 \003(\0132!.H" +
+      "ostNamesFiles.HostNameFileEntry\0323\n\021HostN" +
+      "ameFileEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t",
+      ":\0028\001\"m\n\023ControllerMessagePB\022!\n\nclienttal" +
+      "k\030\001 \001(\0132\013.ClientTalkH\000\022,\n\020storageHeartBe" +
+      "at\030\002 \001(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033e" +
+      "du.usfca.cs.dfs.controllerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3320,8 +4026,20 @@ public final class ControllerProtobuf {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ListOfHostnames_descriptor,
         new java.lang.String[] { "Hostnames", });
-    internal_static_ControllerMessagePB_descriptor =
+    internal_static_HostNamesFiles_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_HostNamesFiles_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_HostNamesFiles_descriptor,
+        new java.lang.String[] { "HostNameFile", });
+    internal_static_HostNamesFiles_HostNameFileEntry_descriptor =
+      internal_static_HostNamesFiles_descriptor.getNestedTypes().get(0);
+    internal_static_HostNamesFiles_HostNameFileEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_HostNamesFiles_HostNameFileEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_ControllerMessagePB_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_ControllerMessagePB_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ControllerMessagePB_descriptor,

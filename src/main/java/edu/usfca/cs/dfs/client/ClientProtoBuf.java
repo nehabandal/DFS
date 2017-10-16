@@ -7,32 +7,18 @@ import edu.usfca.cs.dfs.storage.StorageProtobuf;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by npbandal on 10/1/17.
  */
 public class ClientProtoBuf {
 
-    public List<String> clientToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId,String reqType) {
+    public List<String> clientToControllerwrite(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
         System.out.println(chunkname);
         List<String> hostnames = new ArrayList<>();
         try {
-            Socket sockController = new Socket(controllerHost, portnumber);
-            ControllerProtobuf.ClientTalk clientTalk
-                    = ControllerProtobuf.ClientTalk.newBuilder()
-                    .setChunkName(chunkname)
-                    .setNumChunks(chunknum)
-                    .setChunkId(chunkId)
-                    .setReqtype(reqType)
-                    .build();
-            ControllerProtobuf.ControllerMessagePB msgWrapper =
-                    ControllerProtobuf.ControllerMessagePB.newBuilder()
-                            .setClienttalk(clientTalk)
-                            .build();
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-
+            Socket sockController = sendReqToController(controllerHost, portnumber, chunkname, chunknum, chunkId, reqType);
 
 //            Hostnames back from controller
             ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
@@ -47,12 +33,49 @@ public class ClientProtoBuf {
         return hostnames;
     }
 
+    public Map<String, String> clientToControllerread(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
+        System.out.println(chunkname);
+        Map<String,String> filesHostnames = new LinkedHashMap<>();
+        try {
+
+            Socket sockController = sendReqToController(controllerHost, portnumber, chunkname, chunknum, chunkId, reqType);
+
+//            Hostnames back from controller with file name
+            ControllerProtobuf.HostNamesFiles fileshosts = ControllerProtobuf.HostNamesFiles
+                    .parseDelimitedFrom(sockController.getInputStream());
+            filesHostnames = fileshosts.getHostNameFileMap();
+
+            sockController.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return filesHostnames;
+    }
+
+    private Socket sendReqToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) throws IOException {
+        Socket sockController = new Socket(controllerHost, portnumber);
+        ControllerProtobuf.ClientTalk clientTalk
+                = ControllerProtobuf.ClientTalk.newBuilder()
+                .setChunkName(chunkname)
+                .setNumChunks(chunknum)
+                .setChunkId(chunkId)
+                .setReqtype(reqType)
+                .build();
+        ControllerProtobuf.ControllerMessagePB msgWrapper =
+                ControllerProtobuf.ControllerMessagePB.newBuilder()
+                        .setClienttalk(clientTalk)
+                        .build();
+        msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        return sockController;
+    }
+
     public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, int chunknum) {
         try {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
 
-            Socket sockController = new Socket(hostname, portnumber);
+            Socket sockController = new Socket("localhost", portnumber);
 
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
