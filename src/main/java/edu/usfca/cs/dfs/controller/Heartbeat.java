@@ -5,8 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -45,6 +45,7 @@ public class Heartbeat implements Runnable {
     public synchronized boolean send(String controllerhost, String hostname, int portnum) {
 
         File directory = new File("/");
+//        File directory = new File("/home2/npbandal/");
         long space = directory.getFreeSpace();
         long spaceMB = space / (1024 * 1024);
         File[] fList = directory.listFiles();
@@ -72,7 +73,6 @@ public class Heartbeat implements Runnable {
                         ProtoHeartbeat.ControllerMessagePB.newBuilder()
                                 .setStorageHeartBeat(heartbeat)
                                 .build();
-
                 msgWrapper.writeDelimitedTo(sockController.getOutputStream());
                 Thread.sleep(3000);
 //                }
@@ -92,29 +92,13 @@ public class Heartbeat implements Runnable {
         return true;
     }
 
-    public HashMap<String, List<String>> receiveFilenames(ServerSocket srvSocket) {
-        List<String> filenames = null;
-        HashMap<String, List<String>> hostFileNames = new LinkedHashMap<>();
-        try {
-            Socket clientSocket = srvSocket.accept();
-
-            ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
-                    .parseDelimitedFrom(clientSocket.getInputStream());
-            if (msgWrapper.hasStorageHeartBeat()) {
-                String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
-                filenames = msgWrapper.getStorageHeartBeatOrBuilder().getFileNameList();
-                hostFileNames.put(hostname, filenames);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return hostFileNames;
-    }
-
-
-    public HashMap<String, Long> receive(ServerSocket srvSocket) {
+    public Map<String, Map<Long, List<String>>> receive(ServerSocket srvSocket) {
         String msg = null;
-        HashMap<String, Long> hostNameSpace = new HashMap<>();
+        Map<String, Map<Long, List<String>>> hostNameSpaceFiles = new HashMap<>();
+//        HashMap<String, Long> hostNameSpace = new HashMap<>();
+        List<String> filenames = null;
+        HashMap<Long, List<String>> hostSpceFiles = new HashMap<>();
+
         try {
             Socket clientSocket = srvSocket.accept();
 
@@ -124,14 +108,17 @@ public class Heartbeat implements Runnable {
                 String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
                 msg = msgWrapper.getStorageHeartBeatOrBuilder().getHeartbeatmsg();
                 Long freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
+                filenames = msgWrapper.getStorageHeartBeatOrBuilder().getFileNameList();
                 System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
-                if (hostname != null && freespace != 0) {
-                    hostNameSpace.put(hostname, freespace);
-                }
+//                for (String filename : filenames) {
+//                    System.out.println(filename);
+//                }
+                hostSpceFiles.put(freespace, filenames);
+                hostNameSpaceFiles.put(hostname, hostSpceFiles);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return hostNameSpace;
+        return hostNameSpaceFiles;
     }
 }

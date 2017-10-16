@@ -2,10 +2,7 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Controller {
 
@@ -38,23 +35,15 @@ public class Controller {
         final String host;
         long availableSpace;
         long lastSeenTime;
+        List<String> filenames;
+
 
         public OnlineStorageNode(String host) {
             this.host = host;
         }
     }
 
-    public static class FilesNode {
-        final String host;
-        List<String> filenames;
-
-        public FilesNode(String host) {
-            this.host = host;
-        }
-    }
-
     private final Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
-    private final Map<String, FilesNode> hostNameFiles = new LinkedHashMap<>();
 
 
     private Thread createHeartBeatReceiverThread() {
@@ -67,35 +56,45 @@ public class Controller {
                     while (!srvSocket.isClosed()) {
                         Heartbeat heartbeat = new Heartbeat();
 
-                        HashMap<String, Long> hostdetails = heartbeat.receive(srvSocket);
-                        HashMap<String, List<String>> filesinhost = heartbeat.receiveFilenames(srvSocket);
+                        Map<String, Map<Long, List<String>>> hostNameSpaceFiles = heartbeat.receive(srvSocket);
+                        Iterator<Map.Entry<String, Map<Long, List<String>>>> parent = hostNameSpaceFiles.entrySet().iterator();
 
-                        for (Map.Entry<String, List<String>> entry : filesinhost.entrySet()) {
-                            String hostname = entry.getKey();
-                            System.out.println(hostname);
-                            List<String> files = entry.getValue();
-                            for (String file : files) {
-                                System.out.println(file);
+                        while (parent.hasNext()) {
+                            Map.Entry<String, Map<Long, List<String>>> parentPair = parent.next();
+                            String hostname = parentPair.getKey();
+                            Iterator<Map.Entry<Long, List<String>>> child = (parentPair.getValue()).entrySet().iterator();
+                            while (child.hasNext()) {
+                                Map.Entry<Long, List<String>> childPair = child.next();
+                                Long availableSpace = childPair.getKey();
+                                List<String> files = childPair.getValue();
+                                OnlineStorageNode node = heartbeatMap.get(hostname);
+                                if (node == null) {
+                                    node = new OnlineStorageNode(hostname);
+                                    heartbeatMap.put(hostname, node);
+                                }
+                                node.lastSeenTime = System.currentTimeMillis();
+                                node.availableSpace = availableSpace;
+                                node.filenames = files;
+
+                                child.remove();
                             }
-                            FilesNode node = hostNameFiles.get(hostname);
-                            if (node == null) {
-                                node = new FilesNode(hostname);
-                                hostNameFiles.put(hostname, node);
-                            }
-                            node.filenames = files;
+                            parent.remove();
                         }
 
-                        for (Map.Entry<String, Long> entry : hostdetails.entrySet()) {
-                            String hostname = entry.getKey();
-                            Long availableSpace = entry.getValue();
-                            OnlineStorageNode node = heartbeatMap.get(hostname);
-                            if (node == null) {
-                                node = new OnlineStorageNode(hostname);
-                                heartbeatMap.put(hostname, node);
-                            }
-                            node.lastSeenTime = System.currentTimeMillis();
-                            node.availableSpace = availableSpace;
-                        }
+
+//                        HashMap<String, Long> hostdetails = heartbeat.receive(srvSocket);
+
+//                        for (Map.Entry<String, Long> entry : hostdetails.entrySet()) {
+//                            String hostname = entry.getKey();
+//                            Long availableSpace = entry.getValue();
+//                            OnlineStorageNode node = heartbeatMap.get(hostname);
+//                            if (node == null) {
+//                                node = new OnlineStorageNode(hostname);
+//                                heartbeatMap.put(hostname, node);
+//                            }
+//                            node.lastSeenTime = System.currentTimeMillis();
+//                            node.availableSpace = availableSpace;
+//                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -111,7 +110,7 @@ public class Controller {
                 ControllerHelper cp = new ControllerHelper();
                 try {
                     ServerSocket srvSocket = new ServerSocket(9900);
-                    cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap, hostNameFiles);
+                    cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -12,7 +12,7 @@ import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
  */
 public class ControllerHelper {
 
-    public void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes, Map<String, Controller.FilesNode> fileNames) throws IOException {
+    public void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
         int chunknum = 0;
         int chunkID = 0;
         String reqType = null;
@@ -30,8 +30,6 @@ public class ControllerHelper {
                 hostReadchunks = clientReq.getChunkName() + chunkID;
                 System.out.println(msg + clientReq.getChunkName());
             }
-
-            System.out.println(fileNames.size());
 
             //Sending response to controller
             if (Objects.equals(reqType, "write")) {
@@ -51,10 +49,6 @@ public class ControllerHelper {
         }
     }
 
-//    private List<String> getAliveHostsRead(Map<String, Controller.FilesNode> fileNames, String hostReadchunks) {
-//
-//
-//    }
 
     private List<String> getAliveHostsWrite(Map<String, Controller.OnlineStorageNode> heartbeatMap) {
         final List<String> hosts = new ArrayList<>();
