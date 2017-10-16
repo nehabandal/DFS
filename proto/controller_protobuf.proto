@@ -18,8 +18,13 @@ message StorageHearbeat {
 }
 
 message ListOfHostnames {
-    repeated string hostnames=1;
+    repeated string hostnames = 1;
 }
+
+message HostNamesFiles {
+    map<string, string> hostNameFile = 1;
+}
+
 
 message ControllerMessagePB {
     oneof msg {

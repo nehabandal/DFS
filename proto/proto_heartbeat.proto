@@ -8,6 +8,8 @@ message StorageHearbeat {
     int32 chunkId = 4;
     string controller = 5;
     string heartbeatmsg = 6;
+    int64 freespace = 7;
+    repeated string fileName = 8;
 }
 
 message ControllerMessagePB {
