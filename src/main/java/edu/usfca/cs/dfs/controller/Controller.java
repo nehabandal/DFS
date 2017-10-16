@@ -2,7 +2,10 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
 
@@ -32,16 +35,27 @@ public class Controller {
     }
 
     public static class OnlineStorageNode {
-         final String host;
-         long availableSpace;
-         long lastSeenTime;
+        final String host;
+        long availableSpace;
+        long lastSeenTime;
 
         public OnlineStorageNode(String host) {
             this.host = host;
         }
     }
 
+    public static class FilesNode {
+        final String host;
+        List<String> filenames;
+
+        public FilesNode(String host) {
+            this.host = host;
+        }
+    }
+
     private final Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
+    private final Map<String, FilesNode> hostNameFiles = new LinkedHashMap<>();
+
 
     private Thread createHeartBeatReceiverThread() {
         return new Thread() {
@@ -52,7 +66,25 @@ public class Controller {
                     srvSocket = new ServerSocket(8080);
                     while (!srvSocket.isClosed()) {
                         Heartbeat heartbeat = new Heartbeat();
+
                         HashMap<String, Long> hostdetails = heartbeat.receive(srvSocket);
+                        HashMap<String, List<String>> filesinhost = heartbeat.receiveFilenames(srvSocket);
+
+                        for (Map.Entry<String, List<String>> entry : filesinhost.entrySet()) {
+                            String hostname = entry.getKey();
+                            System.out.println(hostname);
+                            List<String> files = entry.getValue();
+                            for (String file : files) {
+                                System.out.println(file);
+                            }
+                            FilesNode node = hostNameFiles.get(hostname);
+                            if (node == null) {
+                                node = new FilesNode(hostname);
+                                hostNameFiles.put(hostname, node);
+                            }
+                            node.filenames = files;
+                        }
+
                         for (Map.Entry<String, Long> entry : hostdetails.entrySet()) {
                             String hostname = entry.getKey();
                             Long availableSpace = entry.getValue();
@@ -73,32 +105,13 @@ public class Controller {
         };
     }
 
-//    private List<String> getAliveHosts() {
-//        final List<String> hosts = new ArrayList<>();
-//        for (String host : heartbeatMap.keySet()) {
-////            System.out.println("Heartbeat: " + host);
-////            OnlineStorageNode node = heartbeatMap.get(host);
-////            if (node.lastSeenTime - System.currentTimeMillis() < TIMEOUT_MS) {
-////                if (node.availableSpace > 10) {
-//                    hosts.add(host);
-////                }
-////            }
-////            if (hosts.size() == 3) {
-////                break;
-////            }
-//        }
-//        return hosts;
-//    }
-
     private Thread createClientResponseThread() {
         return new Thread() {
             public void run() {
                 ControllerHelper cp = new ControllerHelper();
                 try {
                     ServerSocket srvSocket = new ServerSocket(9900);
-//                    List<String> sublist = getAliveHosts(heartbeatMap);
-//                    cp.receiveClientReqAtController(srvSocket, "File received ", sublist);
-                    cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
+                    cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap, hostNameFiles);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

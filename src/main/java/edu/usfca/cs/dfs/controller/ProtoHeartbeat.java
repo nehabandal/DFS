@@ -72,6 +72,25 @@ public final class ProtoHeartbeat {
      * <code>int64 freespace = 7;</code>
      */
     long getFreespace();
+
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    java.util.List<java.lang.String>
+        getFileNameList();
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    int getFileNameCount();
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    java.lang.String getFileName(int index);
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getFileNameBytes(int index);
   }
   /**
    * Protobuf type {@code StorageHearbeat}
@@ -93,6 +112,7 @@ public final class ProtoHeartbeat {
       controller_ = "";
       heartbeatmsg_ = "";
       freespace_ = 0L;
+      fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -162,6 +182,15 @@ public final class ProtoHeartbeat {
               freespace_ = input.readInt64();
               break;
             }
+            case 66: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                fileName_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              fileName_.add(s);
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -170,6 +199,9 @@ public final class ProtoHeartbeat {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          fileName_ = fileName_.getUnmodifiableView();
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -186,6 +218,7 @@ public final class ProtoHeartbeat {
               edu.usfca.cs.dfs.controller.ProtoHeartbeat.StorageHearbeat.class, edu.usfca.cs.dfs.controller.ProtoHeartbeat.StorageHearbeat.Builder.class);
     }
 
+    private int bitField0_;
     public static final int CHUNKNAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object chunkName_;
     /**
@@ -349,6 +382,35 @@ public final class ProtoHeartbeat {
       return freespace_;
     }
 
+    public static final int FILENAME_FIELD_NUMBER = 8;
+    private com.google.protobuf.LazyStringList fileName_;
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getFileNameList() {
+      return fileName_;
+    }
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    public int getFileNameCount() {
+      return fileName_.size();
+    }
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    public java.lang.String getFileName(int index) {
+      return fileName_.get(index);
+    }
+    /**
+     * <code>repeated string fileName = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFileNameBytes(int index) {
+      return fileName_.getByteString(index);
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -382,6 +444,9 @@ public final class ProtoHeartbeat {
       if (freespace_ != 0L) {
         output.writeInt64(7, freespace_);
       }
+      for (int i = 0; i < fileName_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, fileName_.getRaw(i));
+      }
       unknownFields.writeTo(output);
     }
 
@@ -414,6 +479,14 @@ public final class ProtoHeartbeat {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(7, freespace_);
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < fileName_.size(); i++) {
+          dataSize += computeStringSizeNoTag(fileName_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getFileNameList().size();
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -444,6 +517,8 @@ public final class ProtoHeartbeat {
           .equals(other.getHeartbeatmsg());
       result = result && (getFreespace()
           == other.getFreespace());
+      result = result && getFileNameList()
+          .equals(other.getFileNameList());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -470,6 +545,10 @@ public final class ProtoHeartbeat {
       hash = (37 * hash) + FREESPACE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getFreespace());
+      if (getFileNameCount() > 0) {
+        hash = (37 * hash) + FILENAME_FIELD_NUMBER;
+        hash = (53 * hash) + getFileNameList().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -613,6 +692,8 @@ public final class ProtoHeartbeat {
 
         freespace_ = 0L;
 
+        fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -635,6 +716,8 @@ public final class ProtoHeartbeat {
 
       public edu.usfca.cs.dfs.controller.ProtoHeartbeat.StorageHearbeat buildPartial() {
         edu.usfca.cs.dfs.controller.ProtoHeartbeat.StorageHearbeat result = new edu.usfca.cs.dfs.controller.ProtoHeartbeat.StorageHearbeat(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         result.chunkName_ = chunkName_;
         result.hostName_ = hostName_;
         result.portnum_ = portnum_;
@@ -642,6 +725,12 @@ public final class ProtoHeartbeat {
         result.controller_ = controller_;
         result.heartbeatmsg_ = heartbeatmsg_;
         result.freespace_ = freespace_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          fileName_ = fileName_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.fileName_ = fileName_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -708,6 +797,16 @@ public final class ProtoHeartbeat {
         if (other.getFreespace() != 0L) {
           setFreespace(other.getFreespace());
         }
+        if (!other.fileName_.isEmpty()) {
+          if (fileName_.isEmpty()) {
+            fileName_ = other.fileName_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureFileNameIsMutable();
+            fileName_.addAll(other.fileName_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -734,6 +833,7 @@ public final class ProtoHeartbeat {
         }
         return this;
       }
+      private int bitField0_;
 
       private java.lang.Object chunkName_ = "";
       /**
@@ -1085,6 +1185,100 @@ public final class ProtoHeartbeat {
       public Builder clearFreespace() {
         
         freespace_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringList fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureFileNameIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          fileName_ = new com.google.protobuf.LazyStringArrayList(fileName_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getFileNameList() {
+        return fileName_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public int getFileNameCount() {
+        return fileName_.size();
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public java.lang.String getFileName(int index) {
+        return fileName_.get(index);
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFileNameBytes(int index) {
+        return fileName_.getByteString(index);
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public Builder setFileName(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFileNameIsMutable();
+        fileName_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public Builder addFileName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFileNameIsMutable();
+        fileName_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public Builder addAllFileName(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureFileNameIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, fileName_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public Builder clearFileName() {
+        fileName_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string fileName = 8;</code>
+       */
+      public Builder addFileNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureFileNameIsMutable();
+        fileName_.add(value);
         onChanged();
         return this;
       }
@@ -1828,14 +2022,14 @@ public final class ProtoHeartbeat {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025proto_heartbeat.proto\"\225\001\n\017StorageHearb" +
+      "\n\025proto_heartbeat.proto\"\247\001\n\017StorageHearb" +
       "eat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002 \001(\t" +
       "\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\022\022\n\nco" +
       "ntroller\030\005 \001(\t\022\024\n\014heartbeatmsg\030\006 \001(\t\022\021\n\t" +
-      "freespace\030\007 \001(\003\"J\n\023ControllerMessagePB\022," +
-      "\n\020storageHeartBeat\030\001 \001(\0132\020.StorageHearbe" +
-      "atH\000B\005\n\003msgB\035\n\033edu.usfca.cs.dfs.controll" +
-      "erb\006proto3"
+      "freespace\030\007 \001(\003\022\020\n\010fileName\030\010 \003(\t\"J\n\023Con" +
+      "trollerMessagePB\022,\n\020storageHeartBeat\030\001 \001" +
+      "(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033edu.usf" +
+      "ca.cs.dfs.controllerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1854,7 +2048,7 @@ public final class ProtoHeartbeat {
     internal_static_StorageHearbeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StorageHearbeat_descriptor,
-        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", "Heartbeatmsg", "Freespace", });
+        new java.lang.String[] { "ChunkName", "HostName", "Portnum", "ChunkId", "Controller", "Heartbeatmsg", "Freespace", "FileName", });
     internal_static_ControllerMessagePB_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ControllerMessagePB_fieldAccessorTable = new

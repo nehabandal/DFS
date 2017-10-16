@@ -43,7 +43,7 @@ public class ClientWriteFile {
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
             List<String> hostnames;
-            hostnames = cp.clientToController(controllerHost, 9900, chunkname, fileInChunks.size(), (j + 1));
+            hostnames = cp.clientToController(controllerHost, 9900, chunkname, fileInChunks.size(), (j + 1),"write");
             System.out.println("Host from controller: " + hostnames.size());
             int chunkid = j + 1;
             System.out.println("Writing into node: "+ hostnames.get(0));

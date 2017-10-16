@@ -20,7 +20,7 @@ public class ClientReadFile {
         HostID.put(9994, "ML-ITS-601927");
         int i = 1;
 
-        activeHostnames = cp.clientToController(controllerHost, 9900, fileName, 1, 1);
+        activeHostnames = cp.clientToController(controllerHost, 9900, fileName, 1, 1,"read");
 
         for (String hostname : activeHostnames) {
             cp.sendReadReqToStorageNode("localhost", 9901, fileName, i, activeHostnames.size());

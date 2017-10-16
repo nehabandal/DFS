@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ClientProtoBuf {
 
-    public List<String> clientToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId) {
+    public List<String> clientToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId,String reqType) {
         System.out.println(chunkname);
         List<String> hostnames = new ArrayList<>();
         try {
@@ -25,6 +25,7 @@ public class ClientProtoBuf {
                     .setChunkName(chunkname)
                     .setNumChunks(chunknum)
                     .setChunkId(chunkId)
+                    .setReqtype(reqType)
                     .build();
             ControllerProtobuf.ControllerMessagePB msgWrapper =
                     ControllerProtobuf.ControllerMessagePB.newBuilder()

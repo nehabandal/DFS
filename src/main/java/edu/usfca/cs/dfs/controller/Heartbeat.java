@@ -3,7 +3,10 @@ package edu.usfca.cs.dfs.controller;
 import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -41,19 +44,28 @@ public class Heartbeat implements Runnable {
     //    public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
     public synchronized boolean send(String controllerhost, String hostname, int portnum) {
 
+        File directory = new File("/");
+        long space = directory.getFreeSpace();
+        long spaceMB = space / (1024 * 1024);
+        File[] fList = directory.listFiles();
+        List<String> filesinHost = new ArrayList<>();
+        if (fList != null) {
+            for (File fileinhost : fList) {
+                filesinHost.add(fileinhost.getName());
+            }
+        } else {
+            filesinHost.add("No file found");
+        }
 
         try {
             while (hostname != null) { //should be not equal in actual code
 //                for (String host : hostname.keySet()) {
-
-                long space = new File("/").getFreeSpace();
-                long spaceMB = space / (1024 * 1024);
-
                 Socket sockController = new Socket(controllerhost, portnum);
                 ProtoHeartbeat.StorageHearbeat heartbeat
                         = ProtoHeartbeat.StorageHearbeat.newBuilder()
                         .setHostName(hostname)
                         .setFreespace(spaceMB)
+                        .addAllFileName(filesinHost)
                         .setHeartbeatmsg("Hi from ")
                         .build();
                 ProtoHeartbeat.ControllerMessagePB msgWrapper =
@@ -78,6 +90,25 @@ public class Heartbeat implements Runnable {
         }
 
         return true;
+    }
+
+    public HashMap<String, List<String>> receiveFilenames(ServerSocket srvSocket) {
+        List<String> filenames = null;
+        HashMap<String, List<String>> hostFileNames = new LinkedHashMap<>();
+        try {
+            Socket clientSocket = srvSocket.accept();
+
+            ProtoHeartbeat.ControllerMessagePB msgWrapper = ProtoHeartbeat.ControllerMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
+            if (msgWrapper.hasStorageHeartBeat()) {
+                String hostname = msgWrapper.getStorageHeartBeatOrBuilder().getHostName();
+                filenames = msgWrapper.getStorageHeartBeatOrBuilder().getFileNameList();
+                hostFileNames.put(hostname, filenames);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hostFileNames;
     }
 
 
