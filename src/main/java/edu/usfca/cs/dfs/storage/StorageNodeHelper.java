@@ -25,15 +25,13 @@ public class StorageNodeHelper {
                     StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
             String reqTypeWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqTypeWrite();
             String reqTypeRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqTypeRead();
-            StorageProtobuf.StoreChunk storeChunkMsg = null;
-            String storeChunkName = null;
-            int chunkID = 0;
-            ClientProtoBuf clientProtoBuf = new ClientProtoBuf();
 
             if (reqTypeWrite.equals("write")) {
-                storeChunkMsg = recfilechunks.getStoreChunkMsg();
-                storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
-                chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
+
+                ClientProtoBuf clientProtoBuf = new ClientProtoBuf();
+                StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
+                String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
+                int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
                 List<String> hostReplica = processClientWriteRequest(recfilechunks, storeChunkMsg, storeChunkName, chunkID);
 
                 if (hostReplica.size() == 2) {
