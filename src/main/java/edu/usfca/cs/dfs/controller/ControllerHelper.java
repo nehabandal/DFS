@@ -59,21 +59,16 @@ public class ControllerHelper {
     private HashMap<String, String> getAliveHostsRead(Map<String, Controller.OnlineStorageNode> heartBeatNodes, String filenameClient) {
         HashMap<String, String> hostFilesNames = new LinkedHashMap<>();
         System.out.println("Coming from controller read: " + heartBeatNodes.size());
-        Random random = new Random();
-        int i = 0;
-        List<String> keys = new ArrayList<String>(heartBeatNodes.keySet());
-        while (i < heartBeatNodes.size()) {
-            String randomKey = keys.get(random.nextInt(keys.size()));
-            System.out.println(randomKey);
-            Controller.OnlineStorageNode node = heartBeatNodes.get(randomKey);
-            System.out.println("Files in node: " + randomKey + ": " + node.filenames.size());
+        for ( String hostname : heartBeatNodes.keySet() ) {
+            System.out.println(hostname);
+            Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
+            System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
             for (String filename : node.filenames) {
                 System.out.println(filename);
                 if (filename.startsWith(filenameClient)) {
-                    hostFilesNames.put(filename, randomKey);
+                    hostFilesNames.put(filename, hostname);
                 }
             }
-            i++;
         }
         return hostFilesNames;
     }
