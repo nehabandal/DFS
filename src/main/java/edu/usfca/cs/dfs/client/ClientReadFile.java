@@ -10,7 +10,7 @@ public class ClientReadFile {
     public void read(String controllerHost, String fileName) throws InterruptedException {
 
         LinkedHashMap<Integer, String> HostID = new LinkedHashMap<>();
-        Map<String, String> hostFilesNames = new LinkedHashMap<>();
+        Map<String, String> hostFilesNames = new TreeMap<>();
         byte[] chunkbytes = null;
         List<byte[]> allChunkData = new ArrayList<>();
 

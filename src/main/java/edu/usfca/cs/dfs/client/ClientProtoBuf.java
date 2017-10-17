@@ -7,9 +7,9 @@ import edu.usfca.cs.dfs.storage.StorageProtobuf;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by npbandal on 10/1/17.
@@ -37,12 +37,12 @@ public class ClientProtoBuf {
 
     public Map<String, String> clientToControllerread(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
         System.out.println(chunkname);
-        Map<String, String> filesHostnames = new LinkedHashMap<>();
+        Map<String, String> filesHostnames = new TreeMap<>();
         try {
 
             Socket sockController = sendReqToController(controllerHost, portnumber, chunkname, chunknum, chunkId, reqType);
 
-//            Hostnames back from controller with file name
+            //            Hostnames back from controller with file name
             ControllerProtobuf.HostNamesFiles fileshosts = ControllerProtobuf.HostNamesFiles
                     .parseDelimitedFrom(sockController.getInputStream());
             filesHostnames = fileshosts.getHostNameFileMap();

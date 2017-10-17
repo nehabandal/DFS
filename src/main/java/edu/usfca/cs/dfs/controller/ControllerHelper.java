@@ -43,7 +43,7 @@ public class ControllerHelper {
             }
 
             if (Objects.equals(reqType, "read")) {
-                HashMap<String, String> sublisthosts = getAliveHostsRead(heartBeatNodes, filenameClient);
+                TreeMap<String, String> sublisthosts = getAliveHostsRead(heartBeatNodes, filenameClient);
                 System.out.println("Coming from controller: " + heartBeatNodes.size());
                 System.out.println("Size of activeNodes from controller to read " + filenameClient + " file " + sublisthosts.size());
                 ControllerProtobuf.HostNamesFiles msgWrapperResread =
@@ -56,8 +56,8 @@ public class ControllerHelper {
         }
     }
 
-    private HashMap<String, String> getAliveHostsRead(Map<String, Controller.OnlineStorageNode> heartBeatNodes, String filenameClient) {
-        HashMap<String, String> hostFilesNames = new LinkedHashMap<>();
+    private TreeMap<String, String> getAliveHostsRead(Map<String, Controller.OnlineStorageNode> heartBeatNodes, String filenameClient) {
+        TreeMap<String, String> hostFilesNames = new TreeMap<>();
         System.out.println("Coming from controller read: " + heartBeatNodes.size());
         for ( String hostname : heartBeatNodes.keySet() ) {
             System.out.println(hostname);
