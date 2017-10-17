@@ -14,6 +14,21 @@ import java.net.Socket;
  */
 public class StorageNodeHelper {
 
+    public void clientRequests(ServerSocket srvSocket) throws IOException {
+        while (true) {
+            Socket clientSocket = srvSocket.accept();
+            StorageProtobuf.StorageMessagePB recfilechunks =
+                    StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
+            String reqTypeWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqTypeWrite();
+            String reqTypeRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqTypeRead();
+            if (reqTypeWrite.equals("write")) {
+                processClientWriteRequest(recfilechunks);
+            }
+            if (reqTypeRead.equals("read")) {
+                processClientReadRequest(clientSocket, recfilechunks);
+            }
+        }
+    }
 
     public void processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks)
             throws IOException {
@@ -23,7 +38,6 @@ public class StorageNodeHelper {
             StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
             String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
             chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-//            hostnums = recfilechunks.getStoreChunkMsgOrBuilder().getChunkNums();
 
             String chunkNameToStore = storeChunkName + "_" + chunkID;
 
@@ -36,41 +50,18 @@ public class StorageNodeHelper {
         }
     }
 
-    public void clientRequests(ServerSocket srvSocket) throws IOException {
-        while (true) {
-            int chunkID = 0, chunknums = 0, hostnum = 0;
-            Socket clientSocket = srvSocket.accept();
-            StorageProtobuf.StorageMessagePB recfilechunks =
-                    StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-            String reqTypeWrite = recfilechunks.getStoreChunkMsgOrBuilder().getReqTypeWrite();
-            String reqTypeRead = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReqTypeRead();
-            if (reqTypeWrite.equals("write")) {
-                chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-                chunknums = recfilechunks.getStoreChunkMsgOrBuilder().getChunkNums();
-                processClientWriteRequest(recfilechunks);
-
-            }
-            if (reqTypeRead.equals("read")) {
-                chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
-                hostnum = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getHostNums();
-                processClientReadRequest(clientSocket, recfilechunks);
-            }
-        }
-    }
-
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
         System.out.println("req rec");
         int chunkID, hostnums = 0;
-        String fileName = null;
+        String chunkName = null;
         byte[] chunkfilecontents = null;
         if (recfilechunks.hasRetrieveChunkFileMsg()) {
 
-            chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
-            fileName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
-            hostnums = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getHostNums();
+//            chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
+            chunkName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
 
-            String chunkName = fileName + chunkID;
-            String path = findFile(chunkName, new File("/Users/npbandal/BigData/p1-nehabandal"));
+//            String chunkName = fileName + chunkID;
+            String path = findFile(chunkName, new File("/"));
             String chunkfiletoread = path + "/" + chunkName;
 
             chunkfilecontents = readChunkFromPath(chunkfiletoread);

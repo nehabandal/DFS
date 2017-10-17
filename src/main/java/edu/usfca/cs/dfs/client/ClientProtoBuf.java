@@ -4,10 +4,12 @@ import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.controller.ControllerProtobuf;
 import edu.usfca.cs.dfs.storage.StorageProtobuf;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by npbandal on 10/1/17.
@@ -35,7 +37,7 @@ public class ClientProtoBuf {
 
     public Map<String, String> clientToControllerread(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
         System.out.println(chunkname);
-        Map<String,String> filesHostnames = new LinkedHashMap<>();
+        Map<String, String> filesHostnames = new LinkedHashMap<>();
         try {
 
             Socket sockController = sendReqToController(controllerHost, portnumber, chunkname, chunknum, chunkId, reqType);
@@ -99,16 +101,14 @@ public class ClientProtoBuf {
 
     }
 
-    public void sendReadReqToStorageNode(String hostname, int portnumber, String filename, int chunkID, int hostnums) {
+    public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String filename) {
         Socket sockController = null;
+        byte[] chunkbytes = null;
         try {
-
-            sockController = new Socket("localhost", portnumber);
+            sockController = new Socket(hostname, portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadfileName(filename)
-                    .setChunkId(chunkID)
-                    .setHostNums(hostnums)
                     .setReqTypeRead("read")
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
@@ -124,24 +124,24 @@ public class ClientProtoBuf {
                 StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
                 ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
 
-                byte[] chunkbytes = chunkdata.toByteArray();
+                chunkbytes = chunkdata.toByteArray();
                 System.out.println(new String(chunkbytes));
 
-                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
-                        .setChunkdatat(chunkdata);
+//                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
+//                        .setChunkdatat(chunkdata);
 
-                String chunkname = filename + "ThanksGanesha" + chunkID;
-                FileOutputStream output = new FileOutputStream(chunkname);
-                profile.build().writeTo(output);
+//                String chunkname = filename + "ThanksGanesha" + chunkID;
+//                FileOutputStream output = new FileOutputStream(chunkname);
+//                profile.build().writeTo(output);
             }
+
 
             sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return chunkbytes;
     }
-
-
 }
 
 

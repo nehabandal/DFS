@@ -82,12 +82,11 @@ public class Controller {
                 OnlineStorageNode node = heartbeatMap.get(hostname);
                 if (node == null) {
                     node = new OnlineStorageNode(hostname);
+                    node.lastSeenTime = System.currentTimeMillis();
+                    node.availableSpace = availableSpace;
+                    node.filenames = files;
                     heartbeatMap.put(hostname, node);
                 }
-                node.lastSeenTime = System.currentTimeMillis();
-                node.availableSpace = availableSpace;
-                node.filenames = files;
-
                 child.remove();
             }
             parent.remove();

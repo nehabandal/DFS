@@ -66,6 +66,7 @@ public class ControllerHelper {
             String randomKey = keys.get(random.nextInt(keys.size()));
             System.out.println(randomKey);
             Controller.OnlineStorageNode node = heartBeatNodes.get(randomKey);
+            System.out.println("Files in node: " + randomKey + ": " + node.filenames.size());
             for (String filename : node.filenames) {
                 System.out.println(filename);
                 if (filename.startsWith(filenameClient)) {
