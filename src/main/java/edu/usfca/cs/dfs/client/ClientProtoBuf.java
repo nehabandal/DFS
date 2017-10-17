@@ -125,7 +125,6 @@ public class ClientProtoBuf {
                 ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
 
                 chunkbytes = chunkdata.toByteArray();
-                System.out.println(new String(chunkbytes));
 
 //                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
 //                        .setChunkdatat(chunkdata);
@@ -134,8 +133,6 @@ public class ClientProtoBuf {
 //                FileOutputStream output = new FileOutputStream(chunkname);
 //                profile.build().writeTo(output);
             }
-
-
             sockController.close();
         } catch (IOException e) {
             e.printStackTrace();

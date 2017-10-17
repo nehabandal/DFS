@@ -51,24 +51,21 @@ public class StorageNodeHelper {
     }
 
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
-        System.out.println("req rec");
-        int chunkID, hostnums = 0;
         String chunkName = null;
         byte[] chunkfilecontents = null;
         if (recfilechunks.hasRetrieveChunkFileMsg()) {
 
-//            chunkID = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getChunkId();
             chunkName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
 
-//            String chunkName = fileName + chunkID;
-            String path = findFile(chunkName, new File("/"));
+            String path = findFile(chunkName, new File("/home2/npbandal"));
             String chunkfiletoread = path + "/" + chunkName;
 
             chunkfilecontents = readChunkFromPath(chunkfiletoread);
 
             String s = new String(chunkfilecontents);
             ByteString data = ByteString.copyFromUtf8(s);
-            System.out.println("File content: " + chunkName + ":" + s);
+            System.out.println("File content: " + chunkName + ": ");
+            System.out.println(s);
 
             //Sending chunk data to client
             StorageProtobuf.RetrieveFile retrieveFile
@@ -82,7 +79,6 @@ public class StorageNodeHelper {
             msgWrapper.writeDelimitedTo(clientSocket.getOutputStream());
         }
     }
-
 
     public byte[] readChunkFromPath(String path) {
         File file = new File(path);
