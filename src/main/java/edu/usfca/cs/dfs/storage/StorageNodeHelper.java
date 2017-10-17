@@ -9,8 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -29,16 +28,19 @@ public class StorageNodeHelper {
             if (reqTypeWrite.equals("write")) {
 
                 ClientProtoBuf clientProtoBuf = new ClientProtoBuf();
-                StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
                 String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
                 int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-                List<String> hostReplica = processClientWriteRequest(recfilechunks, storeChunkMsg, storeChunkName, chunkID);
-
-                if (hostReplica.size() == 2) {
-                    callReplica1(hostReplica, storeChunkMsg, storeChunkName, chunkID, clientProtoBuf);
-                }
-                if (hostReplica.size() == 1) {
-                    callReplica2(hostReplica, storeChunkMsg, storeChunkName, chunkID, clientProtoBuf);
+                HashMap<StorageProtobuf.StoreChunk, List<String>> hostReplica = processClientWriteRequest(recfilechunks, storeChunkName, chunkID);
+                for (Map.Entry<StorageProtobuf.StoreChunk, List<String>> entry : hostReplica.entrySet()) {
+                    //System.out.println(entry.getKey() + "/" + entry.getValue());
+                    StorageProtobuf.StoreChunk replicaChunk = entry.getKey();
+                    List<String> replicaName = entry.getValue();
+                    if (replicaName.size() == 2) {
+                        callReplica1(replicaName, replicaChunk, storeChunkName, chunkID, clientProtoBuf);
+                    }
+                    if (replicaName.size() == 1) {
+                        callReplica2(replicaName, replicaChunk, storeChunkName, chunkID, clientProtoBuf);
+                    }
                 }
             }
 
@@ -63,11 +65,14 @@ public class StorageNodeHelper {
         clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica2);
     }
 
-    public List<String> processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks, StorageProtobuf.StoreChunk storeChunkMsg, String storeChunkName, int chunkID)
+    public HashMap<StorageProtobuf.StoreChunk, List<String>> processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks, String storeChunkName, int chunkID)
             throws IOException, InterruptedException {
         List<String> hostReplica = new ArrayList<>();
+        StorageProtobuf.StoreChunk storeChunkMsg = null;
+        HashMap<StorageProtobuf.StoreChunk, List<String>> chunkDataReplica = new LinkedHashMap<>();
         if (recfilechunks.hasStoreChunkMsg()) {
 
+            storeChunkMsg = recfilechunks.getStoreChunkMsg();
             hostReplica = recfilechunks.getStoreChunkMsgOrBuilder().getHostReplicaList();
 
             String chunkNameToStore = storeChunkName + "_" + chunkID;
@@ -78,8 +83,10 @@ public class StorageNodeHelper {
 
             FileOutputStream output = new FileOutputStream(chunkNameToStore);
             profile.build().writeTo(output);
+            chunkDataReplica.put(storeChunkMsg, hostReplica);
+
         }
-        return hostReplica;
+        return chunkDataReplica;
     }
 
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
