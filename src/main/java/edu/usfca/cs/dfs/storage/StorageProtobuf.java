@@ -718,6 +718,35 @@ public final class StorageProtobuf {
      */
     com.google.protobuf.ByteString
         getReqTypeWriteBytes();
+
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    java.util.List<java.lang.String>
+        getHostReplicaList();
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    int getHostReplicaCount();
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    java.lang.String getHostReplica(int index);
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getHostReplicaBytes(int index);
+
+    /**
+     * <code>string replica2 = 9;</code>
+     */
+    java.lang.String getReplica2();
+    /**
+     * <code>string replica2 = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getReplica2Bytes();
   }
   /**
    * Protobuf type {@code StoreChunk}
@@ -739,6 +768,8 @@ public final class StorageProtobuf {
       portNum_ = 0;
       chunkNums_ = 0;
       reqTypeWrite_ = "";
+      hostReplica_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      replica2_ = "";
     }
 
     @java.lang.Override
@@ -807,6 +838,21 @@ public final class StorageProtobuf {
               reqTypeWrite_ = s;
               break;
             }
+            case 66: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                hostReplica_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              hostReplica_.add(s);
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              replica2_ = s;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -815,6 +861,9 @@ public final class StorageProtobuf {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          hostReplica_ = hostReplica_.getUnmodifiableView();
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -831,6 +880,7 @@ public final class StorageProtobuf {
               edu.usfca.cs.dfs.storage.StorageProtobuf.StoreChunk.class, edu.usfca.cs.dfs.storage.StorageProtobuf.StoreChunk.Builder.class);
     }
 
+    private int bitField0_;
     public static final int WRITEFILECHUNKNAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object writefilechunkName_;
     /**
@@ -969,6 +1019,69 @@ public final class StorageProtobuf {
       }
     }
 
+    public static final int HOSTREPLICA_FIELD_NUMBER = 8;
+    private com.google.protobuf.LazyStringList hostReplica_;
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getHostReplicaList() {
+      return hostReplica_;
+    }
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    public int getHostReplicaCount() {
+      return hostReplica_.size();
+    }
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    public java.lang.String getHostReplica(int index) {
+      return hostReplica_.get(index);
+    }
+    /**
+     * <code>repeated string hostReplica = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHostReplicaBytes(int index) {
+      return hostReplica_.getByteString(index);
+    }
+
+    public static final int REPLICA2_FIELD_NUMBER = 9;
+    private volatile java.lang.Object replica2_;
+    /**
+     * <code>string replica2 = 9;</code>
+     */
+    public java.lang.String getReplica2() {
+      java.lang.Object ref = replica2_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        replica2_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string replica2 = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getReplica2Bytes() {
+      java.lang.Object ref = replica2_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        replica2_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1001,6 +1114,12 @@ public final class StorageProtobuf {
       }
       if (!getReqTypeWriteBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, reqTypeWrite_);
+      }
+      for (int i = 0; i < hostReplica_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, hostReplica_.getRaw(i));
+      }
+      if (!getReplica2Bytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, replica2_);
       }
       unknownFields.writeTo(output);
     }
@@ -1035,6 +1154,17 @@ public final class StorageProtobuf {
       if (!getReqTypeWriteBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, reqTypeWrite_);
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < hostReplica_.size(); i++) {
+          dataSize += computeStringSizeNoTag(hostReplica_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getHostReplicaList().size();
+      }
+      if (!getReplica2Bytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, replica2_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1065,6 +1195,10 @@ public final class StorageProtobuf {
           == other.getChunkNums());
       result = result && getReqTypeWrite()
           .equals(other.getReqTypeWrite());
+      result = result && getHostReplicaList()
+          .equals(other.getHostReplicaList());
+      result = result && getReplica2()
+          .equals(other.getReplica2());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1090,6 +1224,12 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getChunkNums();
       hash = (37 * hash) + REQTYPEWRITE_FIELD_NUMBER;
       hash = (53 * hash) + getReqTypeWrite().hashCode();
+      if (getHostReplicaCount() > 0) {
+        hash = (37 * hash) + HOSTREPLICA_FIELD_NUMBER;
+        hash = (53 * hash) + getHostReplicaList().hashCode();
+      }
+      hash = (37 * hash) + REPLICA2_FIELD_NUMBER;
+      hash = (53 * hash) + getReplica2().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1233,6 +1373,10 @@ public final class StorageProtobuf {
 
         reqTypeWrite_ = "";
 
+        hostReplica_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        replica2_ = "";
+
         return this;
       }
 
@@ -1255,6 +1399,8 @@ public final class StorageProtobuf {
 
       public edu.usfca.cs.dfs.storage.StorageProtobuf.StoreChunk buildPartial() {
         edu.usfca.cs.dfs.storage.StorageProtobuf.StoreChunk result = new edu.usfca.cs.dfs.storage.StorageProtobuf.StoreChunk(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         result.writefilechunkName_ = writefilechunkName_;
         result.chunkId_ = chunkId_;
         result.writechunkdata_ = writechunkdata_;
@@ -1262,6 +1408,13 @@ public final class StorageProtobuf {
         result.portNum_ = portNum_;
         result.chunkNums_ = chunkNums_;
         result.reqTypeWrite_ = reqTypeWrite_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          hostReplica_ = hostReplica_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.hostReplica_ = hostReplica_;
+        result.replica2_ = replica2_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1327,6 +1480,20 @@ public final class StorageProtobuf {
           reqTypeWrite_ = other.reqTypeWrite_;
           onChanged();
         }
+        if (!other.hostReplica_.isEmpty()) {
+          if (hostReplica_.isEmpty()) {
+            hostReplica_ = other.hostReplica_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureHostReplicaIsMutable();
+            hostReplica_.addAll(other.hostReplica_);
+          }
+          onChanged();
+        }
+        if (!other.getReplica2().isEmpty()) {
+          replica2_ = other.replica2_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1353,6 +1520,7 @@ public final class StorageProtobuf {
         }
         return this;
       }
+      private int bitField0_;
 
       private java.lang.Object writefilechunkName_ = "";
       /**
@@ -1664,6 +1832,169 @@ public final class StorageProtobuf {
   checkByteStringIsUtf8(value);
         
         reqTypeWrite_ = value;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringList hostReplica_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureHostReplicaIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          hostReplica_ = new com.google.protobuf.LazyStringArrayList(hostReplica_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public com.google.protobuf.ProtocolStringList
+          getHostReplicaList() {
+        return hostReplica_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public int getHostReplicaCount() {
+        return hostReplica_.size();
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public java.lang.String getHostReplica(int index) {
+        return hostReplica_.get(index);
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getHostReplicaBytes(int index) {
+        return hostReplica_.getByteString(index);
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public Builder setHostReplica(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureHostReplicaIsMutable();
+        hostReplica_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public Builder addHostReplica(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureHostReplicaIsMutable();
+        hostReplica_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public Builder addAllHostReplica(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureHostReplicaIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, hostReplica_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public Builder clearHostReplica() {
+        hostReplica_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string hostReplica = 8;</code>
+       */
+      public Builder addHostReplicaBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureHostReplicaIsMutable();
+        hostReplica_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object replica2_ = "";
+      /**
+       * <code>string replica2 = 9;</code>
+       */
+      public java.lang.String getReplica2() {
+        java.lang.Object ref = replica2_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          replica2_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string replica2 = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getReplica2Bytes() {
+        java.lang.Object ref = replica2_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          replica2_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string replica2 = 9;</code>
+       */
+      public Builder setReplica2(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        replica2_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string replica2 = 9;</code>
+       */
+      public Builder clearReplica2() {
+        
+        replica2_ = getDefaultInstance().getReplica2();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string replica2 = 9;</code>
+       */
+      public Builder setReplica2Bytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        replica2_ = value;
         onChanged();
         return this;
       }
@@ -3624,18 +3955,19 @@ public final class StorageProtobuf {
     java.lang.String[] descriptorData = {
       "\n\026storage_protobuf.proto\"A\n\007Profile\022\021\n\tc" +
       "hunkname\030\001 \001(\t\022\017\n\007chunkid\030\002 \001(\005\022\022\n\nchunk" +
-      "datat\030\003 \001(\014\"\235\001\n\nStoreChunk\022\032\n\022writefilec" +
+      "datat\030\003 \001(\014\"\304\001\n\nStoreChunk\022\032\n\022writefilec" +
       "hunkName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\026\n\016write" +
       "chunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\017\n\007por" +
       "tNum\030\005 \001(\005\022\021\n\tchunkNums\030\006 \001(\005\022\024\n\014reqType" +
-      "Write\030\007 \001(\t\"\205\001\n\014RetrieveFile\022\024\n\014readfile" +
-      "Name\030\001 \001(\t\022\025\n\rreadchunkdata\030\002 \001(\014\022\020\n\010hos" +
-      "tName\030\003 \001(\t\022\017\n\007chunkId\030\004 \001(\005\022\020\n\010hostNums" +
-      "\030\005 \001(\005\022\023\n\013reqTypeRead\030\006 \001(\t\"n\n\020StorageMe",
-      "ssagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreCh" +
-      "unkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r.Re" +
-      "trieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.dfs." +
-      "storageb\006proto3"
+      "Write\030\007 \001(\t\022\023\n\013hostReplica\030\010 \003(\t\022\020\n\010repl" +
+      "ica2\030\t \001(\t\"\205\001\n\014RetrieveFile\022\024\n\014readfileN" +
+      "ame\030\001 \001(\t\022\025\n\rreadchunkdata\030\002 \001(\014\022\020\n\010host" +
+      "Name\030\003 \001(\t\022\017\n\007chunkId\030\004 \001(\005\022\020\n\010hostNums\030",
+      "\005 \001(\005\022\023\n\013reqTypeRead\030\006 \001(\t\"n\n\020StorageMes" +
+      "sagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreChu" +
+      "nkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r.Ret" +
+      "rieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.dfs.s" +
+      "torageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3660,7 +3992,7 @@ public final class StorageProtobuf {
     internal_static_StoreChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StoreChunk_descriptor,
-        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "PortNum", "ChunkNums", "ReqTypeWrite", });
+        new java.lang.String[] { "WritefilechunkName", "ChunkId", "Writechunkdata", "HostName", "PortNum", "ChunkNums", "ReqTypeWrite", "HostReplica", "Replica2", });
     internal_static_RetrieveFile_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_RetrieveFile_fieldAccessorTable = new

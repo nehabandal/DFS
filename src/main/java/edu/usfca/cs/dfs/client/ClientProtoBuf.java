@@ -72,33 +72,33 @@ public class ClientProtoBuf {
         return sockController;
     }
 
-    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, int chunknum) {
-        try {
-            String s = new String(chunk);
-            ByteString data = ByteString.copyFromUtf8(s);
+    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, List<String> hostReplica) {
+            try {
+                String s = new String(chunk);
+                ByteString data = ByteString.copyFromUtf8(s);
 
-            Socket sockController = new Socket(hostname, portnumber);
+                Socket sockController = new Socket(hostname, portnumber);
 
-            StorageProtobuf.StoreChunk storeChunkMsg
-                    = StorageProtobuf.StoreChunk.newBuilder()
-                    .setWritefilechunkName(filename)
-                    .setChunkId(chunkId)
-                    .setReqTypeWrite("write")
-                    .setWritechunkdata(data)
-                    .setChunkNums(chunknum)
-                    .build();
+                StorageProtobuf.StoreChunk storeChunkMsg
+                        = StorageProtobuf.StoreChunk.newBuilder()
+                        .setWritefilechunkName(filename)
+                        .setChunkId(chunkId)
+                        .setReqTypeWrite("write")
+                        .setWritechunkdata(data)
+                        .addAllHostReplica(hostReplica)
+                        .build();
 
-            StorageProtobuf.StorageMessagePB msgWrapper =
-                    StorageProtobuf.StorageMessagePB.newBuilder()
-                            .setStoreChunkMsg(storeChunkMsg)
-                            .build();
+                StorageProtobuf.StorageMessagePB msgWrapper =
+                        StorageProtobuf.StorageMessagePB.newBuilder()
+                                .setStoreChunkMsg(storeChunkMsg)
+                                .build();
 
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+                msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+//            sockController.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String filename) {

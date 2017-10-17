@@ -13,7 +13,6 @@ import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
 public class ControllerHelper {
 
     public void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
-        int chunkID = 0;
         String reqType = null;
         String filenameClient = null;
 
@@ -23,7 +22,6 @@ public class ControllerHelper {
                     .parseDelimitedFrom(clientSocket.getInputStream());
             if (msgWrapper.hasClienttalk()) {
                 ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
-                chunkID = clientReq.getChunkId();
                 reqType = clientReq.getReqtype();
                 System.out.println("Request type is " + reqType);
                 filenameClient = clientReq.getChunkName();
@@ -64,7 +62,6 @@ public class ControllerHelper {
             Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
             System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
             for (String filename : node.filenames) {
-                System.out.println(filename);
                 if (filename.startsWith(filenameClient)) {
                     hostFilesNames.put(filename, hostname);
                 }
