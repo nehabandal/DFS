@@ -60,15 +60,11 @@ public class ControllerHelper {
         for (String hostname : heartBeatNodes.keySet()) {
             System.out.println(hostname);
             Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
-            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
-
-            } else {
-                System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
-                for (String filename : node.filenames) {
-                    if (filename.startsWith(filenameClient)) {
-                        if (!hostFilesNames.containsValue(hostname)) {
-                            hostFilesNames.put(filename, hostname);
-                        }
+            System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
+            for (String filename : node.filenames) {
+                if (filename.startsWith(filenameClient)) {
+                    if (!hostFilesNames.containsValue(hostname)) {
+                        hostFilesNames.put(filename, hostname);
                     }
                 }
             }
