@@ -50,7 +50,7 @@ public class Controller {
 
     private Map<String, Map<Long, List<String>>> hostNameSpaceFiles = new HashMap<>();
 
-    private final Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
+    private static Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
 
     private Thread createHeartBeatReceiverThread() {
         return new Thread() {
@@ -81,11 +81,16 @@ public class Controller {
                 OnlineStorageNode node = heartbeatMap.get(hostname);
                 if (node == null) {
                     node = new OnlineStorageNode(hostname);
+                    node.lastSeenTime = System.currentTimeMillis();
+                    node.availableSpace = availableSpace;
+                    node.filenames = files;
+                    heartbeatMap.put(hostname, node);
                 }
                 node.lastSeenTime = System.currentTimeMillis();
                 node.availableSpace = availableSpace;
                 node.filenames = files;
                 heartbeatMap.put(hostname, node);
+
             }
         }
     }
@@ -105,19 +110,28 @@ public class Controller {
     }
 
     private Thread deleteInactiveNodes() {
-        while (true) {
-            return new Thread() {
-                public void run() {
-                    System.out.println("Coming in delete thread");
+        return new Thread() {
+            public void run() {
+                System.out.println("Coming in delete thread");
+                while (true) {
                     deleteInactive();
+                    try {
+                        sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-            };
-        }
+            }
+        };
     }
 
     private void deleteInactive() {
+//        System.out.println(heartbeatMap.size());
         for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
+            System.out.println(heartbeatMap.size());
             String hostname = entry.getKey();
+            System.out.println(hostname);
             OnlineStorageNode node = entry.getValue();
             if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
                 System.out.println("removing host: " + hostname);
