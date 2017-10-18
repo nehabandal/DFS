@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.controller.ControllerProtobuf;
 import edu.usfca.cs.dfs.storage.StorageProtobuf;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class ClientProtoBuf {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
 
-            Socket sockController = new Socket(hostname, portnumber);
+            Socket sockController = new Socket("localhost", portnumber);
 
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
@@ -102,14 +103,14 @@ public class ClientProtoBuf {
         }
     }
 
-    public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String filename) {
+    public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String chunkname) {
         Socket sockController = null;
         byte[] chunkbytes = null;
         try {
             sockController = new Socket(hostname, portnumber);
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
-                    .setReadfileName(filename)
+                    .setReadfileName(chunkname)
                     .setReqTypeRead("read")
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
@@ -123,16 +124,21 @@ public class ClientProtoBuf {
                     .parseDelimitedFrom(sockController.getInputStream());
             if (recfilechunks.hasRetrieveChunkFileMsg()) {
                 StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
-                ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
 
+                ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
                 chunkbytes = chunkdata.toByteArray();
 
-//                StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
-//                        .setChunkdatat(chunkdata);
+                String checksum = retrivechunkfiledata.getChecksum();
 
-//                String chunkname = filename + "ThanksGanesha" + chunkID;
-//                FileOutputStream output = new FileOutputStream(chunkname);
-//                profile.build().writeTo(output);
+                System.out.println("Checksum: " + checksum);
+
+                try (FileOutputStream fop = new FileOutputStream(chunkname + "client_checksum")) {
+                    fop.write(checksum.getBytes());
+                    fop.flush();
+                    fop.close();
+                } catch (Exception e) {
+                    System.out.println("No file written");
+                }
             }
             sockController.close();
         } catch (IOException e) {

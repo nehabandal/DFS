@@ -37,6 +37,16 @@ public final class StorageProtobuf {
      * <code>bytes chunkdatat = 3;</code>
      */
     com.google.protobuf.ByteString getChunkdatat();
+
+    /**
+     * <code>string checksum = 4;</code>
+     */
+    java.lang.String getChecksum();
+    /**
+     * <code>string checksum = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getChecksumBytes();
   }
   /**
    * Protobuf type {@code Profile}
@@ -54,6 +64,7 @@ public final class StorageProtobuf {
       chunkname_ = "";
       chunkid_ = 0;
       chunkdatat_ = com.google.protobuf.ByteString.EMPTY;
+      checksum_ = "";
     }
 
     @java.lang.Override
@@ -98,6 +109,12 @@ public final class StorageProtobuf {
             case 26: {
 
               chunkdatat_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              checksum_ = s;
               break;
             }
           }
@@ -176,6 +193,40 @@ public final class StorageProtobuf {
       return chunkdatat_;
     }
 
+    public static final int CHECKSUM_FIELD_NUMBER = 4;
+    private volatile java.lang.Object checksum_;
+    /**
+     * <code>string checksum = 4;</code>
+     */
+    public java.lang.String getChecksum() {
+      java.lang.Object ref = checksum_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        checksum_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string checksum = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getChecksumBytes() {
+      java.lang.Object ref = checksum_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        checksum_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -197,6 +248,9 @@ public final class StorageProtobuf {
       if (!chunkdatat_.isEmpty()) {
         output.writeBytes(3, chunkdatat_);
       }
+      if (!getChecksumBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, checksum_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -215,6 +269,9 @@ public final class StorageProtobuf {
       if (!chunkdatat_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, chunkdatat_);
+      }
+      if (!getChecksumBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, checksum_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -238,6 +295,8 @@ public final class StorageProtobuf {
           == other.getChunkid());
       result = result && getChunkdatat()
           .equals(other.getChunkdatat());
+      result = result && getChecksum()
+          .equals(other.getChecksum());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -255,6 +314,8 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getChunkid();
       hash = (37 * hash) + CHUNKDATAT_FIELD_NUMBER;
       hash = (53 * hash) + getChunkdatat().hashCode();
+      hash = (37 * hash) + CHECKSUM_FIELD_NUMBER;
+      hash = (53 * hash) + getChecksum().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -390,6 +451,8 @@ public final class StorageProtobuf {
 
         chunkdatat_ = com.google.protobuf.ByteString.EMPTY;
 
+        checksum_ = "";
+
         return this;
       }
 
@@ -415,6 +478,7 @@ public final class StorageProtobuf {
         result.chunkname_ = chunkname_;
         result.chunkid_ = chunkid_;
         result.chunkdatat_ = chunkdatat_;
+        result.checksum_ = checksum_;
         onBuilt();
         return result;
       }
@@ -465,6 +529,10 @@ public final class StorageProtobuf {
         }
         if (other.getChunkdatat() != com.google.protobuf.ByteString.EMPTY) {
           setChunkdatat(other.getChunkdatat());
+        }
+        if (!other.getChecksum().isEmpty()) {
+          checksum_ = other.checksum_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -613,6 +681,75 @@ public final class StorageProtobuf {
       public Builder clearChunkdatat() {
         
         chunkdatat_ = getDefaultInstance().getChunkdatat();
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object checksum_ = "";
+      /**
+       * <code>string checksum = 4;</code>
+       */
+      public java.lang.String getChecksum() {
+        java.lang.Object ref = checksum_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          checksum_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string checksum = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getChecksumBytes() {
+        java.lang.Object ref = checksum_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          checksum_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string checksum = 4;</code>
+       */
+      public Builder setChecksum(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        checksum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string checksum = 4;</code>
+       */
+      public Builder clearChecksum() {
+        
+        checksum_ = getDefaultInstance().getChecksum();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string checksum = 4;</code>
+       */
+      public Builder setChecksumBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        checksum_ = value;
         onChanged();
         return this;
       }
@@ -2095,6 +2232,16 @@ public final class StorageProtobuf {
      */
     com.google.protobuf.ByteString
         getReqTypeReadBytes();
+
+    /**
+     * <code>string checksum = 7;</code>
+     */
+    java.lang.String getChecksum();
+    /**
+     * <code>string checksum = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getChecksumBytes();
   }
   /**
    * Protobuf type {@code RetrieveFile}
@@ -2115,6 +2262,7 @@ public final class StorageProtobuf {
       chunkId_ = 0;
       hostNums_ = 0;
       reqTypeRead_ = "";
+      checksum_ = "";
     }
 
     @java.lang.Override
@@ -2176,6 +2324,12 @@ public final class StorageProtobuf {
               java.lang.String s = input.readStringRequireUtf8();
 
               reqTypeRead_ = s;
+              break;
+            }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              checksum_ = s;
               break;
             }
           }
@@ -2331,6 +2485,40 @@ public final class StorageProtobuf {
       }
     }
 
+    public static final int CHECKSUM_FIELD_NUMBER = 7;
+    private volatile java.lang.Object checksum_;
+    /**
+     * <code>string checksum = 7;</code>
+     */
+    public java.lang.String getChecksum() {
+      java.lang.Object ref = checksum_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        checksum_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string checksum = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getChecksumBytes() {
+      java.lang.Object ref = checksum_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        checksum_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2361,6 +2549,9 @@ public final class StorageProtobuf {
       if (!getReqTypeReadBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, reqTypeRead_);
       }
+      if (!getChecksumBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, checksum_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2390,6 +2581,9 @@ public final class StorageProtobuf {
       if (!getReqTypeReadBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, reqTypeRead_);
       }
+      if (!getChecksumBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, checksum_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -2418,6 +2612,8 @@ public final class StorageProtobuf {
           == other.getHostNums());
       result = result && getReqTypeRead()
           .equals(other.getReqTypeRead());
+      result = result && getChecksum()
+          .equals(other.getChecksum());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -2441,6 +2637,8 @@ public final class StorageProtobuf {
       hash = (53 * hash) + getHostNums();
       hash = (37 * hash) + REQTYPEREAD_FIELD_NUMBER;
       hash = (53 * hash) + getReqTypeRead().hashCode();
+      hash = (37 * hash) + CHECKSUM_FIELD_NUMBER;
+      hash = (53 * hash) + getChecksum().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2582,6 +2780,8 @@ public final class StorageProtobuf {
 
         reqTypeRead_ = "";
 
+        checksum_ = "";
+
         return this;
       }
 
@@ -2610,6 +2810,7 @@ public final class StorageProtobuf {
         result.chunkId_ = chunkId_;
         result.hostNums_ = hostNums_;
         result.reqTypeRead_ = reqTypeRead_;
+        result.checksum_ = checksum_;
         onBuilt();
         return result;
       }
@@ -2670,6 +2871,10 @@ public final class StorageProtobuf {
         }
         if (!other.getReqTypeRead().isEmpty()) {
           reqTypeRead_ = other.reqTypeRead_;
+          onChanged();
+        }
+        if (!other.getChecksum().isEmpty()) {
+          checksum_ = other.checksum_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -2983,6 +3188,75 @@ public final class StorageProtobuf {
   checkByteStringIsUtf8(value);
         
         reqTypeRead_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object checksum_ = "";
+      /**
+       * <code>string checksum = 7;</code>
+       */
+      public java.lang.String getChecksum() {
+        java.lang.Object ref = checksum_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          checksum_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string checksum = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getChecksumBytes() {
+        java.lang.Object ref = checksum_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          checksum_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string checksum = 7;</code>
+       */
+      public Builder setChecksum(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        checksum_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string checksum = 7;</code>
+       */
+      public Builder clearChecksum() {
+        
+        checksum_ = getDefaultInstance().getChecksum();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string checksum = 7;</code>
+       */
+      public Builder setChecksumBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        checksum_ = value;
         onChanged();
         return this;
       }
@@ -3953,21 +4227,22 @@ public final class StorageProtobuf {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\026storage_protobuf.proto\"A\n\007Profile\022\021\n\tc" +
+      "\n\026storage_protobuf.proto\"S\n\007Profile\022\021\n\tc" +
       "hunkname\030\001 \001(\t\022\017\n\007chunkid\030\002 \001(\005\022\022\n\nchunk" +
-      "datat\030\003 \001(\014\"\304\001\n\nStoreChunk\022\032\n\022writefilec" +
-      "hunkName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\026\n\016write" +
-      "chunkdata\030\003 \001(\014\022\020\n\010hostName\030\004 \001(\t\022\017\n\007por" +
-      "tNum\030\005 \001(\005\022\021\n\tchunkNums\030\006 \001(\005\022\024\n\014reqType" +
-      "Write\030\007 \001(\t\022\023\n\013hostReplica\030\010 \003(\t\022\020\n\010repl" +
-      "ica2\030\t \001(\t\"\205\001\n\014RetrieveFile\022\024\n\014readfileN" +
-      "ame\030\001 \001(\t\022\025\n\rreadchunkdata\030\002 \001(\014\022\020\n\010host" +
-      "Name\030\003 \001(\t\022\017\n\007chunkId\030\004 \001(\005\022\020\n\010hostNums\030",
-      "\005 \001(\005\022\023\n\013reqTypeRead\030\006 \001(\t\"n\n\020StorageMes" +
-      "sagePB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreChu" +
-      "nkH\000\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r.Ret" +
-      "rieveFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.dfs.s" +
-      "torageb\006proto3"
+      "datat\030\003 \001(\014\022\020\n\010checksum\030\004 \001(\t\"\304\001\n\nStoreC" +
+      "hunk\022\032\n\022writefilechunkName\030\001 \001(\t\022\017\n\007chun" +
+      "kId\030\002 \001(\005\022\026\n\016writechunkdata\030\003 \001(\014\022\020\n\010hos" +
+      "tName\030\004 \001(\t\022\017\n\007portNum\030\005 \001(\005\022\021\n\tchunkNum" +
+      "s\030\006 \001(\005\022\024\n\014reqTypeWrite\030\007 \001(\t\022\023\n\013hostRep" +
+      "lica\030\010 \003(\t\022\020\n\010replica2\030\t \001(\t\"\227\001\n\014Retriev" +
+      "eFile\022\024\n\014readfileName\030\001 \001(\t\022\025\n\rreadchunk" +
+      "data\030\002 \001(\014\022\020\n\010hostName\030\003 \001(\t\022\017\n\007chunkId\030",
+      "\004 \001(\005\022\020\n\010hostNums\030\005 \001(\005\022\023\n\013reqTypeRead\030\006" +
+      " \001(\t\022\020\n\010checksum\030\007 \001(\t\"n\n\020StorageMessage" +
+      "PB\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreChunkH\000" +
+      "\022-\n\024retrieveChunkFileMsg\030\002 \001(\0132\r.Retriev" +
+      "eFileH\000B\005\n\003msgB\032\n\030edu.usfca.cs.dfs.stora" +
+      "geb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3986,7 +4261,7 @@ public final class StorageProtobuf {
     internal_static_Profile_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Profile_descriptor,
-        new java.lang.String[] { "Chunkname", "Chunkid", "Chunkdatat", });
+        new java.lang.String[] { "Chunkname", "Chunkid", "Chunkdatat", "Checksum", });
     internal_static_StoreChunk_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_StoreChunk_fieldAccessorTable = new
@@ -3998,7 +4273,7 @@ public final class StorageProtobuf {
     internal_static_RetrieveFile_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RetrieveFile_descriptor,
-        new java.lang.String[] { "ReadfileName", "Readchunkdata", "HostName", "ChunkId", "HostNums", "ReqTypeRead", });
+        new java.lang.String[] { "ReadfileName", "Readchunkdata", "HostName", "ChunkId", "HostNums", "ReqTypeRead", "Checksum", });
     internal_static_StorageMessagePB_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_StorageMessagePB_fieldAccessorTable = new

@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.storage;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.client.ClientProtoBuf;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +11,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -36,90 +35,59 @@ public class StorageNodeHelper {
                 int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
                 StorageProtobuf.StoreChunk storeChunkMsg = recfilechunks.getStoreChunkMsg();
 
-                List<String> hostReplica = processClientWriteRequest(recfilechunks,storeChunkMsg,chunkID,storeChunkName);
+                List<String> hostReplica = processClientWriteRequest(recfilechunks, storeChunkMsg, chunkID, storeChunkName);
 
                 List<String> hostReplica1 = new ArrayList<>();
                 if (hostReplica.size() == 2) {
                     hostReplica1.add(hostReplica.get(1));
                     System.out.println("Writing into: " + hostReplica.get(0));
-                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica1);
+                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica1);
                 }
                 if (hostReplica.size() == 1) {
                     List<String> hostReplica2 = new ArrayList<>();
                     System.out.println("Writing into: " + hostReplica.get(0));
-                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica2);
+                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica2);
                 }
 
             }
 
-        if (reqTypeRead.equals("read")) {
-            processClientReadRequest(clientSocket, recfilechunks);
+            if (reqTypeRead.equals("read")) {
+                processClientReadRequest(clientSocket, recfilechunks);
+            }
+
         }
 
     }
 
-}
-
-//    public void clientRequestReplica1(ServerSocket srvSocket) throws IOException, InterruptedException {
-//
-//        while (true) {
-//            Socket clientSocket = srvSocket.accept();
-//            ClientProtoBuf clientProtoBuf = new ClientProtoBuf();
-//            StorageProtobuf.StorageMessagePB recfilechunks =
-//                    StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-//            String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
-//            int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
-//            HashMap<StorageProtobuf.StoreChunk, List<String>> hostReplica = processClientWriteRequest(recfilechunks);
-//            for (Map.Entry<StorageProtobuf.StoreChunk, List<String>> entry : hostReplica.entrySet()) {
-//                StorageProtobuf.StoreChunk replicaChunk = entry.getKey();
-//                List<String> replicaName = entry.getValue();
-//                if (replicaName.size() == 1) {
-//                    callReplica2(replicaName, replicaChunk, storeChunkName, chunkID, clientProtoBuf);
-//                }
-//
-//            }
-//        }
-//    }
-
-//    public void clientRequestReplica2(ServerSocket srvSocket) throws IOException, InterruptedException {
-//        while (true) {
-//            Socket clientSocket = srvSocket.accept();
-//            StorageProtobuf.StorageMessagePB recfilechunks =
-//                    StorageProtobuf.StorageMessagePB.parseDelimitedFrom(clientSocket.getInputStream());
-//            HashMap<StorageProtobuf.StoreChunk, List<String>> hostReplica = processClientWriteRequest(recfilechunks);
-//        }
-//    }
-//
-//    //
-//    private void callReplica1(List<String> hostReplica, StorageProtobuf.StoreChunk storeChunkMsg, String storeChunkName, int chunkID, ClientProtoBuf clientProtoBuf) {
-//        List<String> hostReplica1 = new ArrayList<>();
-//        hostReplica1.add(hostReplica.get(1));
-//        System.out.println("Writing into: " + hostReplica.get(0));
-//        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica1);
-//    }
-//
-//    private void callReplica2(List<String> hostReplica, StorageProtobuf.StoreChunk storeChunkMsg, String storeChunkName, int chunkID, ClientProtoBuf clientProtoBuf) {
-//        List<String> hostReplica2 = new ArrayList<>();
-//        System.out.println("Writing into: " + hostReplica.get(0));
-//        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica2);
-//    }
-
-    public List<String> processClientWriteRequest
-            (StorageProtobuf.StorageMessagePB recfilechunks, StorageProtobuf.StoreChunk storeChunkMsg, int chunkID, String storeChunkName)
+    public List<String> processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks, StorageProtobuf.StoreChunk storeChunkMsg, int chunkID, String storeChunkName)
             throws IOException, InterruptedException {
         List<String> hostReplica = new ArrayList<>();
+        FileOutputStream output;
         if (recfilechunks.hasStoreChunkMsg()) {
-
 
             hostReplica = recfilechunks.getStoreChunkMsgOrBuilder().getHostReplicaList();
             String chunkNameToStore = storeChunkName + "_" + chunkID;
 
-            //Writing into files
-            StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
-                    .setChunkdatat(storeChunkMsg.getWritechunkdata());
+            //Writing chunk data into files
+            try (FileOutputStream fop = new FileOutputStream(chunkNameToStore)) {
+                fop.write(storeChunkMsg.getWritechunkdata().toByteArray());
+                fop.flush();
+                fop.close();
+            } catch (Exception e) {
+                System.out.println("No file written");
+            }
 
-            FileOutputStream output = new FileOutputStream(chunkNameToStore);
-            profile.build().writeTo(output);
+            //Writing checksum data
+            String md5 = DigestUtils.md5Hex(storeChunkMsg.getWritechunkdata().toByteArray());
+
+            System.out.println("Checksum: " + md5);
+            try (FileOutputStream fop = new FileOutputStream(chunkNameToStore + "_checksum")) {
+                fop.write(md5.getBytes());
+                fop.flush();
+                fop.close();
+            } catch (Exception e) {
+                System.out.println("No file written");
+            }
 
         }
         return hostReplica;
@@ -142,10 +110,14 @@ public class StorageNodeHelper {
             System.out.println("File content: " + chunkName + ": ");
             System.out.println(s);
 
+            //creating checksum
+            String md5 = DigestUtils.md5Hex(s);
+
             //Sending chunk data to client
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadchunkdata(data)
+                    .setChecksum(md5)
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()

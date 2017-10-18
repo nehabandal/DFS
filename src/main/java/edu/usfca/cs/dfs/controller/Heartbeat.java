@@ -41,11 +41,11 @@ public class Heartbeat implements Runnable {
             }
     }
 
-//        public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
+//    public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
     public synchronized boolean send(String controllerhost, String hostname, int portnum) {
 
-//        File directory = new File("/");
-        File directory = new File("/home2/npbandal/");
+        File directory = new File("/");
+//        File directory = new File("/home2/npbandal/");
         long space = directory.getFreeSpace();
         long spaceMB = space / (1024 * 1024);
         File[] fList = directory.listFiles();
@@ -61,20 +61,20 @@ public class Heartbeat implements Runnable {
         try {
             while (hostname != null) { //should be not equal in actual code
 //                for (String host : hostname.keySet()) {
-                Socket sockController = new Socket(controllerhost, portnum);
-                ProtoHeartbeat.StorageHearbeat heartbeat
-                        = ProtoHeartbeat.StorageHearbeat.newBuilder()
-                        .setHostName(hostname)
-                        .setFreespace(spaceMB)
-                        .addAllFileName(filesinHost)
-                        .setHeartbeatmsg("Hi from ")
-                        .build();
-                ProtoHeartbeat.ControllerMessagePB msgWrapper =
-                        ProtoHeartbeat.ControllerMessagePB.newBuilder()
-                                .setStorageHeartBeat(heartbeat)
-                                .build();
-                msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-                Thread.sleep(3000);
+                    Socket sockController = new Socket(controllerhost, portnum);
+                    ProtoHeartbeat.StorageHearbeat heartbeat
+                            = ProtoHeartbeat.StorageHearbeat.newBuilder()
+                            .setHostName(hostname)
+                            .setFreespace(spaceMB)
+                            .addAllFileName(filesinHost)
+                            .setHeartbeatmsg("Hi from ")
+                            .build();
+                    ProtoHeartbeat.ControllerMessagePB msgWrapper =
+                            ProtoHeartbeat.ControllerMessagePB.newBuilder()
+                                    .setStorageHeartBeat(heartbeat)
+                                    .build();
+                    msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+                    Thread.sleep(3000);
 //                }
             }
         } catch (Exception e) {
@@ -109,9 +109,9 @@ public class Heartbeat implements Runnable {
                 Long freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
                 filenames = msgWrapper.getStorageHeartBeatOrBuilder().getFileNameList();
                 System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
-                for (String filename : filenames) {
-                    System.out.println(filename);
-                }
+//                for (String filename : filenames) {
+//                    System.out.println(filename);
+//                }
                 hostSpceFiles.put(freespace, filenames);
                 hostNameSpaceFiles.put(hostname, hostSpceFiles);
             }

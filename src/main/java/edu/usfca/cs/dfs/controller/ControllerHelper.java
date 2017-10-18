@@ -12,7 +12,7 @@ import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
  */
 public class ControllerHelper {
 
-    public void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
+    public synchronized void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
         String reqType = null;
         String filenameClient = null;
 
@@ -57,13 +57,15 @@ public class ControllerHelper {
     private TreeMap<String, String> getAliveHostsRead(Map<String, Controller.OnlineStorageNode> heartBeatNodes, String filenameClient) {
         TreeMap<String, String> hostFilesNames = new TreeMap<>();
         System.out.println("Coming from controller read: " + heartBeatNodes.size());
-        for ( String hostname : heartBeatNodes.keySet() ) {
+        for (String hostname : heartBeatNodes.keySet()) {
             System.out.println(hostname);
             Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
-            System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
-            for (String filename : node.filenames) {
-                if (filename.startsWith(filenameClient)) {
-                    hostFilesNames.put(filename, hostname);
+            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
+                System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
+                for (String filename : node.filenames) {
+                    if (filename.startsWith(filenameClient)) {
+                        hostFilesNames.put(filename, hostname);
+                    }
                 }
             }
         }
@@ -79,7 +81,7 @@ public class ControllerHelper {
         while (i < heartbeatMap.size()) {
             String randomKey = keys.get(random.nextInt(keys.size()));
             Controller.OnlineStorageNode node = heartbeatMap.get(randomKey);
-            if (node.lastSeenTime - System.currentTimeMillis() < TIMEOUT_MS) {
+            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
                 if (node.availableSpace > 10) {
                     if (hosts.contains(randomKey)) {
                         continue;
