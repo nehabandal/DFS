@@ -105,18 +105,14 @@ public class Controller {
     }
 
     private Thread deleteInactiveNodes() {
-        while (hostNameSpaceFiles != null)
+        while (true) {
             return new Thread() {
                 public void run() {
+                    System.out.println("Coming in delete thread");
                     deleteInactive(heartbeatMap);
-                    try {
-                        wait(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             };
-        return null;
+        }
     }
 
     private void deleteInactive(Map<String, OnlineStorageNode> heartbeatMap) {
