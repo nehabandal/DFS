@@ -50,7 +50,7 @@ public class ClientWriteFile {
             hostToreplica.add(hostnames.get(1));
             hostToreplica.add(hostnames.get(2));
             System.out.println("Writing into node: " + hostnames.get(0));
-            cp.protoBufToWriteintoStorageNode(hostnames.get(0), 9901, fileName.getName(), chunkid, fileInChunks.get(0));
+            cp.protoBufToWriteintoStorageNode(hostnames.get(0), 9901, fileName.getName(), chunkid, fileInChunks.get(j),hostToreplica);
             Thread.sleep(100);
         }
 

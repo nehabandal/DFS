@@ -72,9 +72,8 @@ public class ClientProtoBuf {
         return sockController;
     }
 
-    //    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, List<String> hostReplica) {
-    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
-
+        public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, List<String> hostReplica) {
+//    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         try {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
@@ -96,7 +95,7 @@ public class ClientProtoBuf {
                             .build();
 
             msgWrapper.writeDelimitedTo(sockController.getOutputStream());
-//            sockController.close();
+            sockController.close();
 
         } catch (IOException e) {
             e.printStackTrace();

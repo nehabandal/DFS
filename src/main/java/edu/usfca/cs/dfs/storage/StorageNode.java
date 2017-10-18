@@ -43,20 +43,20 @@ public class StorageNode {
 
         System.out.println("Storage Node processing client request on " + hostname + "...");
         Thread thread2 = threadClientReq();
-//
-//        Thread thread3 = threadReplicaReq1();
 
-//        Thread thread4 = threadReplicaReq2();
+        Thread thread3 = threadReplicaReq1();
+
+        Thread thread4 = threadReplicaReq2();
 
         thread1.start();
         thread2.start();
-//        thread3.start();
-//        thread4.start();
+        thread3.start();
+        thread4.start();
 
         thread1.join();
         thread2.join();
-//        thread3.join();
-//        thread4.join();
+        thread3.join();
+        thread4.join();
     }
 
     private Thread threadClientReq() {
@@ -74,38 +74,36 @@ public class StorageNode {
         };
     }
 //
-//    private Thread threadReplicaReq1() {
-//        return new Thread() {
-//            public void run() {
-//                StorageNodeHelper sh = new StorageNodeHelper();
-//                ServerSocket srvSocket = null;
-//                try {
-//                    srvSocket = new ServerSocket(9910);
-//                    Thread.yield();
-//                    sh.clientRequestReplica1(srvSocket);
-//                } catch (IOException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//    }
+    private Thread threadReplicaReq1() {
+        return new Thread() {
+            public void run() {
+                StorageNodeHelper sh = new StorageNodeHelper();
+                ServerSocket srvSocket = null;
+                try {
+                    srvSocket = new ServerSocket(9910);
+                    sh.clientRequestReplica1(srvSocket);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
 
 
-//    private Thread threadReplicaReq2() {
-//        return new Thread() {
-//            public void run() {
-//                StorageNodeHelper sh = new StorageNodeHelper();
-//                ServerSocket srvSocket = null;
-//                try {
-//                    srvSocket = new ServerSocket(9911);
-//                    Thread.yield();
-//                    sh.clientRequestReplica2(srvSocket);
-//                } catch (IOException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//    }
+    private Thread threadReplicaReq2() {
+        return new Thread() {
+            public void run() {
+                StorageNodeHelper sh = new StorageNodeHelper();
+                ServerSocket srvSocket = null;
+                try {
+                    srvSocket = new ServerSocket(9911);
+                    sh.clientRequestReplica2(srvSocket);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
 
 //    private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails, final int portnumber) {
     private Thread threadHeartBeat(final String controllerName, final String hostdetails, final int portnumber) {
