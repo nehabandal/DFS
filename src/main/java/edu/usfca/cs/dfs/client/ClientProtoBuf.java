@@ -79,7 +79,7 @@ public class ClientProtoBuf {
             String s = new String(chunk);
             ByteString data = ByteString.copyFromUtf8(s);
 
-            Socket sockController = new Socket("localhost", portnumber);
+            Socket sockController = new Socket(hostname, portnumber);
 
             StorageProtobuf.StoreChunk storeChunkMsg
                     = StorageProtobuf.StoreChunk.newBuilder()
