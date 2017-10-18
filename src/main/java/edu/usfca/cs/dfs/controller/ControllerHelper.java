@@ -57,6 +57,7 @@ public class ControllerHelper {
     private TreeMap<String, String> getAliveHostsRead(Map<String, Controller.OnlineStorageNode> heartBeatNodes, String filenameClient) {
         TreeMap<String, String> hostFilesNames = new TreeMap<>();
         System.out.println("Coming from controller read: " + heartBeatNodes.size());
+        String filenameHost;
         for (String hostname : heartBeatNodes.keySet()) {
             System.out.println(hostname);
             Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
@@ -64,7 +65,10 @@ public class ControllerHelper {
                 System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
                 for (String filename : node.filenames) {
                     if (filename.startsWith(filenameClient)) {
-                        hostFilesNames.put(filename, hostname);
+                        filenameHost = hostFilesNames.get(hostname);
+                        if (!hostFilesNames.containsValue(filenameHost)) {
+                            hostFilesNames.put(hostname, filename);
+                        }
                     }
                 }
             }

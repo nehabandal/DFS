@@ -24,9 +24,9 @@ public class ClientReadFile {
         Iterator it = hostFilesNames.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry fileHostname = (Map.Entry) it.next();
-            String hostname = String.valueOf(fileHostname.getValue());
-            String chunkname = String.valueOf(fileHostname.getKey());
-            System.out.println("Filename: " + fileHostname.getKey() + " hostname: " + fileHostname.getValue());
+            String chunkname = String.valueOf(fileHostname.getValue());
+            String hostname = String.valueOf(fileHostname.getKey());
+            System.out.println("Hostname: " + fileHostname.getKey() + "Filename :" + fileHostname.getValue());
             chunkbytes = cp.sendReadReqToStorageNode(hostname, 9901, chunkname);
             System.out.println(new String(chunkbytes));
             allChunkData.add(chunkbytes);
