@@ -2,7 +2,10 @@ package edu.usfca.cs.dfs.controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
 
@@ -80,6 +83,9 @@ public class Controller {
                     node.availableSpace = availableSpace;
                     node.filenames = files;
                     heartbeatMap.put(hostname, node);
+                }
+                if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
+                    heartbeatMap.remove(hostname);
                 }
             }
         }
