@@ -65,9 +65,8 @@ public class ControllerHelper {
                 System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
                 for (String filename : node.filenames) {
                     if (filename.startsWith(filenameClient)) {
-                        filenameHost = hostFilesNames.get(hostname);
-                        if (!hostFilesNames.containsValue(filenameHost)) {
-                            hostFilesNames.put(hostname, filename);
+                        if (!hostFilesNames.containsKey(hostname)) {
+                            hostFilesNames.put(filename, hostname);
                         }
                     }
                 }
