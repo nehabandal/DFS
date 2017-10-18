@@ -23,14 +23,17 @@ public class Controller {
         Thread thread1 = createHeartBeatReceiverThread();
 
         System.out.println("Controller receiving Client request on port 9900...");
-
         Thread thread2 = createClientResponseThread();
+
+        Thread thread3 = deleteInactiveNodes();
 
         thread1.start();
         thread2.start();
+        thread3.start();
 
         thread1.join();
         thread2.join();
+        thread3.join();
     }
 
     public static class OnlineStorageNode {
@@ -78,15 +81,11 @@ public class Controller {
                 OnlineStorageNode node = heartbeatMap.get(hostname);
                 if (node == null) {
                     node = new OnlineStorageNode(hostname);
-                    node.lastSeenTime = System.currentTimeMillis();
-                    node.availableSpace = availableSpace;
-                    node.filenames = files;
-                    heartbeatMap.put(hostname, node);
-                } else {
-                    if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
-                        heartbeatMap.remove(hostname);
-                    }
                 }
+                node.lastSeenTime = System.currentTimeMillis();
+                node.availableSpace = availableSpace;
+                node.filenames = files;
+                heartbeatMap.put(hostname, node);
             }
         }
     }
@@ -97,13 +96,38 @@ public class Controller {
                 ControllerHelper cp = new ControllerHelper();
                 try {
                     ServerSocket srvSocket = new ServerSocket(9900);
-//                    getHostNameSpaceFiles(hostNameSpaceFiles);
                     cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
+    }
+
+    private Thread deleteInactiveNodes() {
+        while (hostNameSpaceFiles != null)
+            return new Thread() {
+                public void run() {
+                    deleteInactive(heartbeatMap);
+                    try {
+                        wait(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        return null;
+    }
+
+    private void deleteInactive(Map<String, OnlineStorageNode> heartbeatMap) {
+        for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
+            String hostname = entry.getKey();
+            OnlineStorageNode node = entry.getValue();
+            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
+                System.out.println("removing host: " + hostname);
+                heartbeatMap.remove(hostname);
+            }
+        }
     }
 }
 
