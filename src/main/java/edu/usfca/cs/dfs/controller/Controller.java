@@ -86,9 +86,7 @@ public class Controller {
                     node.filenames = files;
                     heartbeatMap.put(hostname, node);
                 }
-                child.remove();
             }
-            parent.remove();
         }
     }
 
