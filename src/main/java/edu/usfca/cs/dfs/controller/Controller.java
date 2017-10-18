@@ -68,14 +68,9 @@ public class Controller {
 
     protected void getHostNameSpaceFiles(Map<String, Map<Long, List<String>>> hostNameSpaceFiles) {
 
-        Iterator<Map.Entry<String, Map<Long, List<String>>>> parent = hostNameSpaceFiles.entrySet().iterator();
-
-        while (parent.hasNext()) {
-            Map.Entry<String, Map<Long, List<String>>> parentPair = parent.next();
+        for (Map.Entry<String, Map<Long, List<String>>> parentPair : hostNameSpaceFiles.entrySet()) {
             String hostname = parentPair.getKey();
-            Iterator<Map.Entry<Long, List<String>>> child = (parentPair.getValue()).entrySet().iterator();
-            while (child.hasNext()) {
-                Map.Entry<Long, List<String>> childPair = child.next();
+            for (Map.Entry<Long, List<String>> childPair : (parentPair.getValue()).entrySet()) {
                 Long availableSpace = childPair.getKey();
                 List<String> files = childPair.getValue();
                 OnlineStorageNode node = heartbeatMap.get(hostname);
