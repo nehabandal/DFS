@@ -128,15 +128,19 @@ public class Controller {
 
     private void deleteInactive() {
 //        System.out.println(heartbeatMap.size());
-        for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
-            System.out.println(heartbeatMap.size());
-            String hostname = entry.getKey();
-            System.out.println(hostname);
-            OnlineStorageNode node = entry.getValue();
-            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
-                System.out.println("removing host: " + hostname);
-                heartbeatMap.remove(hostname);
+        try {
+            for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
+                System.out.println(heartbeatMap.size());
+                String hostname = entry.getKey();
+                System.out.println(hostname);
+                OnlineStorageNode node = entry.getValue();
+                if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
+                    System.out.println("removing host: " + hostname);
+                    heartbeatMap.remove(hostname);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Host removed");
         }
     }
 }

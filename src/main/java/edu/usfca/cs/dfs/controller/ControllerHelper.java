@@ -5,8 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
-
 /**
  * Created by npbandal on 10/9/17.
  */
@@ -63,9 +61,9 @@ public class ControllerHelper {
             System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
             for (String filename : node.filenames) {
                 if (filename.startsWith(filenameClient)) {
-                    if (!hostFilesNames.containsValue(hostname)) {
+//                    if (!hostFilesNames.containsValue(hostname)) {
                         hostFilesNames.put(filename, hostname);
-                    }
+//                    }
                 }
             }
         }
@@ -81,14 +79,12 @@ public class ControllerHelper {
         while (i < heartbeatMap.size()) {
             String randomKey = keys.get(random.nextInt(keys.size()));
             Controller.OnlineStorageNode node = heartbeatMap.get(randomKey);
-            if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
-                if (node.availableSpace > 10) {
-                    if (hosts.contains(randomKey)) {
-                        continue;
-                    } else
-                        hosts.add(randomKey);
-                    System.out.println("Heartbeat: " + randomKey);
-                }
+            if (node.availableSpace > 10) {
+                if (hosts.contains(randomKey)) {
+                    continue;
+                } else
+                    hosts.add(randomKey);
+                System.out.println("Heartbeat: " + randomKey);
             }
             if (hosts.size() == 3) {
                 break;
