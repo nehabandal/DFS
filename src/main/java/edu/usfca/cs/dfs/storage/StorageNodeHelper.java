@@ -31,14 +31,14 @@ public class StorageNodeHelper {
                 String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
                 int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
                 HashMap<StorageProtobuf.StoreChunk, List<String>> hostReplica = processClientWriteRequest(recfilechunks, storeChunkName, chunkID);
-                for (Map.Entry<StorageProtobuf.StoreChunk, List<String>> entry : hostReplica.entrySet()) {
-                    StorageProtobuf.StoreChunk replicaChunk = entry.getKey();
-                    List<String> replicaName = entry.getValue();
-                    if (replicaName.size() == 2) {
-                        callReplica1(replicaName, replicaChunk, storeChunkName, chunkID, clientProtoBuf);
-                    }
+//                for (Map.Entry<StorageProtobuf.StoreChunk, List<String>> entry : hostReplica.entrySet()) {
+//                    StorageProtobuf.StoreChunk replicaChunk = entry.getKey();
+//                    List<String> replicaName = entry.getValue();
+//                    if (replicaName.size() == 2) {
+//                        callReplica1(replicaName, replicaChunk, storeChunkName, chunkID, clientProtoBuf);
+//                    }
 
-                }
+//                }
             }
 
             if (reqTypeRead.equals("read")) {
