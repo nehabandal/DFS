@@ -81,7 +81,7 @@ public class StorageNode {
                 ServerSocket srvSocket = null;
                 try {
                     srvSocket = new ServerSocket(9910);
-                    sh.clientRequestReplica1(srvSocket);
+                    sh.clientRequests(srvSocket);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +97,7 @@ public class StorageNode {
                 ServerSocket srvSocket = null;
                 try {
                     srvSocket = new ServerSocket(9911);
-                    sh.clientRequestReplica2(srvSocket);
+                    sh.clientRequests(srvSocket);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
