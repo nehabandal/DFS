@@ -94,7 +94,7 @@ public class Controller {
                 ControllerHelper cp = new ControllerHelper();
                 try {
                     ServerSocket srvSocket = new ServerSocket(9900);
-                    getHostNameSpaceFiles(hostNameSpaceFiles);
+//                    getHostNameSpaceFiles(hostNameSpaceFiles);
                     cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
                 } catch (IOException e) {
                     e.printStackTrace();
