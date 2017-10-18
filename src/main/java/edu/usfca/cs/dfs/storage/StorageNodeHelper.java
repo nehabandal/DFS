@@ -85,13 +85,13 @@ public class StorageNodeHelper {
         List<String> hostReplica1 = new ArrayList<>();
         hostReplica1.add(hostReplica.get(1));
         System.out.println("Writing into: " + hostReplica.get(0));
-        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica1);
+//        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica1);
     }
 
     private void callReplica2(List<String> hostReplica, StorageProtobuf.StoreChunk storeChunkMsg, String storeChunkName, int chunkID, ClientProtoBuf clientProtoBuf) {
         List<String> hostReplica2 = new ArrayList<>();
         System.out.println("Writing into: " + hostReplica.get(0));
-        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica2);
+//        clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.toByteArray(), hostReplica2);
     }
 
     public HashMap<StorageProtobuf.StoreChunk, List<String>> processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks, String storeChunkName, int chunkID)
