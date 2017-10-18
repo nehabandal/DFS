@@ -72,7 +72,7 @@ public class ClientProtoBuf {
         return sockController;
     }
 
-        public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, List<String> hostReplica) {
+    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk, List<String> hostReplica) {
 //    public void protoBufToWriteintoStorageNode(String hostname, int portnumber, String filename, int chunkId, byte[] chunk) {
         try {
             String s = new String(chunk);
@@ -86,7 +86,7 @@ public class ClientProtoBuf {
                     .setChunkId(chunkId)
                     .setReqTypeWrite("write")
                     .setWritechunkdata(data)
-//                        .addAllHostReplica(hostReplica)
+                    .addAllHostReplica(hostReplica)
                     .build();
 
             StorageProtobuf.StorageMessagePB msgWrapper =
