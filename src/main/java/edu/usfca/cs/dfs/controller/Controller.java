@@ -10,7 +10,7 @@ import java.util.Map;
 public class Controller {
 
     public static final int COUNT = 3;
-    public static final int TIMEOUT_MS = 3000;
+    public static final int TIMEOUT_MS = 50000;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         final Controller controller = new Controller();
@@ -83,9 +83,6 @@ public class Controller {
                     node.availableSpace = availableSpace;
                     node.filenames = files;
                     heartbeatMap.put(hostname, node);
-                }
-                if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
-                    heartbeatMap.remove(hostname);
                 }
             }
         }
