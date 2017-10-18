@@ -76,7 +76,8 @@ public class StorageNodeHelper {
             HashMap<StorageProtobuf.StoreChunk, List<String>> hostReplica = processClientWriteRequest(recfilechunks);
         }
     }
-//
+
+    //
     private void callReplica1(List<String> hostReplica, StorageProtobuf.StoreChunk storeChunkMsg, String storeChunkName, int chunkID, ClientProtoBuf clientProtoBuf) {
         List<String> hostReplica1 = new ArrayList<>();
         hostReplica1.add(hostReplica.get(1));
@@ -100,6 +101,8 @@ public class StorageNodeHelper {
             String storeChunkName = recfilechunks.getStoreChunkMsgOrBuilder().getWritefilechunkName();
             int chunkID = recfilechunks.getStoreChunkMsgOrBuilder().getChunkId();
             String chunkNameToStore = storeChunkName + "_" + chunkID;
+
+            chunkDataReplica.put(storeChunkMsg, hostReplica);
 
             //Writing into files
             StorageProtobuf.Profile.Builder profile = StorageProtobuf.Profile.newBuilder()
