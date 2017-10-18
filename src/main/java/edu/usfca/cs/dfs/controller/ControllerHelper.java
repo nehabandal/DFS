@@ -12,7 +12,7 @@ import static edu.usfca.cs.dfs.controller.Controller.TIMEOUT_MS;
  */
 public class ControllerHelper {
 
-    public synchronized void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Map<Long, List<String>>> heartBeatNodes) throws IOException {
+    public synchronized void receiveClientReqAtController(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
         String reqType = null;
         String filenameClient = null;
 
@@ -30,9 +30,7 @@ public class ControllerHelper {
 
             //Sending response to controller
             if (Objects.equals(reqType, "write")) {
-//                Controller controller = new Controller();
-                getHostNameSpaceFiles(heartBeatNodes);
-                List<String> sublist = getAliveHostsWrite(heartbeatMap);
+                List<String> sublist = getAliveHostsWrite(heartBeatNodes);
                 System.out.println("Coming from controller: " + heartBeatNodes.size());
                 System.out.println("Size of activeNodes from controller to write file " + sublist.size());
                 ControllerProtobuf.ListOfHostnames msgWrapperReswrite =
@@ -43,8 +41,7 @@ public class ControllerHelper {
             }
 
             if (Objects.equals(reqType, "read")) {
-                getHostNameSpaceFiles(heartBeatNodes);
-                TreeMap<String, String> sublisthosts = getAliveHostsRead(heartbeatMap, filenameClient);
+                TreeMap<String, String> sublisthosts = getAliveHostsRead(heartBeatNodes, filenameClient);
                 System.out.println("Coming from controller: " + heartBeatNodes.size());
                 System.out.println("Size of activeNodes from controller to read " + filenameClient + " file " + sublisthosts.size());
                 ControllerProtobuf.HostNamesFiles msgWrapperResread =
@@ -54,34 +51,6 @@ public class ControllerHelper {
                 msgWrapperResread.writeDelimitedTo(clientSocket.getOutputStream());
             }
             clientSocket.close();
-        }
-    }
-
-    private final Map<String, Controller.OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
-
-    protected void getHostNameSpaceFiles(Map<String, Map<Long, List<String>>> hostNameSpaceFiles) {
-
-        Iterator<Map.Entry<String, Map<Long, List<String>>>> parent = hostNameSpaceFiles.entrySet().iterator();
-
-        while (parent.hasNext()) {
-            Map.Entry<String, Map<Long, List<String>>> parentPair = parent.next();
-            String hostname = parentPair.getKey();
-            Iterator<Map.Entry<Long, List<String>>> child = (parentPair.getValue()).entrySet().iterator();
-            while (child.hasNext()) {
-                Map.Entry<Long, List<String>> childPair = child.next();
-                Long availableSpace = childPair.getKey();
-                List<String> files = childPair.getValue();
-                Controller.OnlineStorageNode node = heartbeatMap.get(hostname);
-                if (node == null) {
-                    node = new Controller.OnlineStorageNode(hostname);
-                    node.lastSeenTime = System.currentTimeMillis();
-                    node.availableSpace = availableSpace;
-                    node.filenames = files;
-                    heartbeatMap.put(hostname, node);
-                }
-                child.remove();
-            }
-            parent.remove();
         }
     }
 

@@ -101,9 +101,9 @@ public class Heartbeat implements Runnable {
                 Long freespace = msgWrapper.getStorageHeartBeatOrBuilder().getFreespace();
                 filenames = msgWrapper.getStorageHeartBeatOrBuilder().getFileNameList();
                 System.out.println(msg + "Host: " + hostname + " Available size: " + freespace + " MB");
-//                for (String filename : filenames) {
-//                    System.out.println(filename);
-//                }
+                for (String filename : filenames) {
+                    System.out.println(filename);
+                }
                 hostSpceFiles.put(freespace, filenames);
                 hostNameSpaceFiles.put(hostname, hostSpceFiles);
             }
