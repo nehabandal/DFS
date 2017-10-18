@@ -109,13 +109,13 @@ public class Controller {
             return new Thread() {
                 public void run() {
                     System.out.println("Coming in delete thread");
-                    deleteInactive(heartbeatMap);
+                    deleteInactive();
                 }
             };
         }
     }
 
-    private void deleteInactive(Map<String, OnlineStorageNode> heartbeatMap) {
+    private void deleteInactive() {
         for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
             String hostname = entry.getKey();
             OnlineStorageNode node = entry.getValue();
