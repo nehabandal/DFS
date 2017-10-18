@@ -43,21 +43,20 @@ public class Controller {
         }
     }
 
-    private final Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
-
+//    private final Map<String, OnlineStorageNode> heartbeatMap = new LinkedHashMap<>();
+    private Map<String, Map<Long, List<String>>> hostNameSpaceFiles = new HashMap<>();
 
     private Thread createHeartBeatReceiverThread() {
         return new Thread() {
             public void run() {
                 ServerSocket srvSocket = null;
-                HashMap<String, Integer> activeHostnames = new HashMap<>();
                 try {
                     srvSocket = new ServerSocket(8080);
                     while (!srvSocket.isClosed()) {
                         Heartbeat heartbeat = new Heartbeat();
 
-                        Map<String, Map<Long, List<String>>> hostNameSpaceFiles = heartbeat.receive(srvSocket);
-                        getHostNameSpaceFiles(hostNameSpaceFiles);
+                        hostNameSpaceFiles = heartbeat.receive(srvSocket);
+//                        getHostNameSpaceFiles(hostNameSpaceFiles);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -67,31 +66,31 @@ public class Controller {
         };
     }
 
-    private void getHostNameSpaceFiles(Map<String, Map<Long, List<String>>> hostNameSpaceFiles) {
-
-        Iterator<Map.Entry<String, Map<Long, List<String>>>> parent = hostNameSpaceFiles.entrySet().iterator();
-
-        while (parent.hasNext()) {
-            Map.Entry<String, Map<Long, List<String>>> parentPair = parent.next();
-            String hostname = parentPair.getKey();
-            Iterator<Map.Entry<Long, List<String>>> child = (parentPair.getValue()).entrySet().iterator();
-            while (child.hasNext()) {
-                Map.Entry<Long, List<String>> childPair = child.next();
-                Long availableSpace = childPair.getKey();
-                List<String> files = childPair.getValue();
-                OnlineStorageNode node = heartbeatMap.get(hostname);
-                if (node == null) {
-                    node = new OnlineStorageNode(hostname);
-                    node.lastSeenTime = System.currentTimeMillis();
-                    node.availableSpace = availableSpace;
-                    node.filenames = files;
-                    heartbeatMap.put(hostname, node);
-                }
-                child.remove();
-            }
-            parent.remove();
-        }
-    }
+//    protected void getHostNameSpaceFiles(Map<String, Map<Long, List<String>>> hostNameSpaceFiles) {
+//
+//        Iterator<Map.Entry<String, Map<Long, List<String>>>> parent = hostNameSpaceFiles.entrySet().iterator();
+//
+//        while (parent.hasNext()) {
+//            Map.Entry<String, Map<Long, List<String>>> parentPair = parent.next();
+//            String hostname = parentPair.getKey();
+//            Iterator<Map.Entry<Long, List<String>>> child = (parentPair.getValue()).entrySet().iterator();
+//            while (child.hasNext()) {
+//                Map.Entry<Long, List<String>> childPair = child.next();
+//                Long availableSpace = childPair.getKey();
+//                List<String> files = childPair.getValue();
+//                OnlineStorageNode node = heartbeatMap.get(hostname);
+//                if (node == null) {
+//                    node = new OnlineStorageNode(hostname);
+//                    node.lastSeenTime = System.currentTimeMillis();
+//                    node.availableSpace = availableSpace;
+//                    node.filenames = files;
+//                    heartbeatMap.put(hostname, node);
+//                }
+//                child.remove();
+//            }
+//            parent.remove();
+//        }
+//    }
 
     private Thread createClientResponseThread() {
         return new Thread() {
@@ -99,7 +98,7 @@ public class Controller {
                 ControllerHelper cp = new ControllerHelper();
                 try {
                     ServerSocket srvSocket = new ServerSocket(9900);
-                    cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
+                    cp.receiveClientReqAtController(srvSocket, "File received ", hostNameSpaceFiles);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

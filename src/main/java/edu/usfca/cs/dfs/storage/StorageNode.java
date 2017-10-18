@@ -25,7 +25,7 @@ public class StorageNode {
         final String hostname = getHostname();
         System.out.println("Storage Node Sending heartbeats on port 8080...");
         final String controllerName = args[0];
-        final int portnumber = Integer.parseInt(args[1]);
+//        final int portnumber = Integer.parseInt(args[1]);
 
         final HashMap<String, Integer> hostnameport = new LinkedHashMap<>();
         hostnameport.put("bass01", 9500);
@@ -39,7 +39,7 @@ public class StorageNode {
 
 
 //        Thread thread1 = threadHeartBeat(controllerName, hostnameport, portnumber);
-        Thread thread1 = threadHeartBeat(controllerName, hostname, portnumber);
+        Thread thread1 = threadHeartBeat(controllerName, hostname);
 
         System.out.println("Storage Node processing client request on " + hostname + "...");
         Thread thread2 = threadClientReq();
@@ -73,7 +73,8 @@ public class StorageNode {
             }
         };
     }
-//
+
+    //
     private Thread threadReplicaReq1() {
         return new Thread() {
             public void run() {
@@ -105,11 +106,11 @@ public class StorageNode {
         };
     }
 
-//    private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails, final int portnumber) {
-    private Thread threadHeartBeat(final String controllerName, final String hostdetails, final int portnumber) {
+    //    private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails, final int portnumber) {
+    private Thread threadHeartBeat(final String controllerName, final String hostdetails) {
         return new Thread() {
             public void run() {
-                new Heartbeat().send(controllerName, hostdetails, portnumber);
+                new Heartbeat().send(controllerName, hostdetails, 8080);
             }
         };
     }

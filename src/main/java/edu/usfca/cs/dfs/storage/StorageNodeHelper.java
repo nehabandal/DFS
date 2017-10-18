@@ -81,7 +81,7 @@ public class StorageNodeHelper {
             String md5 = DigestUtils.md5Hex(storeChunkMsg.getWritechunkdata().toByteArray());
 
             System.out.println("Checksum: " + md5);
-            try (FileOutputStream fop = new FileOutputStream(chunkNameToStore + "_checksum")) {
+            try (FileOutputStream fop = new FileOutputStream("storage_checksum_" + chunkNameToStore)) {
                 fop.write(md5.getBytes());
                 fop.flush();
                 fop.close();

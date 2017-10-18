@@ -19,21 +19,13 @@ public class Heartbeat implements Runnable {
     private int portNum;
     int count = 0;
 
-
-    public Heartbeat(String ControllerName, String hostname, int portnum) {
-        controllerhost = ControllerName;
-        hostName = hostname;
-        portNum = portnum;
-
-    }
-
     public Heartbeat() {
 
     }
 
     @Override
     public void run() {
-        while (send(controllerhost, hostName, 8080))
+        while (send(controllerhost, hostName, portNum))
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

@@ -130,9 +130,9 @@ public class ClientProtoBuf {
 
                 String checksum = retrivechunkfiledata.getChecksum();
 
-                System.out.println("Checksum: " + checksum);
+//                System.out.println("Checksum: " + checksum);
 
-                try (FileOutputStream fop = new FileOutputStream(chunkname + "client_checksum")) {
+                try (FileOutputStream fop = new FileOutputStream("client_checksum_" + chunkname)) {
                     fop.write(checksum.getBytes());
                     fop.flush();
                     fop.close();
