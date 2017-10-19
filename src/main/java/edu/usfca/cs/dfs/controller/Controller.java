@@ -133,7 +133,9 @@ public class Controller {
                 System.out.println(hostname);
                 OnlineStorageNode node = entry.getValue();
                 if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
+                    BackupNode backup = new BackupNode();
                     System.out.println("removing host: " + hostname);
+                    backup.creatBackupNode(hostname,node.filenames,heartbeatMap);
                     heartbeatMap.remove(hostname);
                 }
             }
