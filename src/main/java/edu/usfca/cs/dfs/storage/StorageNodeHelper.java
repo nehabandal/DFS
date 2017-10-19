@@ -62,11 +62,14 @@ public class StorageNodeHelper {
     public List<String> processClientWriteRequest(StorageProtobuf.StorageMessagePB recfilechunks, StorageProtobuf.StoreChunk storeChunkMsg, int chunkID, String storeChunkName)
             throws IOException, InterruptedException {
         List<String> hostReplica = new ArrayList<>();
-        FileOutputStream output;
+        String chunkNameToStore;
         if (recfilechunks.hasStoreChunkMsg()) {
 
             hostReplica = recfilechunks.getStoreChunkMsgOrBuilder().getHostReplicaList();
-            String chunkNameToStore = storeChunkName + "_" + chunkID;
+            if (chunkID == 0)
+                chunkNameToStore = storeChunkName;
+            else
+                chunkNameToStore = storeChunkName + "_" + chunkID;
 
             //Writing chunk data into files
             try (FileOutputStream fop = new FileOutputStream(chunkNameToStore)) {
