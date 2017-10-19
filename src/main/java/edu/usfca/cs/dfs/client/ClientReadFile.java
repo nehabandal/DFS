@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.client;
 
+import java.io.FileOutputStream;
 import java.util.*;
 
 /**
@@ -32,11 +33,21 @@ public class ClientReadFile {
             allChunkData.add(chunkbytes);
             Thread.sleep(100);
         }
-        for (byte[] chunkdata : allChunkData)
-            System.out.println(new String(chunkdata));
+
+
+        try (FileOutputStream fop = new FileOutputStream(fileName)) {
+            for (byte[] chunkdata : allChunkData) {
+                System.out.println(new String(chunkdata));
+                fop.write(chunkdata);
+            }
+            fop.flush();
+            fop.close();
+        } catch (Exception e) {
+            System.out.println("No file written");
+        }
+
+
     }
-
-
 }
 
 

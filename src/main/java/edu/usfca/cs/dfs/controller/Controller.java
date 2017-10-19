@@ -112,7 +112,6 @@ public class Controller {
     private Thread deleteInactiveNodes() {
         return new Thread() {
             public void run() {
-                System.out.println("Coming in delete thread");
                 while (true) {
                     deleteInactive();
                     try {
