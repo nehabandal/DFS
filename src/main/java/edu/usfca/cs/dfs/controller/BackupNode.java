@@ -22,8 +22,10 @@ public class BackupNode {
             for (String fileDead : filenamelist) {
                 if (node.filenames.contains(fileDead) && !Objects.equals(hostName, hostname)) {
                     chunkbytesreq = cp.sendReadReqToStorageNode(hostName, 13001, fileDead);
-                    System.out.println("Here I am reading dead node files");
+                    System.out.println("reading: " + fileDead);
                     chunkbytes.put(fileDead, chunkbytesreq);
+                    System.out.println("Here I am reading dead node files: " + chunkbytes.size());
+
                 }
             }
         }
@@ -35,12 +37,14 @@ public class BackupNode {
                 backupHost = hostName;
             }
         }
+        System.out.println("Back up host is: " + backupHost);
 
         Iterator it = chunkbytes.entrySet().iterator();
         while (it.hasNext()) {
-            System.out.println("Here I am writing file in new node");
+            System.out.println("Here I am writing file in new node ");
             Map.Entry backup = (Map.Entry) it.next();
             String backupfilename = String.valueOf(backup.getKey());
+            System.out.println("File name writing: " + backupfilename);
             byte[] chunkdata = (byte[]) backup.getValue();
             List<String> test = new ArrayList<>();
             cp.protoBufToWriteintoStorageNode(backupHost, 13001, backupfilename, 0, chunkdata, test);
