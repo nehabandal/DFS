@@ -19,7 +19,7 @@ public class ClientReadFile {
         HostID.put(9993, "ML-ITS-601927");
         HostID.put(9994, "ML-ITS-601927");
 
-        hostFilesNames = cp.clientToControllerread(controllerHost, 9900, fileName, 1, 1, "read");
+        hostFilesNames = cp.clientToControllerread(controllerHost, 13000, fileName, 1, 1, "read");
 
         Iterator it = hostFilesNames.entrySet().iterator();
         while (it.hasNext()) {
@@ -27,7 +27,7 @@ public class ClientReadFile {
             String hostname = String.valueOf(fileHostname.getValue());
             String chunkname = String.valueOf(fileHostname.getKey());
             System.out.println("Filename: " + fileHostname.getKey() + "Hostname :" + fileHostname.getValue());
-            chunkbytes = cp.sendReadReqToStorageNode(hostname, 9901, chunkname);
+            chunkbytes = cp.sendReadReqToStorageNode(hostname, 13001, chunkname);
             System.out.println(new String(chunkbytes));
             allChunkData.add(chunkbytes);
             Thread.sleep(100);

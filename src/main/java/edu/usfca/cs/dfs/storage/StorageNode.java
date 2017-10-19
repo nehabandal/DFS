@@ -65,7 +65,7 @@ public class StorageNode {
                 StorageNodeHelper sh = new StorageNodeHelper();
                 ServerSocket srvSocket = null;
                 try {
-                    srvSocket = new ServerSocket(9901);
+                    srvSocket = new ServerSocket(13001);
                     sh.clientRequests(srvSocket);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -81,7 +81,7 @@ public class StorageNode {
                 StorageNodeHelper sh = new StorageNodeHelper();
                 ServerSocket srvSocket = null;
                 try {
-                    srvSocket = new ServerSocket(9910);
+                    srvSocket = new ServerSocket(13003);
                     sh.clientRequests(srvSocket);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -97,7 +97,7 @@ public class StorageNode {
                 StorageNodeHelper sh = new StorageNodeHelper();
                 ServerSocket srvSocket = null;
                 try {
-                    srvSocket = new ServerSocket(9911);
+                    srvSocket = new ServerSocket(13004);
                     sh.clientRequests(srvSocket);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -110,7 +110,7 @@ public class StorageNode {
     private Thread threadHeartBeat(final String controllerName, final String hostdetails) {
         return new Thread() {
             public void run() {
-                new Heartbeat().send(controllerName, hostdetails, 8080);
+                new Heartbeat().send(controllerName, hostdetails, 13002);
             }
         };
     }

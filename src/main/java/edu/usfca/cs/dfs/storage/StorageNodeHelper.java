@@ -41,12 +41,12 @@ public class StorageNodeHelper {
                 if (hostReplica.size() == 2) {
                     hostReplica1.add(hostReplica.get(1));
                     System.out.println("Writing into: " + hostReplica.get(0));
-                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9910, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica1);
+                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 13003, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica1);
                 }
                 if (hostReplica.size() == 1) {
                     List<String> hostReplica2 = new ArrayList<>();
                     System.out.println("Writing into: " + hostReplica.get(0));
-                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 9911, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica2);
+                    clientProtoBuf.protoBufToWriteintoStorageNode(hostReplica.get(0), 13004, storeChunkName, chunkID, storeChunkMsg.getWritechunkdata().toByteArray(), hostReplica2);
                 }
 
             }

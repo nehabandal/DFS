@@ -57,7 +57,7 @@ public class Controller {
             public void run() {
                 ServerSocket srvSocket = null;
                 try {
-                    srvSocket = new ServerSocket(8080);
+                    srvSocket = new ServerSocket(13002);
                     while (!srvSocket.isClosed()) {
                         Heartbeat heartbeat = new Heartbeat();
                         hostNameSpaceFiles = heartbeat.receive(srvSocket);
@@ -100,7 +100,7 @@ public class Controller {
             public void run() {
                 ControllerHelper cp = new ControllerHelper();
                 try {
-                    ServerSocket srvSocket = new ServerSocket(9900);
+                    ServerSocket srvSocket = new ServerSocket(13000);
                     cp.receiveClientReqAtController(srvSocket, "File received ", heartbeatMap);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -127,7 +127,6 @@ public class Controller {
     }
 
     private void deleteInactive() {
-//        System.out.println(heartbeatMap.size());
         try {
             for (Map.Entry<String, OnlineStorageNode> entry : heartbeatMap.entrySet()) {
                 System.out.println(heartbeatMap.size());
