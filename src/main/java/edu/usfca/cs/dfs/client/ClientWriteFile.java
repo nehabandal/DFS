@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -42,15 +43,25 @@ public class ClientWriteFile {
 
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
-            List<String> hostnames;
+            Map<String, Long> hostnames;
             hostnames = cp.clientToControllerwrite(controllerHost, 13000, chunkname, fileInChunks.size(), (j + 1), "write");
             System.out.println("Host from controller: " + hostnames.size());
             int chunkid = j + 1;
+
+            Map.Entry<String, Long> entry = hostnames.entrySet().iterator().next();
+            String hostname = entry.getKey();
+            Long size = entry.getValue();
+            hostnames.remove(hostname);
+
             List<String> hostToreplica = new ArrayList<>();
-            hostToreplica.add(hostnames.get(1));
-            hostToreplica.add(hostnames.get(2));
-            System.out.println("Writing into node: " + hostnames.get(0));
-            cp.protoBufToWriteintoStorageNode(hostnames.get(0), 13001, fileName.getName(), chunkid, fileInChunks.get(j), hostToreplica);
+            for (Map.Entry<String, Long> replicas : hostnames.entrySet()) {
+                String hostnameReplica = replicas.getKey();
+                Long sizeReplica = replicas.getValue();
+                hostToreplica.add(hostnameReplica);
+                System.out.println("Writing into node: " + hostnameReplica + " Available free space in " + hostnameReplica + " is: " + sizeReplica);
+            }
+            System.out.println("Writing into node: " + hostname + " Available free space in " + hostname + " is: " + size);
+            cp.protoBufToWriteintoStorageNode(hostname, 13001, fileName.getName(), chunkid, fileInChunks.get(j), hostToreplica);
             Thread.sleep(100);
         }
 

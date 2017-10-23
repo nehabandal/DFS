@@ -3,11 +3,12 @@ package edu.usfca.cs.dfs.client;
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.controller.ControllerProtobuf;
 import edu.usfca.cs.dfs.storage.StorageProtobuf;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,16 +18,16 @@ import java.util.TreeMap;
  */
 public class ClientProtoBuf {
 
-    public List<String> clientToControllerwrite(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
+    public Map<String, Long> clientToControllerwrite(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) {
         System.out.println(chunkname);
-        List<String> hostnames = new ArrayList<>();
+        Map<String, Long> hostnames = new LinkedHashMap<>();
         try {
             Socket sockController = sendReqToController(controllerHost, portnumber, chunkname, chunknum, chunkId, reqType);
 
 //            Hostnames back from controller
             ControllerProtobuf.ListOfHostnames listOfHostnames = ControllerProtobuf.ListOfHostnames
                     .parseDelimitedFrom(sockController.getInputStream());
-            hostnames = listOfHostnames.getHostnamesList();
+            hostnames = listOfHostnames.getHostnamesMap();
 
             sockController.close();
 
@@ -54,6 +55,37 @@ public class ClientProtoBuf {
             e.printStackTrace();
         }
         return filesHostnames;
+    }
+
+    public String clientToControllerreadfilecurrupt(String controllerHost, int portnumber, String chunkname, String corruptHostname) {
+        System.out.println(chunkname);
+        String hostnameFileCorrupt = null;
+        try {
+
+            Socket sockController = new Socket(controllerHost, portnumber);
+            ControllerProtobuf.ClientTalk clientTalk
+                    = ControllerProtobuf.ClientTalk.newBuilder()
+                    .setChunkName(chunkname)
+                    .setHostName(corruptHostname)
+                    .build();
+            ControllerProtobuf.ControllerMessagePB msgWrapper =
+                    ControllerProtobuf.ControllerMessagePB.newBuilder()
+                            .setClienttalk(clientTalk)
+                            .build();
+            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+
+
+            //            Hostnames back from controller with file name
+            ControllerProtobuf.ClientTalk reshostname = ControllerProtobuf.ClientTalk
+                    .parseDelimitedFrom(sockController.getInputStream());
+            hostnameFileCorrupt = reshostname.getHostName();
+
+            sockController.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hostnameFileCorrupt;
     }
 
     private Socket sendReqToController(String controllerHost, int portnumber, String chunkname, int chunknum, int chunkId, String reqType) throws IOException {
@@ -127,24 +159,25 @@ public class ClientProtoBuf {
 
                 ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
                 chunkbytes = chunkdata.toByteArray();
+                String checksumstorage = retrivechunkfiledata.getChecksum();
 
-                String checksum = retrivechunkfiledata.getChecksum();
-
-//                System.out.println("Checksum: " + checksum);
-
-                try (FileOutputStream fop = new FileOutputStream("client_checksum_" + chunkname)) {
-                    fop.write(checksum.getBytes());
-                    fop.flush();
-                    fop.close();
-                } catch (Exception e) {
-                    System.out.println("No file written");
+                String checksumclient = DigestUtils.md5Hex(chunkbytes);
+                if (checksumstorage.equals(checksumclient)) {
+                    try (FileOutputStream fop = new FileOutputStream("client_checksum_" + chunkname)) {
+                        fop.write(checksumstorage.getBytes());
+                        fop.flush();
+                        fop.close();
+                    } catch (Exception e) {
+                        System.out.println("No file written");
+                    }
+                    return chunkbytes;
                 }
             }
             sockController.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return chunkbytes;
+        return null;
     }
 }
 

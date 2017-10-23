@@ -28,12 +28,12 @@ public class ControllerHelper {
 
             //Sending response to controller
             if (Objects.equals(reqType, "write")) {
-                List<String> sublist = getAliveHostsWrite(heartBeatNodes);
+                Map<String, Long> sublist = getAliveHostsWrite(heartBeatNodes);
                 System.out.println("Coming from controller: " + heartBeatNodes.size());
                 System.out.println("Size of activeNodes from controller to write file " + sublist.size());
                 ControllerProtobuf.ListOfHostnames msgWrapperReswrite =
                         ControllerProtobuf.ListOfHostnames.newBuilder()
-                                .addAllHostnames(sublist)
+                                .putAllHostnames(sublist)
                                 .build();
                 msgWrapperReswrite.writeDelimitedTo(clientSocket.getOutputStream());
             }
@@ -68,9 +68,53 @@ public class ControllerHelper {
         return hostFilesNames;
     }
 
+    public synchronized void receiveClientReqAtControllerFilecorrupt(ServerSocket srvSocket, String msg, Map<String, Controller.OnlineStorageNode> heartBeatNodes) throws IOException {
+        String filenameClient = null;
+        String hostnamecorrupted;
 
-    private List<String> getAliveHostsWrite(Map<String, Controller.OnlineStorageNode> heartbeatMap) {
-        final List<String> hosts = new ArrayList<>();
+        while (true) {
+            Socket clientSocket = srvSocket.accept();
+            ControllerProtobuf.ControllerMessagePB msgWrapper = ControllerProtobuf.ControllerMessagePB
+                    .parseDelimitedFrom(clientSocket.getInputStream());
+            if (msgWrapper.hasClienttalk()) {
+                ControllerProtobuf.ClientTalk clientReq = msgWrapper.getClienttalk();
+                filenameClient = clientReq.getChunkName();
+                hostnamecorrupted = clientReq.getHostName();
+                System.out.println(msg + clientReq.getChunkName());
+
+                String newHostname = getHostForFileCorrupt(filenameClient, heartBeatNodes, hostnamecorrupted);
+
+                //Responding back to client
+                System.out.println("Coming from controller for corrupted filename: " + newHostname);
+                ControllerProtobuf.ClientTalk msgWrapperResread =
+                        ControllerProtobuf.ClientTalk.newBuilder()
+                                .setHostName(newHostname)
+                                .build();
+                msgWrapperResread.writeDelimitedTo(clientSocket.getOutputStream());
+            }
+        }
+    }
+
+    private String getHostForFileCorrupt(String filenameClient, Map<String, Controller.OnlineStorageNode> heartBeatNodes, String hostnamecorrupted) {
+
+        for (String hostname : heartBeatNodes.keySet()) {
+            System.out.println(hostname);
+            if (!hostname.equals(hostnamecorrupted)) {
+                Controller.OnlineStorageNode node = heartBeatNodes.get(hostname);
+                System.out.println("Files in node: " + hostname + ": " + node.filenames.size());
+                for (String filename : node.filenames) {
+                    if (filename.equals(filenameClient)) {
+                        return hostname;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Map<String, Long> getAliveHostsWrite(Map<String, Controller.OnlineStorageNode> heartbeatMap) {
+        Map<String, Long> hosts = new LinkedHashMap<>();
+
         Random random = new Random();
         List<String> keys = new ArrayList<String>(heartbeatMap.keySet());
         int i = 0;
@@ -78,10 +122,10 @@ public class ControllerHelper {
             String randomKey = keys.get(random.nextInt(keys.size()));
             Controller.OnlineStorageNode node = heartbeatMap.get(randomKey);
             if (node.availableSpace > 10) {
-                if (hosts.contains(randomKey)) {
+                if (hosts.containsKey(randomKey)) {
                     continue;
                 } else
-                    hosts.add(randomKey);
+                    hosts.put(randomKey, node.availableSpace);
                 System.out.println("Heartbeat: " + randomKey);
             }
             if (hosts.size() == 3) {

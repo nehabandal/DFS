@@ -1789,23 +1789,38 @@ public final class ControllerProtobuf {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated string hostnames = 1;</code>
-     */
-    java.util.List<java.lang.String>
-        getHostnamesList();
-    /**
-     * <code>repeated string hostnames = 1;</code>
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
      */
     int getHostnamesCount();
     /**
-     * <code>repeated string hostnames = 1;</code>
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
      */
-    java.lang.String getHostnames(int index);
+    boolean containsHostnames(
+        java.lang.String key);
     /**
-     * <code>repeated string hostnames = 1;</code>
+     * Use {@link #getHostnamesMap()} instead.
      */
-    com.google.protobuf.ByteString
-        getHostnamesBytes(int index);
+    @java.lang.Deprecated
+    java.util.Map<java.lang.String, java.lang.Long>
+    getHostnames();
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+    java.util.Map<java.lang.String, java.lang.Long>
+    getHostnamesMap();
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+
+    long getHostnamesOrDefault(
+        java.lang.String key,
+        long defaultValue);
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+
+    long getHostnamesOrThrow(
+        java.lang.String key);
   }
   /**
    * Protobuf type {@code ListOfHostnames}
@@ -1820,7 +1835,6 @@ public final class ControllerProtobuf {
       super(builder);
     }
     private ListOfHostnames() {
-      hostnames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
 
     @java.lang.Override
@@ -1852,12 +1866,16 @@ public final class ControllerProtobuf {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                hostnames_ = new com.google.protobuf.LazyStringArrayList();
+                hostnames_ = com.google.protobuf.MapField.newMapField(
+                    HostnamesDefaultEntryHolder.defaultEntry);
                 mutable_bitField0_ |= 0x00000001;
               }
-              hostnames_.add(s);
+              com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+              hostnames__ = input.readMessage(
+                  HostnamesDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+              hostnames_.getMutableMap().put(
+                  hostnames__.getKey(), hostnames__.getValue());
               break;
             }
           }
@@ -1868,9 +1886,6 @@ public final class ControllerProtobuf {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          hostnames_ = hostnames_.getUnmodifiableView();
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -1880,6 +1895,17 @@ public final class ControllerProtobuf {
       return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_ListOfHostnames_descriptor;
     }
 
+    @SuppressWarnings({"rawtypes"})
+    protected com.google.protobuf.MapField internalGetMapField(
+        int number) {
+      switch (number) {
+        case 1:
+          return internalGetHostnames();
+        default:
+          throw new RuntimeException(
+              "Invalid map field number: " + number);
+      }
+    }
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_ListOfHostnames_fieldAccessorTable
@@ -1888,32 +1914,79 @@ public final class ControllerProtobuf {
     }
 
     public static final int HOSTNAMES_FIELD_NUMBER = 1;
-    private com.google.protobuf.LazyStringList hostnames_;
-    /**
-     * <code>repeated string hostnames = 1;</code>
-     */
-    public com.google.protobuf.ProtocolStringList
-        getHostnamesList() {
+    private static final class HostnamesDefaultEntryHolder {
+      static final com.google.protobuf.MapEntry<
+          java.lang.String, java.lang.Long> defaultEntry =
+              com.google.protobuf.MapEntry
+              .<java.lang.String, java.lang.Long>newDefaultInstance(
+                  edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_ListOfHostnames_HostnamesEntry_descriptor, 
+                  com.google.protobuf.WireFormat.FieldType.STRING,
+                  "",
+                  com.google.protobuf.WireFormat.FieldType.INT64,
+                  0L);
+    }
+    private com.google.protobuf.MapField<
+        java.lang.String, java.lang.Long> hostnames_;
+    private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+    internalGetHostnames() {
+      if (hostnames_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            HostnamesDefaultEntryHolder.defaultEntry);
+      }
       return hostnames_;
     }
-    /**
-     * <code>repeated string hostnames = 1;</code>
-     */
+
     public int getHostnamesCount() {
-      return hostnames_.size();
+      return internalGetHostnames().getMap().size();
     }
     /**
-     * <code>repeated string hostnames = 1;</code>
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
      */
-    public java.lang.String getHostnames(int index) {
-      return hostnames_.get(index);
+
+    public boolean containsHostnames(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      return internalGetHostnames().getMap().containsKey(key);
     }
     /**
-     * <code>repeated string hostnames = 1;</code>
+     * Use {@link #getHostnamesMap()} instead.
      */
-    public com.google.protobuf.ByteString
-        getHostnamesBytes(int index) {
-      return hostnames_.getByteString(index);
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, java.lang.Long> getHostnames() {
+      return getHostnamesMap();
+    }
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+
+    public java.util.Map<java.lang.String, java.lang.Long> getHostnamesMap() {
+      return internalGetHostnames().getMap();
+    }
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+
+    public long getHostnamesOrDefault(
+        java.lang.String key,
+        long defaultValue) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.Long> map =
+          internalGetHostnames().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+     */
+
+    public long getHostnamesOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new java.lang.NullPointerException(); }
+      java.util.Map<java.lang.String, java.lang.Long> map =
+          internalGetHostnames().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1928,9 +2001,12 @@ public final class ControllerProtobuf {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      for (int i = 0; i < hostnames_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, hostnames_.getRaw(i));
-      }
+      com.google.protobuf.GeneratedMessageV3
+        .serializeStringMapTo(
+          output,
+          internalGetHostnames(),
+          HostnamesDefaultEntryHolder.defaultEntry,
+          1);
       unknownFields.writeTo(output);
     }
 
@@ -1939,13 +2015,15 @@ public final class ControllerProtobuf {
       if (size != -1) return size;
 
       size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < hostnames_.size(); i++) {
-          dataSize += computeStringSizeNoTag(hostnames_.getRaw(i));
-        }
-        size += dataSize;
-        size += 1 * getHostnamesList().size();
+      for (java.util.Map.Entry<java.lang.String, java.lang.Long> entry
+           : internalGetHostnames().getMap().entrySet()) {
+        com.google.protobuf.MapEntry<java.lang.String, java.lang.Long>
+        hostnames__ = HostnamesDefaultEntryHolder.defaultEntry.newBuilderForType()
+            .setKey(entry.getKey())
+            .setValue(entry.getValue())
+            .build();
+        size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, hostnames__);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1963,8 +2041,8 @@ public final class ControllerProtobuf {
       edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames other = (edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames) obj;
 
       boolean result = true;
-      result = result && getHostnamesList()
-          .equals(other.getHostnamesList());
+      result = result && internalGetHostnames().equals(
+          other.internalGetHostnames());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1976,9 +2054,9 @@ public final class ControllerProtobuf {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (getHostnamesCount() > 0) {
+      if (!internalGetHostnames().getMap().isEmpty()) {
         hash = (37 * hash) + HOSTNAMES_FIELD_NUMBER;
-        hash = (53 * hash) + getHostnamesList().hashCode();
+        hash = (53 * hash) + internalGetHostnames().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -2085,6 +2163,28 @@ public final class ControllerProtobuf {
         return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_ListOfHostnames_descriptor;
       }
 
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMapField(
+          int number) {
+        switch (number) {
+          case 1:
+            return internalGetHostnames();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
+      @SuppressWarnings({"rawtypes"})
+      protected com.google.protobuf.MapField internalGetMutableMapField(
+          int number) {
+        switch (number) {
+          case 1:
+            return internalGetMutableHostnames();
+          default:
+            throw new RuntimeException(
+                "Invalid map field number: " + number);
+        }
+      }
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return edu.usfca.cs.dfs.controller.ControllerProtobuf.internal_static_ListOfHostnames_fieldAccessorTable
@@ -2109,8 +2209,7 @@ public final class ControllerProtobuf {
       }
       public Builder clear() {
         super.clear();
-        hostnames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
+        internalGetMutableHostnames().clear();
         return this;
       }
 
@@ -2134,11 +2233,8 @@ public final class ControllerProtobuf {
       public edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames buildPartial() {
         edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames result = new edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames(this);
         int from_bitField0_ = bitField0_;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          hostnames_ = hostnames_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.hostnames_ = hostnames_;
+        result.hostnames_ = internalGetHostnames();
+        result.hostnames_.makeImmutable();
         onBuilt();
         return result;
       }
@@ -2180,16 +2276,8 @@ public final class ControllerProtobuf {
 
       public Builder mergeFrom(edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames other) {
         if (other == edu.usfca.cs.dfs.controller.ControllerProtobuf.ListOfHostnames.getDefaultInstance()) return this;
-        if (!other.hostnames_.isEmpty()) {
-          if (hostnames_.isEmpty()) {
-            hostnames_ = other.hostnames_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureHostnamesIsMutable();
-            hostnames_.addAll(other.hostnames_);
-          }
-          onChanged();
-        }
+        internalGetMutableHostnames().mergeFrom(
+            other.internalGetHostnames());
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -2218,97 +2306,126 @@ public final class ControllerProtobuf {
       }
       private int bitField0_;
 
-      private com.google.protobuf.LazyStringList hostnames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureHostnamesIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          hostnames_ = new com.google.protobuf.LazyStringArrayList(hostnames_);
-          bitField0_ |= 0x00000001;
-         }
+      private com.google.protobuf.MapField<
+          java.lang.String, java.lang.Long> hostnames_;
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+      internalGetHostnames() {
+        if (hostnames_ == null) {
+          return com.google.protobuf.MapField.emptyMapField(
+              HostnamesDefaultEntryHolder.defaultEntry);
+        }
+        return hostnames_;
       }
-      /**
-       * <code>repeated string hostnames = 1;</code>
-       */
-      public com.google.protobuf.ProtocolStringList
-          getHostnamesList() {
-        return hostnames_.getUnmodifiableView();
+      private com.google.protobuf.MapField<java.lang.String, java.lang.Long>
+      internalGetMutableHostnames() {
+        onChanged();;
+        if (hostnames_ == null) {
+          hostnames_ = com.google.protobuf.MapField.newMapField(
+              HostnamesDefaultEntryHolder.defaultEntry);
+        }
+        if (!hostnames_.isMutable()) {
+          hostnames_ = hostnames_.copy();
+        }
+        return hostnames_;
       }
-      /**
-       * <code>repeated string hostnames = 1;</code>
-       */
+
       public int getHostnamesCount() {
-        return hostnames_.size();
+        return internalGetHostnames().getMap().size();
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
        */
-      public java.lang.String getHostnames(int index) {
-        return hostnames_.get(index);
+
+      public boolean containsHostnames(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        return internalGetHostnames().getMap().containsKey(key);
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * Use {@link #getHostnamesMap()} instead.
        */
-      public com.google.protobuf.ByteString
-          getHostnamesBytes(int index) {
-        return hostnames_.getByteString(index);
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Long> getHostnames() {
+        return getHostnamesMap();
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
        */
-      public Builder setHostnames(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureHostnamesIsMutable();
-        hostnames_.set(index, value);
-        onChanged();
-        return this;
+
+      public java.util.Map<java.lang.String, java.lang.Long> getHostnamesMap() {
+        return internalGetHostnames().getMap();
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
        */
-      public Builder addHostnames(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureHostnamesIsMutable();
-        hostnames_.add(value);
-        onChanged();
-        return this;
+
+      public long getHostnamesOrDefault(
+          java.lang.String key,
+          long defaultValue) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetHostnames().getMap();
+        return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
        */
-      public Builder addAllHostnames(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureHostnamesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, hostnames_);
-        onChanged();
-        return this;
+
+      public long getHostnamesOrThrow(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        java.util.Map<java.lang.String, java.lang.Long> map =
+            internalGetHostnames().getMap();
+        if (!map.containsKey(key)) {
+          throw new java.lang.IllegalArgumentException();
+        }
+        return map.get(key);
       }
-      /**
-       * <code>repeated string hostnames = 1;</code>
-       */
+
       public Builder clearHostnames() {
-        hostnames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
+        internalGetMutableHostnames().getMutableMap()
+            .clear();
         return this;
       }
       /**
-       * <code>repeated string hostnames = 1;</code>
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
        */
-      public Builder addHostnamesBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        ensureHostnamesIsMutable();
-        hostnames_.add(value);
-        onChanged();
+
+      public Builder removeHostnames(
+          java.lang.String key) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        internalGetMutableHostnames().getMutableMap()
+            .remove(key);
+        return this;
+      }
+      /**
+       * Use alternate mutation accessors instead.
+       */
+      @java.lang.Deprecated
+      public java.util.Map<java.lang.String, java.lang.Long>
+      getMutableHostnames() {
+        return internalGetMutableHostnames().getMutableMap();
+      }
+      /**
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+       */
+      public Builder putHostnames(
+          java.lang.String key,
+          long value) {
+        if (key == null) { throw new java.lang.NullPointerException(); }
+        
+        internalGetMutableHostnames().getMutableMap()
+            .put(key, value);
+        return this;
+      }
+      /**
+       * <code>map&lt;string, int64&gt; hostnames = 1;</code>
+       */
+
+      public Builder putAllHostnames(
+          java.util.Map<java.lang.String, java.lang.Long> values) {
+        internalGetMutableHostnames().getMutableMap()
+            .putAll(values);
         return this;
       }
       public final Builder setUnknownFields(
@@ -3958,6 +4075,11 @@ public final class ControllerProtobuf {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ListOfHostnames_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ListOfHostnames_HostnamesEntry_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ListOfHostnames_HostnamesEntry_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_HostNamesFiles_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3986,15 +4108,17 @@ public final class ControllerProtobuf {
       "\n\007chunkId\030\003 \001(\005\022\017\n\007reqtype\030\004 \001(\t\022\017\n\007port" +
       "Num\030\005 \001(\005\022\021\n\tnumChunks\030\006 \001(\005\"X\n\017StorageH" +
       "earbeat\022\021\n\tchunkName\030\001 \001(\t\022\020\n\010hostName\030\002" +
-      " \001(\t\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\"$" +
-      "\n\017ListOfHostnames\022\021\n\thostnames\030\001 \003(\t\"~\n\016" +
-      "HostNamesFiles\0227\n\014hostNameFile\030\001 \003(\0132!.H" +
-      "ostNamesFiles.HostNameFileEntry\0323\n\021HostN" +
-      "ameFileEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t",
-      ":\0028\001\"m\n\023ControllerMessagePB\022!\n\nclienttal" +
-      "k\030\001 \001(\0132\013.ClientTalkH\000\022,\n\020storageHeartBe" +
-      "at\030\002 \001(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035\n\033e" +
-      "du.usfca.cs.dfs.controllerb\006proto3"
+      " \001(\t\022\017\n\007portnum\030\003 \001(\005\022\017\n\007chunkId\030\004 \001(\005\"w" +
+      "\n\017ListOfHostnames\0222\n\thostnames\030\001 \003(\0132\037.L" +
+      "istOfHostnames.HostnamesEntry\0320\n\016Hostnam" +
+      "esEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\003:\0028\001\"" +
+      "~\n\016HostNamesFiles\0227\n\014hostNameFile\030\001 \003(\0132",
+      "!.HostNamesFiles.HostNameFileEntry\0323\n\021Ho" +
+      "stNameFileEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
+      "\001(\t:\0028\001\"m\n\023ControllerMessagePB\022!\n\nclient" +
+      "talk\030\001 \001(\0132\013.ClientTalkH\000\022,\n\020storageHear" +
+      "tBeat\030\002 \001(\0132\020.StorageHearbeatH\000B\005\n\003msgB\035" +
+      "\n\033edu.usfca.cs.dfs.controllerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4026,6 +4150,12 @@ public final class ControllerProtobuf {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ListOfHostnames_descriptor,
         new java.lang.String[] { "Hostnames", });
+    internal_static_ListOfHostnames_HostnamesEntry_descriptor =
+      internal_static_ListOfHostnames_descriptor.getNestedTypes().get(0);
+    internal_static_ListOfHostnames_HostnamesEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ListOfHostnames_HostnamesEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
     internal_static_HostNamesFiles_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_HostNamesFiles_fieldAccessorTable = new

@@ -27,13 +27,20 @@ public class Controller {
 
         Thread thread3 = deleteInactiveNodes();
 
+        System.out.println("Controller receiving File corrupt request on port 13010...");
+        Thread thread4 = createClientResponseFileCorruptThread();
+
+
+
         thread1.start();
         thread2.start();
         thread3.start();
+        thread4.start();
 
         thread1.join();
         thread2.join();
         thread3.join();
+        thread4.join();
     }
 
     public static class OnlineStorageNode {
@@ -109,6 +116,20 @@ public class Controller {
         };
     }
 
+    private Thread createClientResponseFileCorruptThread() {
+        return new Thread() {
+            public void run() {
+                ControllerHelper cp = new ControllerHelper();
+                try {
+                    ServerSocket srvSocket = new ServerSocket(13010);
+                    cp.receiveClientReqAtControllerFilecorrupt(srvSocket, "File received ", heartbeatMap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
     private Thread deleteInactiveNodes() {
         return new Thread() {
             public void run() {
@@ -135,7 +156,7 @@ public class Controller {
                 if (System.currentTimeMillis() - node.lastSeenTime > TIMEOUT_MS) {
                     BackupNode backup = new BackupNode();
                     System.out.println("removing host: " + hostname);
-                    backup.creatBackupNode(hostname,node.filenames,heartbeatMap);
+//                    backup.creatBackupNode(hostname,node.filenames,heartbeatMap);
                     heartbeatMap.remove(hostname);
                 }
             }

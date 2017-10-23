@@ -18,7 +18,7 @@ message StorageHearbeat {
 }
 
 message ListOfHostnames {
-    repeated string hostnames = 1;
+    map<string, int64> hostnames = 1;
 }
 
 message HostNamesFiles {
