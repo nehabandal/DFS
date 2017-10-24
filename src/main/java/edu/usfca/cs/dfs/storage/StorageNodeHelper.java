@@ -101,28 +101,33 @@ public class StorageNodeHelper {
     public void processClientReadRequest(Socket clientSocket, StorageProtobuf.StorageMessagePB recfilechunks) throws IOException {
         String chunkName = null;
         byte[] chunkfilecontents = null;
+        byte[] checksumstorage = null;
         if (recfilechunks.hasRetrieveChunkFileMsg()) {
 
             chunkName = recfilechunks.getRetrieveChunkFileMsgOrBuilder().getReadfileName();
 
             String path = findFile(chunkName, new File("/home2/npbandal"));
             String chunkfiletoread = path + "/" + chunkName;
+            String chunkstoragechunktoread = path + "/" + "storage_checksum_" + chunkName;
+
 
             chunkfilecontents = readChunkFromPath(chunkfiletoread);
+            checksumstorage = readChunkFromPath(chunkstoragechunktoread);
 
             String s = new String(chunkfilecontents);
             ByteString data = ByteString.copyFromUtf8(s);
             System.out.println("File content: " + chunkName + ": ");
             System.out.println(s);
 
-            //creating checksum
-            String md5 = DigestUtils.md5Hex(s);
+            String sChecksum = new String(checksumstorage);
+            System.out.println("Checksum for File "+ chunkName);
+            System.out.println(sChecksum);
 
             //Sending chunk data to client
             StorageProtobuf.RetrieveFile retrieveFile
                     = StorageProtobuf.RetrieveFile.newBuilder()
                     .setReadchunkdata(data)
-                    .setChecksum(md5)
+                    .setChecksum(sChecksum)
                     .build();
             StorageProtobuf.StorageMessagePB msgWrapper =
                     StorageProtobuf.StorageMessagePB.newBuilder()
