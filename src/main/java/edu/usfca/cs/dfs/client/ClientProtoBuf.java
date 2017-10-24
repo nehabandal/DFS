@@ -135,49 +135,50 @@ public class ClientProtoBuf {
         }
     }
 
-    public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String chunkname) {
+    public byte[] sendReadReqToStorageNode(String hostname, int portnumber, String chunkname) throws IOException {
         Socket sockController = null;
+        String checksumstorage = null;
+        String checksumclient = null;
         byte[] chunkbytes = null;
-        try {
-            sockController = new Socket(hostname, portnumber);
-            StorageProtobuf.RetrieveFile retrieveFile
-                    = StorageProtobuf.RetrieveFile.newBuilder()
-                    .setReadfileName(chunkname)
-                    .setReqTypeRead("read")
-                    .build();
-            StorageProtobuf.StorageMessagePB msgWrapper =
-                    StorageProtobuf.StorageMessagePB.newBuilder()
-                            .setRetrieveChunkFileMsg(retrieveFile)
-                            .build();
-            msgWrapper.writeDelimitedTo(sockController.getOutputStream());
+        sockController = new Socket(hostname, portnumber);
+        StorageProtobuf.RetrieveFile retrieveFile
+                = StorageProtobuf.RetrieveFile.newBuilder()
+                .setReadfileName(chunkname)
+                .setReqTypeRead("read")
+                .build();
+        StorageProtobuf.StorageMessagePB msgWrapper =
+                StorageProtobuf.StorageMessagePB.newBuilder()
+                        .setRetrieveChunkFileMsg(retrieveFile)
+                        .build();
+        msgWrapper.writeDelimitedTo(sockController.getOutputStream());
 
-            //Receive chunks from storage nodes
-            StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
-                    .parseDelimitedFrom(sockController.getInputStream());
-            if (recfilechunks.hasRetrieveChunkFileMsg()) {
-                StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
+        //Receive chunks from storage nodes
+        StorageProtobuf.StorageMessagePB recfilechunks = StorageProtobuf.StorageMessagePB
+                .parseDelimitedFrom(sockController.getInputStream());
+        if (recfilechunks.hasRetrieveChunkFileMsg()) {
+            StorageProtobuf.RetrieveFile retrivechunkfiledata = recfilechunks.getRetrieveChunkFileMsg();
 
-                ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
-                chunkbytes = chunkdata.toByteArray();
-                String checksumstorage = retrivechunkfiledata.getChecksum();
+            ByteString chunkdata = retrivechunkfiledata.getReadchunkdata();
+            chunkbytes = chunkdata.toByteArray();
+            checksumstorage = retrivechunkfiledata.getChecksum();
+            System.out.println("checksum storage: " + checksumstorage);
 
-                String checksumclient = DigestUtils.md5Hex(chunkbytes);
-                if (checksumstorage.equals(checksumclient)) {
-                    try (FileOutputStream fop = new FileOutputStream("client_checksum_" + chunkname)) {
-                        fop.write(checksumstorage.getBytes());
-                        fop.flush();
-                        fop.close();
-                    } catch (Exception e) {
-                        System.out.println("No file written");
-                    }
-                    return chunkbytes;
-                }
-            }
-            sockController.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            checksumclient = DigestUtils.md5Hex(chunkbytes);
+            System.out.println("checksum client: " + checksumclient);
+
         }
-        return null;
+        if (checksumstorage != null) {
+            if (checksumstorage.equals(checksumclient)) {
+                FileOutputStream fop = new FileOutputStream("client_checksum_" + chunkname);
+                fop.write(checksumstorage.getBytes());
+                fop.flush();
+                fop.close();
+                return chunkbytes;
+            } else {
+                return null;
+            }
+        }
+        return chunkbytes;
     }
 }
 

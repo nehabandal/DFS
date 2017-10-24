@@ -1,6 +1,7 @@
 package edu.usfca.cs.dfs.client;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -8,7 +9,7 @@ import java.util.*;
  */
 public class ClientReadFile {
 
-    public void read(String controllerHost, String fileName) throws InterruptedException {
+    public void read(String controllerHost, String fileName) throws InterruptedException, IOException {
 
         LinkedHashMap<Integer, String> HostID = new LinkedHashMap<>();
         Map<String, String> hostFilesNames = new TreeMap<>();
