@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.controller;
 
 import edu.usfca.cs.dfs.client.ClientProtoBuf;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -9,7 +10,7 @@ import java.util.*;
  */
 public class BackupNode {
 
-    public void creatBackupNode(String hostname, List<String> filenamelist, Map<String, Controller.OnlineStorageNode> heartbeatMap) {
+    public void creatBackupNode(String hostname, List<String> filenamelist, Map<String, Controller.OnlineStorageNode> heartbeatMap) throws IOException {
 
         TreeMap<String, byte[]> chunkbytes = new TreeMap<>();
         byte[] chunkbytesreq;
