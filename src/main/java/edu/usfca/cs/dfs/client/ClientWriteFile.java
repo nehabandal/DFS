@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by npbandal on 10/7/17.
@@ -43,28 +44,21 @@ public class ClientWriteFile {
 
         for (int j = 0; j < fileInChunks.size(); j++) {
             String chunkname = fileName.getName() + (j + 1);
-            Map<String, Long> hostnames;
+            Map<String, Long> hostnames = new TreeMap<>();
             hostnames = cp.clientToControllerwrite(controllerHost, 13000, chunkname, fileInChunks.size(), (j + 1), "write");
             System.out.println("Host from controller: " + hostnames.size());
             int chunkid = j + 1;
-
-            Map.Entry<String, Long> entry = hostnames.entrySet().iterator().next();
-            String hostname = entry.getKey();
-            Long size = entry.getValue();
-            hostnames.remove(hostname);
-
+            List<String> hostnameslist = new ArrayList<String>(hostnames.keySet());
+            List<Long> spacelist = new ArrayList<Long>(hostnames.values());
             List<String> hostToreplica = new ArrayList<>();
-            for (Map.Entry<String, Long> replicas : hostnames.entrySet()) {
-                String hostnameReplica = replicas.getKey();
-                Long sizeReplica = replicas.getValue();
-                hostToreplica.add(hostnameReplica);
-                System.out.println("Writing into node: " + hostnameReplica + " Available free space in " + hostnameReplica + " is: " + sizeReplica);
-            }
-            System.out.println("Writing into node: " + hostname + " Available free space in " + hostname + " is: " + size);
-            cp.protoBufToWriteintoStorageNode(hostname, 13001, fileName.getName(), chunkid, fileInChunks.get(j), hostToreplica);
+            hostToreplica.add(hostnameslist.get(1));
+            hostToreplica.add(hostnameslist.get(2));
+            System.out.println("Writing into node: " + hostnameslist.get(0) + " Available space: " + spacelist.get(0));
+            System.out.println("Writing into node: " + hostnameslist.get(1) + " Available space: " + spacelist.get(1));
+            System.out.println("Writing into node: " + hostnameslist.get(2) + " Available space: " + spacelist.get(2));
+            cp.protoBufToWriteintoStorageNode(hostnameslist.get(0), 13001, fileName.getName(), chunkid, fileInChunks.get(j), hostToreplica);
             Thread.sleep(100);
         }
-
     }
 }
 
