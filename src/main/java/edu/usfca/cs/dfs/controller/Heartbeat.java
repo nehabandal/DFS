@@ -25,7 +25,7 @@ public class Heartbeat implements Runnable {
 
     @Override
     public void run() {
-        while (send(controllerhost, hostdetails, portNum))
+        while (send(controllerhost, hostName, portNum))
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -33,8 +33,8 @@ public class Heartbeat implements Runnable {
             }
     }
 
-    public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
-//    public synchronized boolean send(String controllerhost, String hostname, int portnum) {
+//    public synchronized boolean send(String controllerhost, HashMap<String, Integer> hostname, int portnum) {
+    public synchronized boolean send(String controllerhost, String hostname, int portnum) {
 
         File directory = new File("/");
 //        File directory = new File("/home2/npbandal/");
@@ -52,11 +52,11 @@ public class Heartbeat implements Runnable {
 
         try {
             while (hostname != null) { //should be not equal in actual code
-                for (String host : hostname.keySet()) {
+//                for (String host : hostname.keySet()) {
                     Socket sockController = new Socket(controllerhost, portnum);
                     ProtoHeartbeat.StorageHearbeat heartbeat
                             = ProtoHeartbeat.StorageHearbeat.newBuilder()
-                            .setHostName(host)
+                            .setHostName(hostname)
                             .setFreespace(spaceMB)
                             .addAllFileName(filesinHost)
                             .setHeartbeatmsg("Hi from ")
@@ -67,7 +67,7 @@ public class Heartbeat implements Runnable {
                                     .build();
                     msgWrapper.writeDelimitedTo(sockController.getOutputStream());
                     Thread.sleep(3000);
-                }
+//                }
             }
         } catch (Exception e) {
             try {

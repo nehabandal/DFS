@@ -38,8 +38,8 @@ public class StorageNode {
         hostnameport.put("bass09", 9100);
 
 
-        Thread thread1 = threadHeartBeat(controllerName, hostnameport);
-//        Thread thread1 = threadHeartBeat(controllerName, hostname);
+//        Thread thread1 = threadHeartBeat(controllerName, hostnameport);
+        Thread thread1 = threadHeartBeat(controllerName, hostname);
 
         System.out.println("Storage Node processing client request on " + hostname + "...");
         Thread thread2 = threadClientReq();
@@ -106,8 +106,8 @@ public class StorageNode {
         };
     }
 
-        private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails) {
-//    private Thread threadHeartBeat(final String controllerName, final String hostdetails) {
+//        private Thread threadHeartBeat(final String controllerName, final HashMap<String, Integer> hostdetails) {
+    private Thread threadHeartBeat(final String controllerName, final String hostdetails) {
         return new Thread() {
             public void run() {
                 new Heartbeat().send(controllerName, hostdetails, 13002);
