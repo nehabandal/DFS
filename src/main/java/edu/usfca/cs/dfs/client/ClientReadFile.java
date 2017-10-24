@@ -33,6 +33,7 @@ public class ClientReadFile {
 
             if (chunkbytes == null) {
                 hostnamefilecorrupt = cp.clientToControllerreadfilecurrupt(controllerHost, 13010, chunkname, hostname);
+                System.out.println("File " + fileHostname.getKey() + "is corrupted at original host So getting from: " + hostnamefilecorrupt);
                 chunkbytes = cp.sendReadReqToStorageNode(hostnamefilecorrupt, 13001, chunkname);
             }
             System.out.println(new String(chunkbytes));

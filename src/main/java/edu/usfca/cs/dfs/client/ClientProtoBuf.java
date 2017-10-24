@@ -58,7 +58,6 @@ public class ClientProtoBuf {
     }
 
     public String clientToControllerreadfilecurrupt(String controllerHost, int portnumber, String chunkname, String corruptHostname) {
-        System.out.println(chunkname);
         String hostnameFileCorrupt = null;
         try {
 
